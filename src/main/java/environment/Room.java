@@ -14,7 +14,7 @@ public class Room implements Environment {
     private final List<Robot> robots;
     private final List<Obstacle> obstacles;
 
-    private Room(int rows, int cols) {
+    public Room(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         this.robots = new ArrayList<>();
