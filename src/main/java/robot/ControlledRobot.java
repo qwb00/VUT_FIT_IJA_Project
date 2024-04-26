@@ -61,10 +61,6 @@ public class ControlledRobot implements Robot {
         angle = (angle + 45) % 360;
     }
 
-    public void turnClockwise() {
-        angle = (angle + 45) % 360;
-    }
-
     public void turnCounterClockwise() {
         angle = (angle - 45 + 360) % 360;
     }
