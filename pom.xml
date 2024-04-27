@@ -19,7 +19,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <configuration>
-                    <mainClass>src.main.java.Main</mainClass>
+                    <mainClass>main.java.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
