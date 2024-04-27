@@ -23,4 +23,8 @@ public class Obstacle {
     public Position getPosition() {
         return pos;
     }
+
+    public String toString() {
+        return "Obstacle " + pos.toString() + "\n";
+    }
 }

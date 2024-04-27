@@ -56,4 +56,6 @@ public interface Environment {
     List<Robot> getRobots();
 
     List<Obstacle> getObstacles();
+
+    String toString();
 }

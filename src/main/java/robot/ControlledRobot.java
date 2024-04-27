@@ -3,13 +3,14 @@ package main.java.robot;
 import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
+import main.java.environment.Room;
 
 public class ControlledRobot implements Robot {
     private final Environment env;
     private Position position;
     private int angle = 0;
 
-    private ControlledRobot(Environment env, Position position) {
+    public ControlledRobot(Environment env, Position position) {
         this.env = env;
         this.position = position;
     }
@@ -94,6 +95,13 @@ public class ControlledRobot implements Robot {
                 break;
         }
         return new Position(position.getRow() + dy, position.getCol() + dx);
+    }
+
+    @Override
+    public String toString() {
+        return "ControlledRobot\n"
+                + "positionRow=" + position.getRow() + "\n"
+                + "positionCol=" + position.getCol() + "\n";
     }
 }
 

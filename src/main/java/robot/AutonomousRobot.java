@@ -3,6 +3,7 @@ package main.java.robot;
 import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
+import main.java.environment.Room;
 
 public class AutonomousRobot implements Robot {
     private final Environment env;
@@ -17,6 +18,16 @@ public class AutonomousRobot implements Robot {
         this.detectionRange = detectionRange;
         this.turnAngle = turnAngle;
         this.turnDirection = turnDirection;
+    }
+
+    public static AutonomousRobot create(Environment env, Position pos, int detectionRange, int turnAngle, boolean turnDirection) {
+        if (env.containsPosition(pos) && !env.robotAt(pos)) {
+            AutonomousRobot robot = new AutonomousRobot(env, pos, detectionRange, turnAngle, turnDirection);
+            if (env.addRobot(robot)) {
+                return robot;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -90,4 +101,15 @@ public class AutonomousRobot implements Robot {
         }
         return new Position(position.getRow() + (dy * steps), position.getCol() + (dx * steps));
     }
+
+    @Override
+    public String toString() {
+        return "AutonomousRobot\n"
+                + "positionRow=" + position.getRow() + "\n"
+                + "positionCol=" + position.getCol() + "\n"
+                + "detectionRange=" + detectionRange + "\n"
+                + "turnAngle=" + turnAngle + "\n"
+                + "turnDirection=" + turnDirection + "\n";
+    }
+
 }

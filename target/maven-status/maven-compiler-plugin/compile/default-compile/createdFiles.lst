@@ -1,10 +1,12 @@
+main/java/Configuration/ConfigurationSaver.class
 main/java/robot/ControlledRobot.class
+main/java/Main.class
 main/java/robot/AutonomousRobot.class
 main/java/environment/Room.class
 main/java/common/Obstacle.class
 main/java/gui/SimulatorGUI$3.class
-src/main/java/Main.class
 main/java/common/Robot.class
+main/java/Configuration/ConfigurationLoader.class
 main/java/gui/SimulatorGUI.class
 main/java/gui/SimulatorGUI$2.class
 main/java/gui/ControlPanel.class
