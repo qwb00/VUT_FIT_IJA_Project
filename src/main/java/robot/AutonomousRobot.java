@@ -4,6 +4,9 @@ import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AutonomousRobot implements Robot {
     private final Environment env;
     private Position position;
@@ -17,6 +20,25 @@ public class AutonomousRobot implements Robot {
         this.detectionRange = detectionRange;
         this.turnAngle = turnAngle;
         this.turnDirection = turnDirection;
+    }
+
+    private final List<Observer> observers = new ArrayList<>();
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this);
+        }
     }
 
     @Override

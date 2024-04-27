@@ -89,4 +89,14 @@ public class Room implements Environment {
     public List<Obstacle> getObstacles() {
         return obstacles;
     }
+
+    @Override
+    public int rows() {
+        return this.rows;
+    }
+
+    @Override
+    public int cols() {
+        return this.cols;
+    }
 }

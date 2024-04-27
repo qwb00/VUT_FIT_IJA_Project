@@ -53,6 +53,10 @@ public interface Environment {
      */
     boolean obstacleAt(Position p);
 
+    int rows();
+
+    int cols();
+
     List<Robot> getRobots();
 
     List<Obstacle> getObstacles();

@@ -1,6 +1,6 @@
 package main.java.common;
 
-public interface Robot {
+public interface Robot extends Observable {
     /**
      * Turns the robot by 45 degrees clockwise
      */

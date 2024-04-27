@@ -12,7 +12,7 @@ public class
 Main {
     public static void main(String... args) {
         Environment env = new Room(10, 10);
-        ControlledRobot robot = ControlledRobot.create(env, new Position(0, 0));
+        ControlledRobot robot = ControlledRobot.create(env, new Position(5, 5));
         if (robot != null) {
             System.out.println("Robot created at " + robot.getPosition());
             System.out.println("Robot angle: " + robot.angle());
