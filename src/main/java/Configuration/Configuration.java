@@ -5,22 +5,33 @@ import main.java.common.Position;
 import main.java.environment.Room;
 import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.Scanner;
 
 public class Configuration {
+    private static final Logger logger = LogManager.getLogger(Configuration.class);
     public static void saveConfiguration(Environment env, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(env.toString());
+            logger.info("Configuration saved to file: " + filePath);
         } catch (IOException e) {
+            logger.error("Failed to save configuration to file: " + filePath, e);
             throw new RuntimeException(e);
         }
     }
 
-    public static Environment loadConfiguration(String filePath) throws FileNotFoundException {
+    public static Environment loadConfiguration(String filePath) {
         File file = new File(filePath);
-        Scanner scanner = new Scanner(file);
+        Scanner scanner;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            logger.error("Failed to load configuration from file: " + filePath, e);
+            throw new RuntimeException(e);
+        }
         Room room = null;
         int numObstacles = 0;
         int numRobots = 0;
@@ -56,9 +67,10 @@ public class Configuration {
         scanner.close();
 
         if (numObstacles != 0 || numRobots != 0) {
+            logger.error("Configuration mismatch: Not all obstacles or robots were processed");
             throw new RuntimeException("Configuration mismatch: Not all obstacles or robots were processed");
         }
-
+        logger.info("Configuration loaded from file: " + filePath);
         return room;
     }
 
@@ -82,9 +94,11 @@ public class Configuration {
             int detectionRange = readInteger(scanner, "detectionRange");
             int turnAngle = readInteger(scanner, "turnAngle");
             boolean turnDirection = Boolean.parseBoolean(scanner.nextLine().split("=")[1].trim());
-            AutonomousRobot.create(room, new Position(row, col), detectionRange, turnAngle, turnDirection);
+            int speed = readInteger(scanner, "speed");
+            AutonomousRobot.create(room, new Position(row, col), speed, detectionRange, turnAngle, turnDirection);
         } else if (robotType.contains("ControlledRobot")) {
-            ControlledRobot.create(room, new Position(row, col));
+            int speed = readInteger(scanner, "speed");
+            ControlledRobot.create(room, new Position(row, col), speed);
         }
     }
 
@@ -95,9 +109,11 @@ public class Configuration {
             if (parts.length > 1) {
                 return Integer.parseInt(parts[1].trim());
             } else {
+                logger.error("Malformed line for " + fieldName + ": " + line);
                 throw new RuntimeException("Malformed line for " + fieldName + ": " + line);
             }
         }
+        logger.error("Missing line for " + fieldName);
         throw new RuntimeException("Missing line for " + fieldName);
     }
 

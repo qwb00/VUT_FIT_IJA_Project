@@ -4,6 +4,10 @@ import main.java.common.Environment;
 import main.java.common.Obstacle;
 import main.java.common.Position;
 import main.java.common.Robot;
+import main.java.robot.AutonomousRobot;
+import main.java.robot.ControlledRobot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +17,8 @@ public class Room implements Environment {
     private final int cols;
     private final List<Robot> robots;
     private final List<Obstacle> obstacles;
+
+    private static final Logger logger = LogManager.getLogger(Room.class);
 
     public Room(int rows, int cols) {
         this.rows = rows;
@@ -33,6 +39,7 @@ public class Room implements Environment {
         if (rows <= 0 || cols <= 0) {
             throw new IllegalArgumentException("The number of rows and columns must be positive.");
         }
+        logger.info("Creating a new Room with dimensions: cols = {}, rows = {}", rows, cols);
         return new Room(rows, cols);
     }
 
@@ -60,6 +67,7 @@ public class Room implements Environment {
         }
         Obstacle newObstacle = new Obstacle(this, new Position(row, col));
         obstacles.add(newObstacle);
+        logger.info("Created a new Obstacle at position: col = {}, row = {}", newObstacle.getPosition().getCol(), newObstacle.getPosition().getRow());
         return true;
     }
 
@@ -73,8 +81,10 @@ public class Room implements Environment {
                 .orElse(null);
         if (toRemove != null) {
             obstacles.remove(toRemove);
+            logger.info("Removed an Obstacle at position: col = {}, row = {}", toRemove.getPosition().getCol(), toRemove.getPosition().getRow());
             return true;
         }
+        logger.error("No Obstacle found at position: ({}, {})", row, col);
         return false;
     }
 
