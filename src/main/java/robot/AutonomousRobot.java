@@ -51,15 +51,6 @@ public class AutonomousRobot implements Robot {
     }
 
     @Override
-    public void turnCounterClockwise() {
-        if (!turnDirection) {
-            angle = (angle + turnAngle) % 360;
-        } else {
-            angle = (angle - turnAngle + 360) % 360;
-        }
-    }
-
-    @Override
     public int angle() {
         return angle;
     }

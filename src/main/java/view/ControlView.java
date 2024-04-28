@@ -2,6 +2,8 @@ package main.java.view;
 
 import main.java.common.Robot;
 import main.java.EnvPresenter;
+import main.java.robot.ControlledRobot;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -43,13 +45,13 @@ public class ControlView extends JPanel implements ComponentView {
         moveButton.addActionListener(this::performMove);
         add(moveButton);
 
-        // Добавление кнопки "Rotate Clockwise"
-        JButton rotateButton = new JButton("Turn");
+        // Добавление кнопки "Turn Clockwise"
+        JButton rotateButton = new JButton("Turn Clockwise");
         rotateButton.addActionListener(this::performTurn);
         add(rotateButton);
 
-        // Добавление кнопки "Turn Clockwise"
-        JButton rotateCounterButton = new JButton("Turn Clockwise");
+        // Добавление кнопки "Turn Counter Clockwise"
+        JButton rotateCounterButton = new JButton("Turn Counter Clockwise");
         rotateCounterButton.addActionListener(this::performCounterTurn);
         add(rotateCounterButton);
 
@@ -81,8 +83,9 @@ public class ControlView extends JPanel implements ComponentView {
     }
 
     private void performCounterTurn(ActionEvent e) {
-        if (model != null) {
-            model.turnCounterClockwise(); // Вызываем метод rotateClockwise модели Robot
+        if (model != null && model instanceof ControlledRobot) {
+            ControlledRobot robot = (ControlledRobot) model;
+            robot.turnCounterClockwise(); // Вызываем метод rotateClockwise модели Robot
             updatesCount++; // Увеличиваем счетчик обновлений
             repaint(); // Перерисовать интерфейс, если это необходимо
         }
