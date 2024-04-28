@@ -3,6 +3,8 @@ package main.java.robot;
 import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
+import main.java.common.Observable.Observer;
+import main.java.common.Observable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,9 @@ public class ControlledRobot implements Robot {
 
     @Override
     public void addObserver(Observer observer) {
-        observers.add(observer);
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
     }
 
     @Override
@@ -72,6 +76,7 @@ public class ControlledRobot implements Robot {
     public boolean move() {
         if (canMove()) {
             this.position = calculateNextPosition();
+            notifyObservers();
             return true;
         }
         return false;
@@ -80,10 +85,12 @@ public class ControlledRobot implements Robot {
     @Override
     public void turn() {
         angle = (angle + 45) % 360;
+        notifyObservers();
     }
 
     public void turnCounterClockwise() {
         angle = (angle - 45 + 360) % 360;
+        notifyObservers();
     }
 
     public Position calculateNextPosition() {

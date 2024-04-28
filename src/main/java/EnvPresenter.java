@@ -7,11 +7,16 @@ package main.java;
 
 import main.java.common.Position;
 import main.java.common.Environment;
+import main.java.common.Robot;
 import main.java.view.FieldView;
 import main.java.view.RobotView;
+import main.java.view.ControlView;
+import main.java.common.Observable.Observer;
+import main.java.common.Observable;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,11 +28,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class EnvPresenter {
+public class EnvPresenter implements Observer {
     private final Environment env;
     private Map<Position, FieldView> fields;
     private List<RobotView> robots;
     private JFrame frame;
+    private ControlView controlView;
+    private Robot activeRobot;
 
     public EnvPresenter(Environment var1) {
         this.env = var1;
@@ -61,35 +68,81 @@ public class EnvPresenter {
     }
 
     private void initialize() {
-        this.frame = new JFrame("Robot Environment Demo");
-        this.frame.setDefaultCloseOperation(3);
-        this.frame.setSize(350, 400);
-        this.frame.setPreferredSize(new Dimension(350, 400));
+        this.frame = new JFrame("Robot Environment");
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setSize(800, 600);
+        this.frame.setMinimumSize(new Dimension(800, 600));
         this.frame.setResizable(false);
-        int var1 = this.env.rows();
-        int var2 = this.env.cols();
-        GridLayout var3 = new GridLayout(var1, var2);
-        JPanel var4 = new JPanel(var3);
+        GridLayout gridLayout = new GridLayout(this.env.rows(), this.env.cols());
+        JPanel gridPanel = new JPanel(gridLayout);
 
-        for(int var5 = 0; var5 < var1; ++var5) {
-            for(int var6 = 0; var6 < var2; ++var6) {
-                Position var7 = new Position(var5, var6);
-                FieldView var8 = new FieldView(this.env, var7);
-                var4.add(var8);
-                this.fields.put(var7, var8);
+        // Создание и распределение полей
+        for (int row = 0; row < this.env.rows(); ++row) {
+            for (int col = 0; col < this.env.cols(); ++col) {
+                Position position = new Position(row, col);
+                FieldView fieldView = new FieldView(this.env, position, this);
+                gridPanel.add(fieldView);
+                this.fields.put(position, fieldView);
             }
         }
 
-        this.env.getRobots().forEach((var1x) -> {
-            RobotView var9 = new RobotView(this, var1x);
-            this.robots.add(var9);
+        // Создание и добавление роботов
+        List<Robot> robotModels = this.env.getRobots();
+        robotModels.forEach(robot -> {
+            RobotView robotView = new RobotView(this, robot);
+            this.robots.add(robotView);
         });
 
-        this.frame.getContentPane().add(var4, "Center");
+        if (!robotModels.isEmpty()) {
+            setActiveRobot(robotModels.get(0)); // Устанавливаем первого робота в списке как активного
+        }
+
+        // Настройка ControlView
+        this.controlView = new ControlView(this, robotModels.get(0));
+        this.controlView.setRobots(robotModels);
+        this.frame.getContentPane().add(controlView, BorderLayout.SOUTH);
+        this.frame.getContentPane().add(gridPanel, BorderLayout.CENTER);
+
         this.frame.pack();
     }
 
     protected List<FieldView> fields() {
         return new ArrayList(this.fields.values());
     }
+
+    public void update(Observable o) {
+        // Обновление GUI, когда состояние робота изменяется
+        //System.out.println("Observable changed: ");
+        SwingUtilities.invokeLater(this::refreshGui);
+    }
+
+    private void refreshGui() {
+        fields.values().forEach(FieldView::repaint); // Перерисовка каждого поля
+        robots.forEach(RobotView::refreshView); // Вызов обновления для каждого представления робота
+    }
+
+    public void setActiveRobot(Robot robot) {
+        this.activeRobot = robot;
+        refreshGui(); // Обновляем GUI после изменения активного робота
+    }
+
+    public boolean isActive(Robot robot) {
+        return robot.equals(activeRobot);
+    }
+
+    public boolean isObstacleMode() {
+        return controlView.isObstacleMode();
+    }
+
+    public void setActiveRobotByPosition(Position pos) {
+        for (RobotView robotView : robots) {
+            if (robotView.getModel().getPosition().equals(pos)) {
+                setActiveRobot(robotView.getModel());
+                controlView.setActiveRobot(robotView.getModel()); // Обновляем активного робота в ControlView
+                break;
+            }
+        }
+        refreshGui();
+    }
+
 }

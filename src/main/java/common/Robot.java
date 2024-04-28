@@ -7,6 +7,11 @@ public interface Robot extends Observable {
     void turn();
 
     /**
+     * Turns the robot by 45 degrees counterclockwise
+     */
+    void turnCounterClockwise();
+
+    /**
      * Returns the current angle of the robot's orientation
      *
      * @return The angle of the robot

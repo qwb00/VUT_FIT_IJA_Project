@@ -63,6 +63,21 @@ public class Room implements Environment {
         return true;
     }
 
+    public boolean removeObstacleAt(int row, int col) {
+        if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) {
+            return false;
+        }
+        Obstacle toRemove = obstacles.stream()
+                .filter(obstacle -> obstacle.getPosition().getRow() == row && obstacle.getPosition().getCol() == col)
+                .findFirst()
+                .orElse(null);
+        if (toRemove != null) {
+            obstacles.remove(toRemove);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean obstacleAt(int row, int col) {
         return obstacles.stream().anyMatch(obstacle ->

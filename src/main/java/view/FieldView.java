@@ -1,35 +1,70 @@
 package main.java.view;
 
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
+import main.java.EnvPresenter;
 import main.java.common.Position;
 import main.java.common.Environment;
-import java.awt.Color;
-import java.awt.Graphics;
+
+import java.awt.*;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FieldView extends JPanel {
     private final Environment model;
     private final Position position;
+    private EnvPresenter presenter;
     private ComponentView obj;
     private int changedModel = 0;
 
-    public FieldView(Environment var1, Position var2) {
-        this.model = var1;
-        this.position = var2;
-        this.privUpdate();
+    public FieldView(Environment env, Position pos, EnvPresenter presenter) {
+        this.model = env;
+        this.position = pos;
+        this.presenter = presenter;
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                handleMouseClick();
+            }
+        });
     }
 
-    protected void paintComponent(Graphics var1) {
-        super.paintComponent(var1);
-        if (this.obj != null) {
-            this.obj.paintComponent(var1);
+    private void handleMouseClick() {
+        if (presenter.isObstacleMode()) {
+            if (model.obstacleAt(position)) {
+                model.removeObstacleAt(position.getRow(), position.getCol());
+                //System.out.println("Removed obstacle at " + position.getRow() + " / " + position.getCol());
+            } else {
+                model.createObstacleAt(position.getRow(), position.getCol());
+                //System.out.println("Created obstacle at " + position.getRow() + " / " + position.getCol());
+            }
+            privUpdate();
+            repaint();
+        } else {
+            // Активировать робота, если кликнули по клетке, где он находится
+            if (model.robotAt(position)) {
+                presenter.setActiveRobotByPosition(position);
+            }
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        setBackground(Color.WHITE); // Установим белый фон для клеток без препятствий
+        setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Граница для клеток
+
+        // Проверяем наличие препятствия
+        if (model.obstacleAt(position)) {
+            g.setColor(Color.DARK_GRAY); // Цвет препятствий
+            g.fillRect(0, 0, getWidth(), getHeight()); // Заполняем всю площадь панели
         }
 
+        // Если в клетке есть компонент (робот), вызываем его paintComponent
+        if (obj != null) {
+            obj.paintComponent(g);
+        }
     }
 
     private void privUpdate() {

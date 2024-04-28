@@ -1,17 +1,12 @@
 package main.java.view;
 
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
+
 
 import main.java.EnvPresenter;
 import main.java.common.Observable;
 import main.java.common.Robot;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+
+import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 public class RobotView implements ComponentView, Observable.Observer {
@@ -19,6 +14,7 @@ public class RobotView implements ComponentView, Observable.Observer {
     private final EnvPresenter parent;
     private FieldView current;
     private int changedModel = 0;
+
 
     public RobotView(EnvPresenter var1, Robot var2) {
         this.model = var2;
@@ -28,15 +24,17 @@ public class RobotView implements ComponentView, Observable.Observer {
     }
 
     private void privUpdate() {
-        FieldView var1 = this.parent.fieldAt(this.model.getPosition());
+        FieldView field = this.parent.fieldAt(this.model.getPosition());
         if (this.current != null) {
-            this.current.removeComponent();
+            this.current.removeComponent(); // Удалить предыдущий компонент
             this.current.repaint();
         }
 
-        this.current = var1;
-        var1.addComponent(this);
-        this.current.repaint();
+        this.current = field;
+        if (field != null) {
+            field.addComponent(this);
+            field.repaint();
+        }
     }
 
     public final void update(Observable var1) {
@@ -49,13 +47,22 @@ public class RobotView implements ComponentView, Observable.Observer {
         Rectangle var3 = this.current.getBounds();
         double var4 = var3.getWidth();
         double var6 = var3.getHeight();
-        Math.max(var6, var4);
         double var10 = Math.min(var6, var4) - 10.0;
         double var12 = (var4 - var10) / 2.0;
         double var14 = (var6 - var10) / 2.0;
         Ellipse2D.Double var16 = new Ellipse2D.Double(var12, var14, var10, var10);
+
+        // Устанавливаем цвет робота
         var2.setColor(Color.cyan);
         var2.fill(var16);
+
+        // Если робот активен, рисуем черную обводку
+        if (this.parent.isActive(this.model)) {
+            var2.setColor(Color.black);
+            var2.setStroke(new BasicStroke(3)); // Указываем толщину линии
+            var2.draw(var16);
+        }
+
         double var17 = var12 + var10 / 2.0;
         double var19 = var14 + var10 / 2.0;
         int var21 = this.model.angle();
@@ -111,6 +118,11 @@ public class RobotView implements ComponentView, Observable.Observer {
 
     public Robot getModel() {
         return this.model;
+    }
+
+    public void refreshView() {
+        // Обновление вида робота
+        this.privUpdate();
     }
 }
 
