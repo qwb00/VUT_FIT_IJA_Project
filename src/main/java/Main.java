@@ -1,31 +1,45 @@
 package main.java;
 
 
+import main.java.Configuration.Configuration;
 import main.java.common.Environment;
+import main.java.common.Obstacle;
 import main.java.common.Position;
 import main.java.environment.Room;
+import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
 import main.java.common.Robot;
 
-public class
+import static main.java.Configuration.Configuration.loadConfiguration;
 
-Main {
+public class Main {
     public static void main(String... args) {
-        Environment env = new Room(10, 10);
-        ControlledRobot robot = ControlledRobot.create(env, new Position(0, 0));
-        if (robot != null) {
-            System.out.println("Robot created at " + robot.getPosition());
-            System.out.println("Robot angle: " + robot.angle());
-            System.out.println("Robot can move: " + robot.canMove());
-            System.out.println("Robot moved: " + robot.move());
-            System.out.println("Robot position: " + robot.getPosition());
-            System.out.println("Robot angle: " + robot.angle());
-            System.out.println("Robot can move: " + robot.canMove());
-            System.out.println("Robot moved: " + robot.move());
-            System.out.println("Robot position: " + robot.getPosition());
-            System.out.println("Robot angle: " + robot.angle());
-        } else {
-            System.out.println("Robot could not be created");
+        try {
+            // Загрузка конфигурации из файла
+            Environment env = loadConfiguration("/Users/aleksander/Documents/SchoolProjects/IJA/IJA-Project/config.txt");
+
+            if (env instanceof Room) {
+                Room room = (Room) env;
+
+                // Вывод информации о препятствиях
+                System.out.println("Obstacles:");
+                for(Obstacle obstacle : room.getObstacles()) {
+                    Position pos = obstacle.getPosition();
+                    System.out.println("Obstacle at Row=" + pos.getRow() + " Col=" + pos.getCol());
+                }
+
+                // Вывод информации о роботах
+                System.out.println("Robots:");
+                for(Robot robot : room.getRobots()) {
+                    Position pos = robot.getPosition();
+                    if(robot instanceof ControlledRobot)
+                        System.out.println("Controlled Robot at Row=" + pos.getRow() + " Col=" + pos.getCol());
+                    else if(robot instanceof AutonomousRobot)
+                        System.out.println("Autonomous Robot at Row=" + pos.getRow() + " Col=" + pos.getCol());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading configuration: " + e.getMessage());
         }
     }
 }
