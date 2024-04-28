@@ -89,4 +89,21 @@ public class Room implements Environment {
     public List<Obstacle> getObstacles() {
         return obstacles;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Room\n");
+        sb.append("Rows=").append(rows).append("\n");
+        sb.append("Cols=").append(cols).append("\n");
+        sb.append("Obstacles=").append(obstacles.size()).append("\n");
+        for (Obstacle obstacle : obstacles) {
+            sb.append(obstacle.toString());
+        }
+        sb.append("Robots=").append(robots.size()).append("\n");
+        for (Robot robot : robots) {
+            sb.append(robot.toString());
+        }
+        return sb.toString();
+    }
 }
