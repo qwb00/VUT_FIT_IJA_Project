@@ -3,7 +3,9 @@ package main.java.robot;
 import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
-import main.java.environment.Room;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AutonomousRobot implements Robot {
     private final Environment env;
@@ -12,6 +14,7 @@ public class AutonomousRobot implements Robot {
     private final int detectionRange; // Distance to detect obstacles
     private final int turnAngle; // Angle to turn when an obstacle is detected
     private final boolean turnDirection;
+    private final List<Observer> observers = new ArrayList<>();
     public AutonomousRobot(Environment env, Position position, int detectionRange, int turnAngle, boolean turnDirection) {
         this.env = env;
         this.position = position;
@@ -28,6 +31,23 @@ public class AutonomousRobot implements Robot {
             }
         }
         return null;
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this);
+        }
     }
 
     @Override
@@ -102,7 +122,6 @@ public class AutonomousRobot implements Robot {
         return new Position(position.getRow() + (dy * steps), position.getCol() + (dx * steps));
     }
 
-    @Override
     public String toString() {
         return "AutonomousRobot\n"
                 + "positionRow=" + position.getRow() + "\n"
@@ -111,5 +130,4 @@ public class AutonomousRobot implements Robot {
                 + "turnAngle=" + turnAngle + "\n"
                 + "turnDirection=" + turnDirection + "\n";
     }
-
 }

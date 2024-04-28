@@ -8,7 +8,6 @@ main/java/common/Robot.class
 main/java/gui/SimulatorGUI.class
 main/java/gui/SimulatorGUI$2.class
 main/java/gui/ControlPanel.class
-main/java/Configuration/Configuration.class
 main/java/gui/SimulationPanel.class
 main/java/common/Position.class
 main/java/gui/SimulatorGUI$1.class

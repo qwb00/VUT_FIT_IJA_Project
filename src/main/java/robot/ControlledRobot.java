@@ -3,16 +3,40 @@ package main.java.robot;
 import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
-import main.java.environment.Room;
+import main.java.common.Observable.Observer;
+import main.java.common.Observable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ControlledRobot implements Robot {
     private final Environment env;
     private Position position;
     private int angle = 0;
+    private final List<Observer> observers = new ArrayList<>();
 
-    public ControlledRobot(Environment env, Position position) {
+    private ControlledRobot(Environment env, Position position) {
         this.env = env;
         this.position = position;
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this);
+        }
     }
 
     /**
@@ -52,6 +76,7 @@ public class ControlledRobot implements Robot {
     public boolean move() {
         if (canMove()) {
             this.position = calculateNextPosition();
+            notifyObservers();
             return true;
         }
         return false;
@@ -60,10 +85,12 @@ public class ControlledRobot implements Robot {
     @Override
     public void turn() {
         angle = (angle + 45) % 360;
+        notifyObservers();
     }
 
     public void turnCounterClockwise() {
         angle = (angle - 45 + 360) % 360;
+        notifyObservers();
     }
 
     public Position calculateNextPosition() {

@@ -1,6 +1,6 @@
 package main.java.common;
 
-public interface Robot {
+public interface Robot extends Observable {
     /**
      * Turns the robot by 45 degrees clockwise
      */
@@ -33,12 +33,5 @@ public interface Robot {
      * @return The current position of the robot
      */
     Position getPosition();
-
-    /**
-     * Returns a string representation of the robot
-     *
-     * @return A string representation of the robot
-     */
-    String toString();
 }
 
