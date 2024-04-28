@@ -98,12 +98,11 @@ public class Room implements Environment {
         sb.append("Cols=").append(cols).append("\n");
         sb.append("Obstacles=").append(obstacles.size()).append("\n");
         for (Obstacle obstacle : obstacles) {
-            sb.append(obstacle.toString()).append("\n");
+            sb.append(obstacle.toString());
         }
         sb.append("Robots=").append(robots.size()).append("\n");
-        sb.append("\n");
         for (Robot robot : robots) {
-            sb.append(robot.toString()).append("\n");
+            sb.append(robot.toString());
         }
         return sb.toString();
     }

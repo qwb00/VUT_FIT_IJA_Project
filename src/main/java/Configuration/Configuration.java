@@ -19,40 +19,86 @@ public class Configuration {
     }
 
     public static Environment loadConfiguration(String filePath) throws FileNotFoundException {
-        Scanner scanner = new Scanner(new File(filePath));
-        Environment room = null;
+        File file = new File(filePath);
+        Scanner scanner = new Scanner(file);
+        Room room = null;
+        int numObstacles = 0;
+        int numRobots = 0;
+        boolean readingObstacles = false;  // To track when we are reading obstacle details
+        boolean readingRobots = false;     // To track when we are reading robot details
+
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine().trim();
-            if (line.equals("Room")) {
-                int rows = Integer.parseInt(scanner.nextLine().split("=")[1]);
-                int cols = Integer.parseInt(scanner.nextLine().split("=")[1]);
-                room = Room.create(rows, cols);
-                scanner.nextLine(); // Skip the Obstacles count
-            } else if (line.startsWith("Obstacle")) {
-                scanner.nextLine(); // Skip "Position"
-                int row = Integer.parseInt(scanner.nextLine().split("=")[1]);
-                int col = Integer.parseInt(scanner.nextLine().split("=")[1]);
-                if (room != null) {
-                    room.createObstacleAt(row, col);
-                }
-            } else if (line.contains("Robot")) {
-                String robotType = line.trim();
-                int row = Integer.parseInt(scanner.nextLine().split("=")[1]);
-                int col = Integer.parseInt(scanner.nextLine().split("=")[1]);
+            if (line.isEmpty()) continue;  // Skip empty lines
 
-                if (robotType.equals("AutonomousRobot")) {
-                    int detectionRange = Integer.parseInt(scanner.nextLine().split("=")[1]);
-                    int turnAngle = Integer.parseInt(scanner.nextLine().split("=")[1]);
-                    boolean turnDirection = Boolean.parseBoolean(scanner.nextLine().split("=")[1]);
-                    AutonomousRobot robot = AutonomousRobot.create(room, new Position(row, col), detectionRange, turnAngle, turnDirection);
-                    room.addRobot(robot);
-                } else if (robotType.equals("ControlledRobot")) {
-                    ControlledRobot robot = ControlledRobot.create(room, new Position(row, col));
-                    room.addRobot(robot);
+            if (line.startsWith("Room")) {
+                room = parseRoom(scanner);
+            } else if (line.startsWith("Obstacles=")) {
+                numObstacles = Integer.parseInt(line.split("=")[1].trim());
+                readingObstacles = true;  // Start reading obstacle positions
+            } else if (line.startsWith("Robots=")) {
+                numRobots = Integer.parseInt(line.split("=")[1].trim());
+                readingRobots = true;    // Start reading robot details
+            } else if (line.startsWith("Obstacle Position") && readingObstacles && numObstacles > 0) {
+                parseObstacle(room, scanner);
+                numObstacles--;
+                if (numObstacles == 0) {
+                    readingObstacles = false;  // Stop reading obstacle positions
+                }
+            } else if (line.contains("Robot") && readingRobots && numRobots > 0) {
+                parseRobot(room, scanner, line);
+                numRobots--;
+                if (numRobots == 0) {
+                    readingRobots = false;    // Stop reading robot details
                 }
             }
         }
         scanner.close();
+
+        if (numObstacles != 0 || numRobots != 0) {
+            throw new RuntimeException("Configuration mismatch: Not all obstacles or robots were processed");
+        }
+
         return room;
     }
+
+    private static Room parseRoom(Scanner scanner) throws RuntimeException {
+        int rows = readInteger(scanner, "Rows");
+        int cols = readInteger(scanner, "Cols");
+        return Room.create(rows, cols);
+    }
+
+    private static void parseObstacle(Room room, Scanner scanner) throws RuntimeException {
+        int row = readInteger(scanner, "Row");
+        int col = readInteger(scanner, "Col");
+        room.createObstacleAt(row, col);
+    }
+
+    private static void parseRobot(Room room, Scanner scanner, String robotType) throws RuntimeException {
+        int row = readInteger(scanner, "positionRow");
+        int col = readInteger(scanner, "positionCol");
+
+        if (robotType.contains("AutonomousRobot")) {
+            int detectionRange = readInteger(scanner, "detectionRange");
+            int turnAngle = readInteger(scanner, "turnAngle");
+            boolean turnDirection = Boolean.parseBoolean(scanner.nextLine().split("=")[1].trim());
+            AutonomousRobot.create(room, new Position(row, col), detectionRange, turnAngle, turnDirection);
+        } else if (robotType.contains("ControlledRobot")) {
+            ControlledRobot.create(room, new Position(row, col));
+        }
+    }
+
+    private static int readInteger(Scanner scanner, String fieldName) throws RuntimeException {
+        if (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] parts = line.split("=");
+            if (parts.length > 1) {
+                return Integer.parseInt(parts[1].trim());
+            } else {
+                throw new RuntimeException("Malformed line for " + fieldName + ": " + line);
+            }
+        }
+        throw new RuntimeException("Missing line for " + fieldName);
+    }
+
 }

@@ -25,6 +25,6 @@ public class Obstacle {
     }
 
     public String toString() {
-        return "Obstacle " + pos.toString() + "\n";
+        return "Obstacle " + pos.toString();
     }
 }
