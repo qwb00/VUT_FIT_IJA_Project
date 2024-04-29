@@ -102,7 +102,6 @@ public class AutonomousRobot implements Robot {
         return position;
     }
 
-    @Override
     public Position calculateNextPosition() {
         int dx = 0, dy = 0;
         switch (angle) {

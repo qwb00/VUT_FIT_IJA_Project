@@ -4,8 +4,6 @@ import main.java.common.Environment;
 import main.java.common.Obstacle;
 import main.java.common.Position;
 import main.java.common.Robot;
-import main.java.robot.AutonomousRobot;
-import main.java.robot.ControlledRobot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

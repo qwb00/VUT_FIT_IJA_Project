@@ -33,7 +33,5 @@ public interface Robot extends Observable {
      * @return The current position of the robot
      */
     Position getPosition();
-
-    public Position calculateNextPosition();
 }
 

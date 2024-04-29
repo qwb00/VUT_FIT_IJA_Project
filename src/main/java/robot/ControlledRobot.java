@@ -3,8 +3,6 @@ package main.java.robot;
 import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
-import main.java.common.Observable.Observer;
-import main.java.common.Observable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +13,7 @@ public class ControlledRobot implements Robot {
     private final Environment env;
     private Position position;
     private int angle = 0;
-    private int speed;
+    private final int speed;
     private final List<Observer> observers = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(ControlledRobot.class);
 
