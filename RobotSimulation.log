@@ -1,0 +1,275 @@
+22:14:48.560 [main.java.Main.main()] INFO  main.java.environment.Room - Creating a new Room with dimensions: rows=5, cols=8
+22:14:48.562 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: Position
+Row=1
+Col=2
+
+22:14:48.562 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: Position
+Row=1
+Col=4
+
+22:14:48.562 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: Position
+Row=1
+Col=5
+
+22:14:48.562 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: Position
+Row=2
+Col=5
+
+22:14:48.562 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: Position
+Row=4
+Col=2
+
+22:14:48.563 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: Position
+Row=4
+Col=7
+
+22:14:48.563 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: Position
+Row=1
+Col=1
+
+22:14:48.563 [main.java.Main.main()] INFO  main.java.configuration.Configuration - Configuration loaded from file: /Users/aleksander/Documents/SchoolProjects/IJA/IJA-Project/config.txt
+22:14:50.374 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: Position
+Row=2
+Col=2
+
+22:14:50.522 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: Position
+Row=0
+Col=2
+
+22:15:22.053 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: Position
+Row=2
+Col=6
+
+22:16:50.154 [main.java.Main.main()] INFO  main.java.environment.Room - Creating a new Room with dimensions: rows=5, cols=8
+22:16:50.156 [main.java.Main.main()] ERROR main.java.environment.Room - Created a new Obstacle at position: Position
+Row=1
+Col=2
+
+22:16:50.156 [main.java.Main.main()] ERROR main.java.environment.Room - Created a new Obstacle at position: Position
+Row=1
+Col=4
+
+22:16:50.156 [main.java.Main.main()] ERROR main.java.environment.Room - Created a new Obstacle at position: Position
+Row=1
+Col=5
+
+22:16:50.156 [main.java.Main.main()] ERROR main.java.environment.Room - Created a new Obstacle at position: Position
+Row=2
+Col=5
+
+22:16:50.157 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: Position
+Row=4
+Col=2
+
+22:16:50.157 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: Position
+Row=4
+Col=7
+
+22:16:50.157 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: Position
+Row=1
+Col=1
+
+22:16:50.157 [main.java.Main.main()] INFO  main.java.configuration.Configuration - Configuration loaded from file: /Users/aleksander/Documents/SchoolProjects/IJA/IJA-Project/config.txt
+22:16:53.552 [AWT-EventQueue-0] ERROR main.java.environment.Room - Created a new Obstacle at position: Position
+Row=2
+Col=6
+
+22:23:43.107 [main.java.Main.main()] INFO  main.java.environment.Room - Creating a new Room with dimensions: rows=5, cols=8
+22:23:43.110 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 2, row = 1
+22:23:43.110 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 4, row = 1
+22:23:43.110 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 1
+22:23:43.110 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 2
+22:23:43.111 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: Position
+Row=4
+Col=2
+
+22:23:43.111 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: Position
+Row=4
+Col=7
+
+22:23:43.111 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: Position
+Row=1
+Col=1
+
+22:23:43.111 [main.java.Main.main()] INFO  main.java.configuration.Configuration - Configuration loaded from file: /Users/aleksander/Documents/SchoolProjects/IJA/IJA-Project/config.txt
+22:25:59.645 [main.java.Main.main()] INFO  main.java.environment.Room - Creating a new Room with dimensions: cols = 5, rows = 8
+22:25:59.647 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 2, row = 1
+22:25:59.647 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 4, row = 1
+22:25:59.647 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 1
+22:25:59.647 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 2
+22:25:59.647 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 2, row = 4
+22:25:59.647 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 7, row = 4
+22:25:59.648 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 1, row = 1
+22:25:59.648 [main.java.Main.main()] INFO  main.java.configuration.Configuration - Configuration loaded from file: /Users/aleksander/Documents/SchoolProjects/IJA/IJA-Project/config.txt
+22:26:10.214 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 45
+22:26:10.728 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 90
+22:26:10.946 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 135
+22:26:11.126 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 180
+22:26:14.746 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 225
+22:26:14.910 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 270
+22:26:15.112 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 315
+22:26:15.377 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 0
+22:26:15.944 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 45
+22:26:16.777 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 4, row = 2
+22:26:23.278 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 6, row = 0
+22:53:40.960 [main.java.Main.main()] INFO  main.java.environment.Room - Creating a new Room with dimensions: cols = 5, rows = 8
+22:53:40.962 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 2, row = 1
+22:53:40.962 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 4, row = 1
+22:53:40.962 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 1
+22:53:40.962 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 2
+22:53:40.962 [main.java.Main.main()] ERROR main.java.Configuration.Configuration - Malformed line for speed: ControlledRobot
+22:54:59.469 [main.java.Main.main()] INFO  main.java.environment.Room - Creating a new Room with dimensions: cols = 5, rows = 8
+22:54:59.471 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 2, row = 1
+22:54:59.471 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 4, row = 1
+22:54:59.471 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 1
+22:54:59.471 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 2
+22:54:59.472 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 2, row = 4
+22:54:59.472 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 7, row = 4
+22:54:59.472 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 1, row = 1
+22:54:59.472 [main.java.Main.main()] INFO  main.java.Configuration.Configuration - Configuration loaded from file: /Users/aleksander/Documents/SchoolProjects/IJA/IJA-Project/config.txt
+22:55:02.217 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 3
+22:55:02.433 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 2
+10:37:46.029 [main.java.Main.main()] INFO  main.java.environment.Room - Creating a new Room with dimensions: cols = 5, rows = 8
+10:37:46.031 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 2, row = 1
+10:37:46.031 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 4, row = 1
+10:37:46.031 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 1
+10:37:46.031 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 2
+10:37:46.031 [main.java.Main.main()] ERROR main.java.Configuration.Configuration - Malformed line for speed: ControlledRobot
+10:38:29.383 [main.java.Main.main()] INFO  main.java.environment.Room - Creating a new Room with dimensions: cols = 5, rows = 8
+10:38:29.386 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 2, row = 1
+10:38:29.386 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 4, row = 1
+10:38:29.386 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 1
+10:38:29.386 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 2
+10:38:29.387 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 2, row = 4
+10:38:29.387 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 7, row = 4
+10:38:29.387 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 1, row = 1
+10:38:29.387 [main.java.Main.main()] INFO  main.java.Configuration.Configuration - Configuration loaded from file: /Users/aleksander/Documents/SchoolProjects/IJA/IJA-Project/config.txt
+10:38:32.033 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 3
+10:38:32.447 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 2
+10:38:34.048 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 45
+10:38:34.232 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 90
+10:38:35.213 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 3, row = 2
+10:38:35.615 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 4, row = 2
+10:38:36.348 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 135
+10:38:36.546 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 180
+10:38:37.516 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 4, row = 3
+10:38:37.699 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 4, row = 4
+10:38:38.612 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 225
+10:38:40.797 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 270
+10:38:41.478 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 3, row = 4
+10:38:41.665 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 4
+10:38:41.879 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 1, row = 4
+10:38:42.430 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 315
+10:38:43.079 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 0
+10:38:44.348 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 1, row = 3
+10:38:45.211 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 45
+10:38:46.646 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 2
+10:38:47.081 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 3, row = 1
+10:38:47.614 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 4, row = 0
+11:06:51.140 [main.java.Main.main()] INFO  main.java.environment.Room - Creating a new Room with dimensions: cols = 5, rows = 8
+11:06:51.142 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 2, row = 1
+11:06:51.142 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 4, row = 1
+11:06:51.143 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 1
+11:06:51.143 [main.java.Main.main()] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 2
+11:06:51.143 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 2, row = 4
+11:06:51.143 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 7, row = 4
+11:06:51.143 [main.java.Main.main()] INFO  main.java.robot.ControlledRobot - Added a new ControlledRobot at position: col = 1, row = 1
+11:06:51.143 [main.java.Main.main()] INFO  main.java.configuration.Configuration - Configuration loaded from file: /Users/aleksander/Documents/SchoolProjects/IJA/IJA-Project/config.txt
+11:06:53.301 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 3
+11:06:53.521 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 2
+11:06:54.502 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 45
+11:06:54.668 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 90
+11:06:54.851 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 135
+11:06:55.650 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 3, row = 3
+11:06:55.834 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 4, row = 4
+11:06:56.535 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 180
+11:06:56.734 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 225
+11:06:56.953 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 270
+11:06:57.134 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 315
+11:06:58.117 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 3, row = 3
+11:06:58.284 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 2
+11:06:59.484 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 0
+11:06:59.633 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 45
+11:06:59.786 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 90
+11:06:59.950 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 135
+11:07:00.684 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 3, row = 3
+11:07:00.852 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 4, row = 4
+11:07:02.800 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 315
+11:07:03.318 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 270
+11:07:03.784 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 225
+11:07:04.086 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 180
+11:07:04.283 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 135
+11:07:04.453 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 90
+11:07:04.835 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 45
+11:07:05.052 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 0
+11:07:06.101 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 7, row = 3
+11:07:06.268 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 7, row = 2
+11:07:06.449 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 7, row = 1
+11:07:06.601 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 7, row = 0
+11:07:07.553 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 45
+11:07:07.716 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 90
+11:07:07.933 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 135
+11:07:08.218 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 180
+11:07:08.403 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 225
+11:07:08.568 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 270
+11:07:09.717 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 6, row = 0
+11:07:09.884 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 5, row = 0
+11:07:10.049 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 4, row = 0
+11:07:10.218 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 3, row = 0
+11:07:10.399 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 0
+11:07:10.769 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 1, row = 0
+11:07:11.035 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 0, row = 0
+11:07:12.651 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 225
+11:07:12.920 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 180
+11:07:14.000 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 0, row = 1
+11:07:14.170 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 0, row = 2
+11:07:14.317 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 0, row = 3
+11:07:15.335 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 135
+11:07:15.500 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 90
+11:07:16.485 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 1, row = 3
+11:07:16.666 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 3
+11:07:16.819 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 3, row = 3
+11:07:17.003 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 4, row = 3
+11:07:17.170 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 5, row = 3
+11:07:18.332 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 135
+11:07:19.283 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 90
+11:07:19.502 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 45
+11:07:20.602 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 6, row = 2
+11:07:20.752 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 7, row = 1
+11:07:21.535 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 90
+11:07:21.883 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 135
+11:07:22.035 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 180
+11:07:22.287 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 225
+11:07:22.466 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 270
+11:07:22.633 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 315
+11:07:23.637 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 6, row = 0
+11:07:24.268 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 0
+11:07:25.300 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 315
+11:07:25.500 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned counterclockwise to angle: 270
+11:07:26.435 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 5, row = 0
+11:07:26.620 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 4, row = 0
+11:07:26.786 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 3, row = 0
+11:07:26.935 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 2, row = 0
+11:07:27.135 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 1, row = 0
+11:07:27.301 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 0, row = 0
+11:07:29.953 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 45
+11:07:30.116 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 90
+11:07:30.269 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 135
+11:07:30.434 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - ControlledRobot turned clockwise to angle: 180
+11:07:31.368 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 1, row = 2
+11:07:31.532 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 1, row = 3
+11:07:31.702 [AWT-EventQueue-0] INFO  main.java.robot.ControlledRobot - Controlled robot moved to position: col = 1, row = 4
+11:07:33.784 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 5, row = 3
+11:07:34.569 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 4, row = 2
+11:07:35.099 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 3, row = 1
+11:07:35.254 [AWT-EventQueue-0] INFO  main.java.environment.Room - Removed an Obstacle at position: col = 3, row = 1
+11:07:36.083 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 3, row = 1
+11:07:36.582 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 3, row = 0
+11:07:36.750 [AWT-EventQueue-0] INFO  main.java.environment.Room - Removed an Obstacle at position: col = 3, row = 0
+11:07:37.216 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 2, row = 0
+11:07:37.783 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 3, row = 0
+11:07:38.032 [AWT-EventQueue-0] INFO  main.java.environment.Room - Removed an Obstacle at position: col = 3, row = 0
+11:07:38.637 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 3, row = 0
+11:07:40.202 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 1, row = 0
+11:07:40.386 [AWT-EventQueue-0] INFO  main.java.environment.Room - Removed an Obstacle at position: col = 1, row = 0
+11:07:40.799 [AWT-EventQueue-0] INFO  main.java.environment.Room - Created a new Obstacle at position: col = 1, row = 0

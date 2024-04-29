@@ -6,6 +6,9 @@ import main.java.common.Robot;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import main.java.common.Observable.Observer;
+import main.java.common.Observable;
+
 import java.util.ArrayList;
 import java.util.List;
 

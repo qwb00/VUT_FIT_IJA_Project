@@ -3,6 +3,7 @@ package main.java.robot;
 import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +20,7 @@ public class AutonomousRobot implements Robot {
     private final int speed;
     private final List<Observer> observers = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(AutonomousRobot.class);
-    public AutonomousRobot(Environment env, Position position, int speed, int detectionRange, int turnAngle, boolean turnDirection) {
+    private AutonomousRobot(Environment env, Position position, int speed, int detectionRange, int turnAngle, boolean turnDirection) {
         this.env = env;
         this.position = position;
         this.detectionRange = detectionRange;

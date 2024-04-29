@@ -1,4 +1,4 @@
-package main.java.Configuration;
+package main.java.configuration;
 
 import main.java.common.Environment;
 import main.java.common.Position;

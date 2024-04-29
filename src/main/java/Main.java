@@ -1,7 +1,7 @@
 package main.java;
 
 
-import main.java.Configuration.Configuration;
+import main.java.configuration.Configuration;
 import main.java.common.Environment;
 
 
@@ -14,6 +14,7 @@ Main {
         EnvPresenter presenter = new EnvPresenter(room);
 
         presenter.open();
+
     }
 
     /**

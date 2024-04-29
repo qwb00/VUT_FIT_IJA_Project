@@ -15,7 +15,6 @@ public class Room implements Environment {
     private final int cols;
     private final List<Robot> robots;
     private final List<Obstacle> obstacles;
-
     private static final Logger logger = LogManager.getLogger(Room.class);
 
     public Room(int rows, int cols) {
@@ -86,6 +85,7 @@ public class Room implements Environment {
         return false;
     }
 
+
     @Override
     public boolean obstacleAt(int row, int col) {
         return obstacles.stream().anyMatch(obstacle ->
@@ -139,3 +139,4 @@ public class Room implements Environment {
         return sb.toString();
     }
 }
+
