@@ -1,0 +1,7 @@
+<Appenders>
+    <File name="fout" fileName="RobotSimulation.log" append="true">
+        <PatternLayout>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %m%n</Pattern>
+        </PatternLayout>
+    </File>
+</Appenders>
