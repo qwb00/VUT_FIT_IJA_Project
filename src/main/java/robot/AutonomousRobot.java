@@ -37,10 +37,10 @@ public class AutonomousRobot implements Robot {
         movementTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                move();  // Перемещение робота
-                notifyObservers();  // Оповещение наблюдателей о изменениях
+                move();  // move the robot
+                notifyObservers();  // notify observers
             }
-        }, 0, 1000);  // Запуск задачи каждую секунду
+        }, 0, 1000);  // init movement with 1 second delay
     }
 
     public static AutonomousRobot create(Environment env, Position pos, int speed, int detectionRange, int turnAngle, boolean turnDirection) {
@@ -90,15 +90,15 @@ public class AutonomousRobot implements Robot {
 
     @Override
     public boolean canMove() {
-        int checkDistance = Math.min(speed, detectionRange);  // Ограничиваем проверку меньшим значением из speed и detectionRange
+        int checkDistance = Math.min(speed, detectionRange);  // Find the minimum of speed and detection range
         for (int i = 1; i <= checkDistance; i++) {
             Position checkingPosition = calculateNextPosition(i);
             if (!env.containsPosition(checkingPosition) || env.robotAt(checkingPosition) || env.obstacleAt(checkingPosition)) {
-                // Препятствие обнаружено
+                // obstacle detected
                 return false;
             }
         }
-        return true; // Препятствий нет в пределах допустимой дистанции
+        return true; // obstacle not detected
     }
 
     public int maxMovableSteps() {
@@ -116,7 +116,7 @@ public class AutonomousRobot implements Robot {
     @Override
     public boolean move() {
         if (canMove()) {
-            int movableSteps = maxMovableSteps();  // Определяем, насколько далеко можно безопасно переместиться
+            int movableSteps = maxMovableSteps();  // determine the maximum number of steps the robot can move
             if (movableSteps > 0) {
                 this.position = calculateNextPosition(movableSteps);
                 notifyObservers();
@@ -124,7 +124,7 @@ public class AutonomousRobot implements Robot {
                 return true;
             }
         } else {
-            // Если обнаружено препятствие, робот поворачивает
+            // obstacle detected
             turn();
             logger.info("Detected an obstacle within detection range, turned to angle: {}", angle);
             return false;
