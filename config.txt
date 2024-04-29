@@ -18,12 +18,9 @@ Robots=3
 ControlledRobot
 positionRow=4
 positionCol=2
-speed=1
 ControlledRobot
 positionRow=4
 positionCol=7
-speed=1
 ControlledRobot
 positionRow=1
 positionCol=1
-speed=1
