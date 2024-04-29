@@ -71,8 +71,14 @@ public class ControlledRobot implements Robot {
 
     @Override
     public boolean canMove() {
-        Position nextPosition = calculateNextPosition();
-        return env.containsPosition(nextPosition) && !env.robotAt(nextPosition) && !env.obstacleAt(nextPosition);
+        for (int step = 1; step <= speed; step++) {
+            Position nextPosition = calculateNextPosition(step);
+            // Check if the next position is within the environment, not an obstacle, and not occupied by another robot
+            if (!env.containsPosition(nextPosition) || env.obstacleAt(nextPosition) || env.robotAt(nextPosition)) {
+                return false;
+            }
+        }
+        return true; // move is possible
     }
 
     @Override
@@ -80,10 +86,23 @@ public class ControlledRobot implements Robot {
         return position;
     }
 
+    public int maxMovableSteps() {
+        int steps = 0;
+        for (int step = 1; step <= speed; step++) {
+            Position nextPosition = calculateNextPosition(step);
+            if (!env.containsPosition(nextPosition) || env.obstacleAt(nextPosition) || env.robotAt(nextPosition)) {
+                break;
+            }
+            steps = step;  // Update the number of steps if the current step is valid
+        }
+        return steps;
+    }
+
     @Override
     public boolean move() {
-        if (canMove()) {
-            this.position = calculateNextPosition();
+        int movableSteps = maxMovableSteps();
+        if (movableSteps > 0) {
+            this.position = calculateNextPosition(movableSteps);
             notifyObservers();
             logger.info("Controlled robot moved to position: col = {}, row = {}", position.getCol(), position.getRow());
             return true;
@@ -104,7 +123,7 @@ public class ControlledRobot implements Robot {
         logger.info("ControlledRobot turned counterclockwise to angle: {}", angle);
     }
 
-    public Position calculateNextPosition() {
+    public Position calculateNextPosition(int step) {
         int dx = 0, dy = 0;
         switch (angle) {
             case 0:
@@ -132,7 +151,7 @@ public class ControlledRobot implements Robot {
                 dx = -1; dy = -1;
                 break;
         }
-        return new Position(position.getRow() + (dy * speed), position.getCol() + (dx * speed));
+        return new Position(position.getRow() + (dy * step), position.getCol() + (dx * step));
     }
 
     @Override

@@ -3,6 +3,7 @@ main/java/Main.class
 main/java/robot/AutonomousRobot.class
 main/java/environment/Room.class
 main/java/common/Obstacle.class
+main/java/robot/AutonomousRobot$1.class
 main/java/common/Robot.class
 main/java/common/Position.class
 main/java/common/Environment.class
