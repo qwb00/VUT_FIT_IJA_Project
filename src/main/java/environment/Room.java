@@ -61,6 +61,31 @@ public class Room implements Environment {
         return removed;
     }
 
+    /**
+     * Clears all robots from the room.
+     */
+    public void clearRobots() {
+        robots.clear();
+        logger.info("All robots have been removed from the room.");
+    }
+
+    /**
+     * Clears all obstacles from the room.
+     */
+    public void clearObstacles() {
+        obstacles.clear();
+        logger.info("All obstacles have been removed from the room.");
+    }
+
+    /**
+     * Resets the room by removing all robots and obstacles.
+     */
+    public void resetRoom() {
+        clearRobots();
+        clearObstacles();
+        logger.info("Room has been reset.");
+    }
+
     @Override
     public boolean containsPosition(Position pos) {
         return pos.getRow() >= 0 && pos.getRow() < this.rows &&
