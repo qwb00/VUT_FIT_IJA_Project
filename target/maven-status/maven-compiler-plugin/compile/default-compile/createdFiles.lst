@@ -1,5 +1,3 @@
-main/java/robot/ControlledRobot.class
-main/java/Main.class
 main/java/robot/AutonomousRobot.class
 main/java/environment/Room.class
 main/java/common/Obstacle.class
