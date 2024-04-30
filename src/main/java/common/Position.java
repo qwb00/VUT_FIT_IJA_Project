@@ -69,7 +69,7 @@ public class Position {
      */
     @Override
     public String toString() {
-        return "Position {" + "row=" + row + ", col=" + col + '}';
+        return "Position\n" + "Row=" + row + "\n" + "Col=" + col + "\n";
     }
 }
 

@@ -4,6 +4,8 @@ import main.java.common.Environment;
 import main.java.common.Obstacle;
 import main.java.common.Position;
 import main.java.common.Robot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ public class Room implements Environment {
     private final int cols;
     private final List<Robot> robots;
     private final List<Obstacle> obstacles;
+    private static final Logger logger = LogManager.getLogger(Room.class);
 
     public Room(int rows, int cols) {
         this.rows = rows;
@@ -33,6 +36,7 @@ public class Room implements Environment {
         if (rows <= 0 || cols <= 0) {
             throw new IllegalArgumentException("The number of rows and columns must be positive.");
         }
+        logger.info("Creating a new Room with dimensions: cols = {}, rows = {}", rows, cols);
         return new Room(rows, cols);
     }
 
@@ -44,6 +48,31 @@ public class Room implements Environment {
         }
         robots.add(robot);
         return true;
+    }
+
+    /**
+     * Clears all robots from the room.
+     */
+    public void clearRobots() {
+        robots.clear();
+        logger.info("All robots have been removed from the room.");
+    }
+
+    /**
+     * Clears all obstacles from the room.
+     */
+    public void clearObstacles() {
+        obstacles.clear();
+        logger.info("All obstacles have been removed from the room.");
+    }
+
+    /**
+     * Resets the room by removing all robots and obstacles.
+     */
+    public void resetRoom() {
+        clearRobots();
+        clearObstacles();
+        logger.info("Room has been reset.");
     }
 
     @Override
@@ -60,6 +89,7 @@ public class Room implements Environment {
         }
         Obstacle newObstacle = new Obstacle(this, new Position(row, col));
         obstacles.add(newObstacle);
+        logger.info("Created a new Obstacle at position: col = {}, row = {}", newObstacle.getPosition().getCol(), newObstacle.getPosition().getRow());
         return true;
     }
 
@@ -73,10 +103,13 @@ public class Room implements Environment {
                 .orElse(null);
         if (toRemove != null) {
             obstacles.remove(toRemove);
+            logger.info("Removed an Obstacle at position: col = {}, row = {}", toRemove.getPosition().getCol(), toRemove.getPosition().getRow());
             return true;
         }
+        logger.error("No Obstacle found at position: ({}, {})", row, col);
         return false;
     }
+
 
     @Override
     public boolean obstacleAt(int row, int col) {
@@ -106,12 +139,29 @@ public class Room implements Environment {
     }
 
     @Override
-    public int rows() {
+    public int getRows() {
         return this.rows;
     }
 
     @Override
-    public int cols() {
+    public int getCols() {
         return this.cols;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Room\n");
+        sb.append("Rows=").append(rows).append("\n");
+        sb.append("Cols=").append(cols).append("\n");
+        sb.append("Obstacles=").append(obstacles.size()).append("\n");
+        for (Obstacle obstacle : obstacles) {
+            sb.append(obstacle.toString());
+        }
+        sb.append("Robots=").append(robots.size()).append("\n");
+        for (Robot robot : robots) {
+            sb.append(robot.toString());
+        }
+        return sb.toString();
+    }
 }
+

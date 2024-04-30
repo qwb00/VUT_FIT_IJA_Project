@@ -3,8 +3,10 @@ package main.java.robot;
 import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
-import main.java.common.Observable.Observer;
-import main.java.common.Observable;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +15,14 @@ public class ControlledRobot implements Robot {
     private final Environment env;
     private Position position;
     private int angle = 0;
+    private final int speed;
     private final List<Observer> observers = new ArrayList<>();
+    private static final Logger logger = LogManager.getLogger(ControlledRobot.class);
 
-    private ControlledRobot(Environment env, Position position) {
+    private ControlledRobot(Environment env, Position position, int speed) {
         this.env = env;
         this.position = position;
+        this.speed = speed;
     }
 
     @Override
@@ -46,13 +51,15 @@ public class ControlledRobot implements Robot {
      * @param pos The intended position for the robot within the environment
      * @return An instance of ControlledRobot placed at the given position or null if the position is invalid
      */
-    public static ControlledRobot create(Environment env, Position pos) {
+    public static ControlledRobot create(Environment env, Position pos, int speed) {
         if (env.containsPosition(pos) && !env.robotAt(pos)) {
-            ControlledRobot robot = new ControlledRobot(env, pos);
+            ControlledRobot robot = new ControlledRobot(env, pos, speed);
             if (env.addRobot(robot)) {
+                logger.info("Added a new ControlledRobot at position: col = {}, row = {}", pos.getCol(), pos.getRow());
                 return robot;
             }
         }
+        logger.warn("Failed to add a new ControlledRobot at position: col = {}, row = {}", pos.getCol(), pos.getRow());
         return null;
     }
 
@@ -63,8 +70,14 @@ public class ControlledRobot implements Robot {
 
     @Override
     public boolean canMove() {
-        Position nextPosition = calculateNextPosition();
-        return env.containsPosition(nextPosition) && !env.robotAt(nextPosition) && !env.obstacleAt(nextPosition);
+        for (int step = 1; step <= speed; step++) {
+            Position nextPosition = calculateNextPosition(step);
+            // Check if the next position is within the environment, not an obstacle, and not occupied by another robot
+            if (!env.containsPosition(nextPosition) || env.obstacleAt(nextPosition) || env.robotAt(nextPosition)) {
+                return false;
+            }
+        }
+        return true; // move is possible
     }
 
     @Override
@@ -72,11 +85,25 @@ public class ControlledRobot implements Robot {
         return position;
     }
 
+    public int maxMovableSteps() {
+        int steps = 0;
+        for (int step = 1; step <= speed; step++) {
+            Position nextPosition = calculateNextPosition(step);
+            if (!env.containsPosition(nextPosition) || env.obstacleAt(nextPosition) || env.robotAt(nextPosition)) {
+                break;
+            }
+            steps = step;  // Update the number of steps if the current step is valid
+        }
+        return steps;
+    }
+
     @Override
     public boolean move() {
-        if (canMove()) {
-            this.position = calculateNextPosition();
+        int movableSteps = maxMovableSteps();
+        if (movableSteps > 0) {
+            this.position = calculateNextPosition(movableSteps);
             notifyObservers();
+            logger.info("Controlled robot moved to position: col = {}, row = {}", position.getCol(), position.getRow());
             return true;
         }
         return false;
@@ -86,14 +113,16 @@ public class ControlledRobot implements Robot {
     public void turn() {
         angle = (angle + 45) % 360;
         notifyObservers();
+        logger.info("ControlledRobot turned clockwise to angle: {}", angle);
     }
 
     public void turnCounterClockwise() {
         angle = (angle - 45 + 360) % 360;
         notifyObservers();
+        logger.info("ControlledRobot turned counterclockwise to angle: {}", angle);
     }
 
-    public Position calculateNextPosition() {
+    public Position calculateNextPosition(int step) {
         int dx = 0, dy = 0;
         switch (angle) {
             case 0:
@@ -121,7 +150,15 @@ public class ControlledRobot implements Robot {
                 dx = -1; dy = -1;
                 break;
         }
-        return new Position(position.getRow() + dy, position.getCol() + dx);
+        return new Position(position.getRow() + (dy * step), position.getCol() + (dx * step));
+    }
+
+    @Override
+    public String toString() {
+        return "ControlledRobot\n"
+                + "positionRow=" + position.getRow() + "\n"
+                + "positionCol=" + position.getCol() + "\n"
+                + "speed=" + speed + "\n";
     }
 }
 

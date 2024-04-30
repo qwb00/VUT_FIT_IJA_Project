@@ -31,22 +31,17 @@ public class FieldView extends JPanel {
     }
 
     private void handleMouseClick() {
-        if (presenter.isObstacleMode()) {
-            if (model.obstacleAt(position)) {
-                model.removeObstacleAt(position.getRow(), position.getCol());
-                //System.out.println("Removed obstacle at " + position.getRow() + " / " + position.getCol());
-            } else {
-                model.createObstacleAt(position.getRow(), position.getCol());
-                //System.out.println("Created obstacle at " + position.getRow() + " / " + position.getCol());
-            }
-            privUpdate();
-            repaint();
+        if (model.obstacleAt(position)) {
+            model.removeObstacleAt(position.getRow(), position.getCol());
         } else {
-            // Активировать робота, если кликнули по клетке, где он находится
-            if (model.robotAt(position)) {
-                presenter.setActiveRobotByPosition(position);
-            }
+            model.createObstacleAt(position.getRow(), position.getCol());
         }
+        if (model.robotAt(position)) {
+            presenter.setActiveRobotByPosition(position);
+        }
+
+        privUpdate();
+        repaint();
     }
 
     @Override

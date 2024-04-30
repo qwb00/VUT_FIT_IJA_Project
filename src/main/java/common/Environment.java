@@ -62,9 +62,9 @@
          */
         boolean obstacleAt(Position p);
 
-        int rows();
+        int getRows();
 
-        int cols();
+        int getCols();
 
         List<Robot> getRobots();
 

@@ -5,6 +5,8 @@ package main.java.view;
 import main.java.EnvPresenter;
 import main.java.common.Observable;
 import main.java.common.Robot;
+import main.java.robot.ControlledRobot;
+import main.java.robot.AutonomousRobot;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -52,8 +54,14 @@ public class RobotView implements ComponentView, Observable.Observer {
         double var14 = (var6 - var10) / 2.0;
         Ellipse2D.Double var16 = new Ellipse2D.Double(var12, var14, var10, var10);
 
-        // Устанавливаем цвет робота
-        var2.setColor(Color.cyan);
+        if (this.model instanceof ControlledRobot) {
+            var2.setColor(Color.cyan);
+        } else if (this.model instanceof AutonomousRobot) {
+            var2.setColor(Color.orange);
+        } else {
+            var2.setColor(Color.gray); // Для других типов роботов
+        }
+
         var2.fill(var16);
 
         // Если робот активен, рисуем черную обводку

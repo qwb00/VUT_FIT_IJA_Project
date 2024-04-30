@@ -1,18 +1,16 @@
 package main.java;
 
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 import main.java.common.Position;
 import main.java.common.Environment;
 import main.java.common.Robot;
+import main.java.environment.Room;
 import main.java.view.FieldView;
 import main.java.view.RobotView;
 import main.java.view.ControlView;
 import main.java.common.Observable.Observer;
 import main.java.common.Observable;
+import main.java.robot.ControlledRobot;
+import main.java.robot.AutonomousRobot;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -29,18 +27,106 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class EnvPresenter implements Observer {
-    private final Environment env;
+    private Environment env;
     private Map<Position, FieldView> fields;
     private List<RobotView> robots;
     private JFrame frame;
     private ControlView controlView;
     private Robot activeRobot;
 
+
     public EnvPresenter(Environment var1) {
         this.env = var1;
         this.fields = new HashMap();
         this.robots = new ArrayList<>();
     }
+
+    public Environment getEnvironment() {
+        return this.env;
+    }
+
+    public void setEnvironment(Environment newEnv) {
+        // Clear existing environment
+        if (this.env instanceof Room) {
+            ((Room) this.env).clearObstacles();
+            ((Room) this.env).clearRobots();
+        }
+
+        // Update the environment reference
+        this.env = newEnv;
+
+        // Clear UI components associated with the old environment
+        this.fields.clear();
+        this.robots.forEach(robotView -> robotView.getModel().removeObserver(this));
+        this.robots.clear();
+
+        // Asynchronously update the UI to reflect the new environment
+        SwingUtilities.invokeLater(() -> {
+            frame.getContentPane().removeAll();
+            initializeViews();  // Reinitialize views for the new environment
+            refreshGui();
+        });
+    }
+
+
+    public void clearEnvironment() {
+        // Check if the environment can be cleared directly
+        if (env instanceof Room) {
+            ((Room) env).clearObstacles();
+            ((Room) env).clearRobots();
+        }
+
+        // Clear all fields and robot views
+        fields.forEach((pos, field) -> {
+            field.removeComponent();
+            frame.getContentPane().remove(field);
+        });
+        fields.clear();
+
+        // Unsubscribe each RobotView from its model
+        robots.forEach(robotView -> robotView.getModel().removeObserver(this));
+        robots.clear();
+
+        // Clear and reset the frame
+        frame.getContentPane().removeAll();
+        frame.revalidate();
+        frame.repaint();
+    }
+
+
+    public void initializeViews() {
+        GridLayout gridLayout = new GridLayout(env.getRows(), env.getCols());
+        JPanel gridPanel = new JPanel(gridLayout);
+
+        // Create field views based on the new environment
+        for (int row = 0; row < env.getRows(); ++row) {
+            for (int col = 0; col < env.getCols(); ++col) {
+                Position position = new Position(row, col);
+                FieldView fieldView = new FieldView(env, position, this);
+                fields.put(position, fieldView);
+                gridPanel.add(fieldView);
+            }
+        }
+
+        // Create robot views for each robot in the new environment
+        env.getRobots().forEach(robot -> {
+            RobotView robotView = new RobotView(this, robot);
+            robots.add(robotView);
+            FieldView field = fields.get(robot.getPosition());
+            if (field != null) {
+                field.addComponent(robotView);
+            }
+        });
+
+        // Update the main frame to show the new layout
+        frame.getContentPane().add(gridPanel, BorderLayout.CENTER);
+        if (controlView != null) {
+            frame.getContentPane().add(controlView, BorderLayout.SOUTH);
+        }
+        frame.revalidate();
+        frame.repaint();
+    }
+
 
     public void open() {
         try {
@@ -73,12 +159,12 @@ public class EnvPresenter implements Observer {
         this.frame.setSize(800, 600);
         this.frame.setMinimumSize(new Dimension(800, 600));
         this.frame.setResizable(false);
-        GridLayout gridLayout = new GridLayout(this.env.rows(), this.env.cols());
+        GridLayout gridLayout = new GridLayout(this.env.getRows(), this.env.getCols());
         JPanel gridPanel = new JPanel(gridLayout);
 
         // Создание и распределение полей
-        for (int row = 0; row < this.env.rows(); ++row) {
-            for (int col = 0; col < this.env.cols(); ++col) {
+        for (int row = 0; row < this.env.getRows(); ++row) {
+            for (int col = 0; col < this.env.getCols(); ++col) {
                 Position position = new Position(row, col);
                 FieldView fieldView = new FieldView(this.env, position, this);
                 gridPanel.add(fieldView);
@@ -136,9 +222,9 @@ public class EnvPresenter implements Observer {
 
     public void setActiveRobotByPosition(Position pos) {
         for (RobotView robotView : robots) {
-            if (robotView.getModel().getPosition().equals(pos)) {
+            if (robotView.getModel().getPosition().equals(pos) && robotView.getModel() instanceof ControlledRobot) {
                 setActiveRobot(robotView.getModel());
-                controlView.setActiveRobot(robotView.getModel()); // Обновляем активного робота в ControlView
+                controlView.setActiveRobot(robotView.getModel());
                 break;
             }
         }
