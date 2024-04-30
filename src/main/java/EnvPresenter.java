@@ -1,18 +1,16 @@
 package main.java;
 
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 import main.java.common.Position;
 import main.java.common.Environment;
 import main.java.common.Robot;
+import main.java.environment.Room;
 import main.java.view.FieldView;
 import main.java.view.RobotView;
 import main.java.view.ControlView;
 import main.java.common.Observable.Observer;
 import main.java.common.Observable;
+import main.java.robot.ControlledRobot;
+import main.java.robot.AutonomousRobot;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -29,18 +27,143 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class EnvPresenter implements Observer {
-    private final Environment env;
+    private Environment env;
     private Map<Position, FieldView> fields;
     private List<RobotView> robots;
     private JFrame frame;
     private ControlView controlView;
     private Robot activeRobot;
 
+
     public EnvPresenter(Environment var1) {
         this.env = var1;
         this.fields = new HashMap();
         this.robots = new ArrayList<>();
     }
+
+    public Environment getEnvironment() {
+        return this.env;
+    }
+
+    public void setEnvironment(Environment newEnv) {
+        if (this.env instanceof Room) {
+            List<Robot> oldRobots = new ArrayList<>(env.getRobots());
+            for (Robot robot : oldRobots) {
+                if (robot instanceof AutonomousRobot) {
+                    ((AutonomousRobot)robot).stopMovement();
+                }
+                env.removeRobot(robot);  // Убедитесь, что таймеры остановлены и наблюдатели удалены
+            }
+            ((Room)this.env).clearObstacles();
+        }
+
+        this.env = newEnv;
+        this.fields.clear();
+        this.robots.clear();
+
+        SwingUtilities.invokeLater(() -> {
+            frame.getContentPane().removeAll();
+            initializeViews();
+            refreshGui();
+            setActiveFirstRobot();  // Установить первого робота в списке как активного
+        });
+    }
+
+    private void setActiveFirstRobot() {
+        List<Robot> robots = env.getRobots(); // Получаем список роботов из окружения
+        if (!robots.isEmpty()) {
+            Robot firstRobot = robots.get(0);
+            setActiveRobot(firstRobot);
+            if (controlView != null) {
+                controlView.setActiveRobot(firstRobot);
+            }
+        }
+    }
+
+    public void clearEnvironment() {
+        stopSimulation();
+        // Check if the environment can be cleared directly
+        if (env instanceof Room) {
+            ((Room) env).clearObstacles();
+            ((Room) env).clearRobots();
+        }
+
+        // Clear all fields and robot views
+        fields.forEach((pos, field) -> {
+            field.removeComponent();
+            frame.getContentPane().remove(field);
+        });
+        fields.clear();
+
+        // Unsubscribe each RobotView from its model
+        robots.forEach(robotView -> robotView.getModel().removeObserver(this));
+        robots.clear();
+
+        // Clear and reset the frame
+        frame.getContentPane().removeAll();
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    /**
+     * Stops any ongoing simulation processes, including robot movements and other timed actions.
+     */
+    public void stopSimulation() {
+        // Stop all autonomous robots' movements
+        for (RobotView robotView : robots) {
+            Robot robot = robotView.getModel();
+            if (robot instanceof AutonomousRobot) {
+                ((AutonomousRobot) robot).stopMovement();
+            }
+        }
+
+        // Optionally, clear fields or reset other simulation-specific states
+        fields.forEach((position, fieldView) -> fieldView.removeComponent());
+        fields.clear();
+
+        // Reset the UI components
+        frame.getContentPane().removeAll();
+        frame.revalidate();
+        frame.repaint();
+
+        // Log or notify about the simulation stop
+        Logger.getLogger(EnvPresenter.class.getName()).log(Level.INFO, "Simulation stopped.");
+    }
+
+
+    public void initializeViews() {
+        GridLayout gridLayout = new GridLayout(env.getRows(), env.getCols());
+        JPanel gridPanel = new JPanel(gridLayout);
+
+        // Create field views based on the new environment
+        for (int row = 0; row < env.getRows(); ++row) {
+            for (int col = 0; col < env.getCols(); ++col) {
+                Position position = new Position(row, col);
+                FieldView fieldView = new FieldView(env, position, this);
+                fields.put(position, fieldView);
+                gridPanel.add(fieldView);
+            }
+        }
+
+        // Create robot views for each robot in the new environment
+        env.getRobots().forEach(robot -> {
+            RobotView robotView = new RobotView(this, robot);
+            robots.add(robotView);
+            FieldView field = fields.get(robot.getPosition());
+            if (field != null) {
+                field.addComponent(robotView);
+            }
+        });
+
+        // Update the main frame to show the new layout
+        frame.getContentPane().add(gridPanel, BorderLayout.CENTER);
+        if (controlView != null) {
+            frame.getContentPane().add(controlView, BorderLayout.SOUTH);
+        }
+        frame.revalidate();
+        frame.repaint();
+    }
+
 
     public void open() {
         try {
@@ -93,9 +216,7 @@ public class EnvPresenter implements Observer {
             this.robots.add(robotView);
         });
 
-        if (!robotModels.isEmpty()) {
-            setActiveRobot(robotModels.get(0)); // Устанавливаем первого робота в списке как активного
-        }
+        setActiveFirstRobot();
 
         // Настройка ControlView
         this.controlView = new ControlView(this, robotModels.get(0));
@@ -136,9 +257,9 @@ public class EnvPresenter implements Observer {
 
     public void setActiveRobotByPosition(Position pos) {
         for (RobotView robotView : robots) {
-            if (robotView.getModel().getPosition().equals(pos)) {
+            if (robotView.getModel().getPosition().equals(pos) && robotView.getModel() instanceof ControlledRobot) {
                 setActiveRobot(robotView.getModel());
-                controlView.setActiveRobot(robotView.getModel()); // Обновляем активного робота в ControlView
+                controlView.setActiveRobot(robotView.getModel());
                 break;
             }
         }

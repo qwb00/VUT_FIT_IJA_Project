@@ -9,7 +9,10 @@ public class
 
 Main {
     public static void main(String... args) {
-        Environment room = Configuration.loadConfiguration("/Users/aleksander/Documents/SchoolProjects/IJA/IJA-Project/config.txt");
+        String homePath = System.getProperty("user.home");
+
+        String configFilePath = "src/main/resources/config.txt";
+        Environment room = Configuration.loadConfiguration(configFilePath);
 
         EnvPresenter presenter = new EnvPresenter(room);
 

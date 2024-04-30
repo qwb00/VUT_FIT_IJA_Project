@@ -57,7 +57,9 @@ public class AutonomousRobot implements Robot {
 
     @Override
     public void addObserver(Observer observer) {
-        observers.add(observer);
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
     }
 
     @Override
@@ -69,6 +71,14 @@ public class AutonomousRobot implements Robot {
     public void notifyObservers() {
         for (Observer observer : observers) {
             observer.update(this);
+        }
+    }
+
+    public void stopMovement() {
+        if (movementTimer != null) {
+            movementTimer.cancel();  // Остановка таймера
+            movementTimer.purge();   // Удаление всех задач
+            movementTimer = null;
         }
     }
 

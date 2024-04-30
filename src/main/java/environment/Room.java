@@ -51,6 +51,17 @@ public class Room implements Environment {
     }
 
     @Override
+    public boolean removeRobot(Robot robot) {
+        boolean removed = robots.remove(robot);
+        if (removed) {
+            logger.info("Robot removed from the environment at position: {}, {}", robot.getPosition().getCol(), robot.getPosition().getRow());
+        } else {
+            logger.warn("Failed to remove robot: Robot not found in the environment.");
+        }
+        return removed;
+    }
+
+    @Override
     public boolean containsPosition(Position pos) {
         return pos.getRow() >= 0 && pos.getRow() < this.rows &&
                 pos.getCol() >= 0 && pos.getCol() < this.cols;
