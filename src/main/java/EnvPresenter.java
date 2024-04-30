@@ -46,30 +46,44 @@ public class EnvPresenter implements Observer {
     }
 
     public void setEnvironment(Environment newEnv) {
-        // Clear existing environment
         if (this.env instanceof Room) {
-            ((Room) this.env).clearObstacles();
-            ((Room) this.env).clearRobots();
+            List<Robot> oldRobots = new ArrayList<>(env.getRobots());
+            for (Robot robot : oldRobots) {
+                if (robot instanceof AutonomousRobot) {
+                    ((AutonomousRobot)robot).stopMovement();
+                }
+                env.removeRobot(robot);  // Убедитесь, что таймеры остановлены и наблюдатели удалены
+            }
+            ((Room)this.env).clearObstacles();
         }
 
-        // Update the environment reference
         this.env = newEnv;
-
-        // Clear UI components associated with the old environment
         this.fields.clear();
-        this.robots.forEach(robotView -> robotView.getModel().removeObserver(this));
         this.robots.clear();
 
-        // Asynchronously update the UI to reflect the new environment
         SwingUtilities.invokeLater(() -> {
             frame.getContentPane().removeAll();
-            initializeViews();  // Reinitialize views for the new environment
+            initializeViews();
             refreshGui();
+            setActiveFirstRobot();  // Установить первого робота в списке как активного
         });
     }
 
+    private void setActiveFirstRobot() {
+        List<Robot> robots = env.getRobots(); // Получаем список роботов из окружения
+        if (!robots.isEmpty()) {
+            Robot firstRobot = robots.get(0);
+            setActiveRobot(firstRobot);
+            if (controlView != null) {
+                controlView.setActiveRobot(firstRobot);
+            }
+        }
+    }
+
+
 
     public void clearEnvironment() {
+        stopSimulation();
         // Check if the environment can be cleared directly
         if (env instanceof Room) {
             ((Room) env).clearObstacles();
@@ -91,6 +105,31 @@ public class EnvPresenter implements Observer {
         frame.getContentPane().removeAll();
         frame.revalidate();
         frame.repaint();
+    }
+
+    /**
+     * Stops any ongoing simulation processes, including robot movements and other timed actions.
+     */
+    public void stopSimulation() {
+        // Stop all autonomous robots' movements
+        for (RobotView robotView : robots) {
+            Robot robot = robotView.getModel();
+            if (robot instanceof AutonomousRobot) {
+                ((AutonomousRobot) robot).stopMovement();
+            }
+        }
+
+        // Optionally, clear fields or reset other simulation-specific states
+        fields.forEach((position, fieldView) -> fieldView.removeComponent());
+        fields.clear();
+
+        // Reset the UI components
+        frame.getContentPane().removeAll();
+        frame.revalidate();
+        frame.repaint();
+
+        // Log or notify about the simulation stop
+        Logger.getLogger(EnvPresenter.class.getName()).log(Level.INFO, "Simulation stopped.");
     }
 
 
@@ -179,9 +218,7 @@ public class EnvPresenter implements Observer {
             this.robots.add(robotView);
         });
 
-        if (!robotModels.isEmpty()) {
-            setActiveRobot(robotModels.get(0)); // Устанавливаем первого робота в списке как активного
-        }
+        setActiveFirstRobot();
 
         // Настройка ControlView
         this.controlView = new ControlView(this, robotModels.get(0));

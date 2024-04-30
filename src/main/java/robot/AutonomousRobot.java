@@ -74,6 +74,14 @@ public class AutonomousRobot implements Robot {
         }
     }
 
+    public void stopMovement() {
+        if (movementTimer != null) {
+            movementTimer.cancel();  // Остановка таймера
+            movementTimer.purge();   // Удаление всех задач
+            movementTimer = null;
+        }
+    }
+
     @Override
     public void turn() {
         if (turnDirection) {

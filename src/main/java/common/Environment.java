@@ -12,6 +12,13 @@
         boolean addRobot(Robot robot);
 
         /**
+         * Removes a robot from the environment.
+         * @param robot The robot to be removed.
+         * @return true if the operation is successful, false otherwise.
+         */
+        boolean removeRobot(Robot robot);
+
+        /**
          * Creates an obstacle at the specified position
          *
          * @param row The row of the position
