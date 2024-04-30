@@ -3,10 +3,10 @@ package main.java.view;
 import main.java.EnvPresenter;
 import main.java.common.Position;
 import main.java.common.Environment;
+import main.java.robot.ControlledRobot;
 
 import java.awt.*;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -34,7 +34,50 @@ public class FieldView extends JPanel {
         if (model.obstacleAt(position)) {
             model.removeObstacleAt(position.getRow(), position.getCol());
         } else {
-            model.createObstacleAt(position.getRow(), position.getCol());
+            if (model.obstacleAt(position)) {
+                model.removeObstacleAt(position.getRow(), position.getCol());
+            } else {
+                // Проверяем, доступна ли данная позиция для добавления робота
+                if (!model.robotAt(position)) {
+                    // Создаем меню выбора
+                    String[] options = {"Add obstacle", "Add controlled robot"};
+                    int choice = JOptionPane.showOptionDialog(
+                            this,
+                            "Choose an action:",
+                            "Add element",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[0]);
+
+                    // Обрабатываем выбор пользователя
+                    switch (choice) {
+                        case 0:
+                            model.createObstacleAt(position.getRow(), position.getCol());
+                            break;
+                        case 1:
+                            // Создаем новый подконтрольный робот и добавляем его в окружение
+                            ControlledRobot newRobot = ControlledRobot.create(model, position, 1); // Замените SPEED на ваше значение скорости
+                            if (newRobot != null) {
+                                FieldView fieldView = presenter.fieldAt(position);
+                                if (fieldView != null) {
+                                    RobotView robotView = new RobotView(presenter, newRobot);
+                                    model.addRobot(newRobot);
+                                    presenter.addRobotView(newRobot);
+                                    presenter.setActiveRobotByPosition(position);
+                                    fieldView.addComponent(robotView);
+                                    fieldView.repaint();
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            privUpdate();
+            repaint();
         }
         if (model.robotAt(position)) {
             presenter.setActiveRobotByPosition(position);

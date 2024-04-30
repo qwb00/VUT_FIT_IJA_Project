@@ -6,7 +6,8 @@ import main.java.common.Robot;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import main.java.common.Observable.Observer;
+import main.java.common.Observable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +104,7 @@ public class ControlledRobot implements Robot {
         if (movableSteps > 0) {
             this.position = calculateNextPosition(movableSteps);
             notifyObservers();
-            logger.info("Controlled robot moved to position: col = {}, row = {}", position.getCol(), position.getRow());
+            logger.info("Moved to position: col = {}, row = {}", position.getCol(), position.getRow());
             return true;
         }
         return false;
@@ -113,13 +114,13 @@ public class ControlledRobot implements Robot {
     public void turn() {
         angle = (angle + 45) % 360;
         notifyObservers();
-        logger.info("ControlledRobot turned clockwise to angle: {}", angle);
+        logger.info("Turned clockwise to angle: {}", angle);
     }
 
     public void turnCounterClockwise() {
         angle = (angle - 45 + 360) % 360;
         notifyObservers();
-        logger.info("ControlledRobot turned counterclockwise to angle: {}", angle);
+        logger.info("Turned counterclockwise to angle: {}", angle);
     }
 
     public Position calculateNextPosition(int step) {

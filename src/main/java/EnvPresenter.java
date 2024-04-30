@@ -80,8 +80,6 @@ public class EnvPresenter implements Observer {
         }
     }
 
-
-
     public void clearEnvironment() {
         stopSimulation();
         // Check if the environment can be cleared directly
@@ -239,7 +237,7 @@ public class EnvPresenter implements Observer {
         SwingUtilities.invokeLater(this::refreshGui);
     }
 
-    private void refreshGui() {
+    public void refreshGui() {
         fields.values().forEach(FieldView::repaint); // Перерисовка каждого поля
         robots.forEach(RobotView::refreshView); // Вызов обновления для каждого представления робота
     }
@@ -267,5 +265,17 @@ public class EnvPresenter implements Observer {
         }
         refreshGui();
     }
+
+    public void addRobotView(Robot robot) {
+        RobotView robotView = new RobotView(this, robot); // Создание визуального представления
+        this.robots.add(robotView); // Добавление в список роботов
+        FieldView field = this.fields.get(robot.getPosition()); // Получение FieldView, где находится робот
+        if (field != null) {
+            field.addComponent(robotView); // Добавление компонента в FieldView
+            field.repaint(); // Перерисовка FieldView
+        }
+        refreshGui(); // Обновление GUI
+    }
+
 
 }
