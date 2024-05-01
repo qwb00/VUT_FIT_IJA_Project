@@ -4,6 +4,7 @@ import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
 
+import main.java.simulation.SimulationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import main.java.common.Observable.Observer;
@@ -20,10 +21,14 @@ public class ControlledRobot implements Robot {
     private final List<Observer> observers = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(ControlledRobot.class);
 
-    private ControlledRobot(Environment env, Position position, int speed) {
+    public boolean canControlled = false;
+    private static SimulationManager simulationManager;
+
+    public ControlledRobot(Environment env, Position position, int speed) {
         this.env = env;
         this.position = position;
         this.speed = speed;
+        this.simulationManager = new SimulationManager(env);
     }
 
     @Override
@@ -71,19 +76,24 @@ public class ControlledRobot implements Robot {
 
     @Override
     public boolean canMove() {
-        for (int step = 1; step <= speed; step++) {
-            Position nextPosition = calculateNextPosition(step);
-            // Check if the next position is within the environment, not an obstacle, and not occupied by another robot
-            if (!env.containsPosition(nextPosition) || env.obstacleAt(nextPosition) || env.robotAt(nextPosition)) {
-                return false;
-            }
-        }
-        return true; // move is possible
+        return maxMovableSteps() > 0 && canControlled;
     }
 
     @Override
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public ControlledRobot clone() {
+        try {
+            ControlledRobot cloned = (ControlledRobot) super.clone();
+            cloned.position = new Position(this.position.getRow(), this.position.getCol());
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            logger.error("Failed to clone the ControlledRobot object.");
+            throw new AssertionError();  // must not happen since we are Cloneable
+        }
     }
 
     public int maxMovableSteps() {
@@ -100,9 +110,9 @@ public class ControlledRobot implements Robot {
 
     @Override
     public boolean move() {
-        int movableSteps = maxMovableSteps();
-        if (movableSteps > 0) {
-            this.position = calculateNextPosition(movableSteps);
+        if (canMove()) {
+            simulationManager.saveState();
+            this.position = calculateNextPosition(maxMovableSteps());
             notifyObservers();
             logger.info("Moved to position: col = {}, row = {}", position.getCol(), position.getRow());
             return true;
@@ -112,15 +122,21 @@ public class ControlledRobot implements Robot {
 
     @Override
     public void turn() {
-        angle = (angle + 45) % 360;
-        notifyObservers();
-        logger.info("Turned clockwise to angle: {}", angle);
+        if (canControlled) {
+            simulationManager.saveState();
+            angle = (angle + 45) % 360;
+            notifyObservers();
+            logger.info("Turned clockwise to angle: {}", angle);
+        }
     }
 
     public void turnCounterClockwise() {
-        angle = (angle - 45 + 360) % 360;
-        notifyObservers();
-        logger.info("Turned counterclockwise to angle: {}", angle);
+        if (canControlled) {
+            simulationManager.saveState();
+            angle = (angle - 45 + 360) % 360;
+            notifyObservers();
+            logger.info("Turned counterclockwise to angle: {}", angle);
+        }
     }
 
     public Position calculateNextPosition(int step) {
@@ -152,6 +168,14 @@ public class ControlledRobot implements Robot {
                 break;
         }
         return new Position(position.getRow() + (dy * step), position.getCol() + (dx * step));
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setAngle(int angle) {
+        this.angle = angle;
     }
 
     @Override

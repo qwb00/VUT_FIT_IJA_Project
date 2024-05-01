@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class AbstractObservableRobot implements Robot, Observable {
-    private final Set<Observable.Observer> observers = new HashSet();
+    private Set<Observable.Observer> observers = new HashSet();
 
     public AbstractObservableRobot() {
     }
@@ -21,5 +21,17 @@ public abstract class AbstractObservableRobot implements Robot, Observable {
         this.observers.forEach((var1) -> {
             var1.update(this);
         });
+    }
+
+    @Override
+    public AbstractObservableRobot clone() {
+        try {
+            AbstractObservableRobot cloned = (AbstractObservableRobot) super.clone();
+            // Deep copy or recreate the observers set if necessary
+            cloned.observers = new HashSet<>(this.observers);
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);  // Since we're Cloneable, this shouldn't happen
+        }
     }
 }

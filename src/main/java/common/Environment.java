@@ -76,4 +76,8 @@
         List<Robot> getRobots();
 
         List<Obstacle> getObstacles();
+
+        public void clearRobots();
+
+        public void clearObstacles();
     }

@@ -3,6 +3,7 @@ package main.java.view;
 import main.java.EnvPresenter;
 import main.java.common.Position;
 import main.java.common.Environment;
+import main.java.simulation.SimulationManager;
 
 import java.awt.*;
 import javax.swing.BorderFactory;
@@ -17,11 +18,13 @@ public class FieldView extends JPanel {
     private ComponentView obj;
     private int changedModel = 0;
 
-    public FieldView(Environment env, Position pos, EnvPresenter presenter) {
+    private final SimulationManager simulationManager;
+
+    public FieldView(Environment env, Position pos, EnvPresenter presenter, SimulationManager simulationManager) {
         this.model = env;
         this.position = pos;
         this.presenter = presenter;
-
+        this.simulationManager = simulationManager;
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -32,8 +35,10 @@ public class FieldView extends JPanel {
 
     private void handleMouseClick() {
         if (model.obstacleAt(position)) {
+            simulationManager.saveState();
             model.removeObstacleAt(position.getRow(), position.getCol());
         } else {
+            simulationManager.saveState();
             model.createObstacleAt(position.getRow(), position.getCol());
         }
         if (model.robotAt(position)) {

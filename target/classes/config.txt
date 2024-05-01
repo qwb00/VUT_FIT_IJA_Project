@@ -19,7 +19,7 @@ Row=0
 Col=3
 Robots=3
 ControlledRobot
-positionRow=4
+positionRow=0
 positionCol=0
 speed=2
 ControlledRobot
@@ -27,8 +27,8 @@ positionRow=4
 positionCol=7
 speed=2
 AutonomousRobot
-positionRow=3
-positionCol=7
+positionRow=1
+positionCol=5
 detectionRange=2
 turnAngle=90
 turnDirection=false

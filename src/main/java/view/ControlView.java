@@ -6,6 +6,7 @@ import main.java.EnvPresenter;
 import main.java.configuration.Configuration;
 import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
+import main.java.simulation.SimulationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,10 +23,12 @@ public class ControlView extends JPanel implements ComponentView {
     private EnvPresenter presenter;
     private boolean isObstacleMode = false;
     private static final Logger logger = LogManager.getLogger(ControlView.class);
+    private SimulationManager simulationManager;
 
-    public ControlView(EnvPresenter presenter, Robot model){
+    public ControlView(EnvPresenter presenter, Robot model, SimulationManager simulationManager){
         this.presenter = presenter;
         this.model = model;
+        this.simulationManager = simulationManager;
         initializeUI();
     }
 
@@ -84,6 +87,25 @@ public class ControlView extends JPanel implements ComponentView {
         JButton saveConfigButton = new JButton("Save Config");
         saveConfigButton.addActionListener(this::saveConfiguration);
         add(saveConfigButton);
+
+        // Start Button
+        JButton startButton = new JButton("Start");
+        startButton.addActionListener(this::handleStart);
+        add(startButton);
+
+        // Pause Button
+        JButton pauseButton = new JButton("Pause");
+        pauseButton.addActionListener(this::handlePause);
+        add(pauseButton);
+
+        JButton stopButton = new JButton("Stop");
+        stopButton.addActionListener(this::handleStop);
+        add(stopButton);
+
+        // Reverse Button
+        JButton reverseButton = new JButton("Reverse");
+        reverseButton.addActionListener(this::handleReverse);
+        add(reverseButton);
     }
 
     private void performMove(ActionEvent e) {
@@ -146,6 +168,22 @@ public class ControlView extends JPanel implements ComponentView {
     private void saveConfiguration(ActionEvent e) {
         Configuration.saveConfiguration(presenter.getEnvironment(), "src/main/resources/config.txt");  // Укажите правильный путь
         repaint();
+    }
+
+    private void handleStart(ActionEvent e) {
+        simulationManager.startSimulation();
+    }
+
+    private void handlePause(ActionEvent e) {
+        simulationManager.pauseSimulation();
+    }
+
+    private void handleReverse(ActionEvent e) {
+        simulationManager.reverseSimulation();
+    }
+
+    private void handleStop(ActionEvent e) {
+        simulationManager.stopSimulation();
     }
 
     @Override

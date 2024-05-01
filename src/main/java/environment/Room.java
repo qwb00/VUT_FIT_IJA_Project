@@ -1,21 +1,19 @@
 package main.java.environment;
 
-import main.java.common.Environment;
-import main.java.common.Obstacle;
-import main.java.common.Position;
-import main.java.common.Robot;
+import main.java.common.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Room implements Environment {
+public class Room implements Environment, Observable {
     private final int rows;
     private final int cols;
-    private final List<Robot> robots;
+    private List<Robot> robots;
     private final List<Obstacle> obstacles;
     private static final Logger logger = LogManager.getLogger(Room.class);
+    private final List<Observer> observers = new ArrayList<>();
 
     public Room(int rows, int cols) {
         this.rows = rows;
@@ -157,6 +155,65 @@ public class Room implements Environment {
     @Override
     public int getCols() {
         return this.cols;
+    }
+
+    public void update() {
+        // Assuming Room stores a list of robots and possibly other entities
+        List<Robot> updatedRobots = new ArrayList<>();
+        for (Robot robot : this.getRobots()) {
+            if (robot.canMove()) {
+                robot.move();  // Move each robot based on its own logic
+            } else {
+                robot.turn();  // If the robot cannot move, make it turn or choose another action
+            }
+            checkCollisions(robot);  // Check for collisions after each move
+            updatedRobots.add(robot);
+        }
+
+        // Optionally, update obstacles or other entities
+        updateObstacles();
+
+        // Update the list of robots after all movements and interactions
+        this.robots = updatedRobots;
+
+        // Notify observers about the update if the Room class implements Observable
+        notifyObservers();
+    }
+
+    private void checkCollisions(Robot robot) {
+        // Example collision detection logic
+        Position robotPosition = robot.getPosition();
+        for (Obstacle obstacle : this.getObstacles()) {
+            if (obstacle.getPosition().equals(robotPosition)) {
+                handleCollision(robot, obstacle);
+                break;
+            }
+        }
+    }
+
+    private void handleCollision(Robot robot, Obstacle obstacle) {
+        // Handle what happens when a robot encounters an obstacle
+        System.out.println("Collision detected between " + robot + " and " + obstacle);
+        // Possible actions might include stopping the robot, damaging it, etc.
+    }
+
+    private void updateObstacles() {
+        // Any logic to update obstacles if they are dynamic or interactable
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        observers.forEach(observer -> observer.update(this));
     }
 
     public String toString() {
