@@ -6,6 +6,7 @@ import main.java.EnvPresenter;
 import main.java.configuration.Configuration;
 import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
+import main.java.design.DesignedButton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,36 +55,45 @@ public class ControlView extends JPanel implements ComponentView {
 
 
     private void initializeUI() {
-        setLayout(new FlowLayout()); // Используем FlowLayout для размещения кнопок
+        setLayout(new FlowLayout());
 
-        // Добавление кнопки "Move"
-        JButton moveButton = new JButton("Move");
+        // Изменяем размер иконки при загрузке
+        Icon moveIcon = resizeIcon(new ImageIcon("src/main/resources/icons/move.png"));
+        DesignedButton moveButton = new DesignedButton(moveIcon);
+        moveButton.setPreferredSize(new Dimension(60, 45));
         moveButton.addActionListener(this::performMove);
         add(moveButton);
 
-        // Добавление кнопки "Turn Clockwise"
-        JButton rotateButton = new JButton("Turn Clockwise");
-        rotateButton.addActionListener(this::performTurn);
-        add(rotateButton);
-
-        // Добавление кнопки "Turn Counter Clockwise"
-        JButton rotateCounterButton = new JButton("Turn Counter Clockwise");
+        Icon rotateCounterIcon = resizeIcon(new ImageIcon("src/main/resources/icons/left.png"));
+        DesignedButton rotateCounterButton = new DesignedButton(rotateCounterIcon);
+        rotateCounterButton.setPreferredSize(new Dimension(60, 45));
         rotateCounterButton.addActionListener(this::performCounterTurn);
         add(rotateCounterButton);
 
-        // Добавление кнопки "Switch Robot"
-        JButton switchButton = new JButton("Switch Robot");
-        switchButton.addActionListener(this::switchRobot);
-        add(switchButton);
+        Icon rotateIcon = resizeIcon(new ImageIcon("src/main/resources/icons/right.png"));
+        DesignedButton rotateButton = new DesignedButton(rotateIcon);
+        rotateButton.setPreferredSize(new Dimension(60, 45));
+        rotateButton.addActionListener(this::performTurn);
+        add(rotateButton);
 
-        // Добавление новых кнопок
-        JButton loadConfigButton = new JButton("Load Config");
+        Icon loadConfigIcon = resizeIcon(new ImageIcon("src/main/resources/icons/load.png"));
+        DesignedButton loadConfigButton = new DesignedButton(loadConfigIcon);
+        loadConfigButton.setPreferredSize(new Dimension(60, 45));
         loadConfigButton.addActionListener(this::loadConfiguration);
         add(loadConfigButton);
 
-        JButton saveConfigButton = new JButton("Save Config");
+        Icon saveConfigIcon = resizeIcon(new ImageIcon("src/main/resources/icons/save.png"));
+        DesignedButton saveConfigButton = new DesignedButton(saveConfigIcon);
+        saveConfigButton.setPreferredSize(new Dimension(60, 45));
         saveConfigButton.addActionListener(this::saveConfiguration);
         add(saveConfigButton);
+    }
+
+    // Метод для изменения размера иконки
+    private Icon resizeIcon(ImageIcon icon) {
+        Image img = icon.getImage();
+        Image resizedImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        return new ImageIcon(resizedImg);
     }
 
     private void performMove(ActionEvent e) {
@@ -109,24 +119,6 @@ public class ControlView extends JPanel implements ComponentView {
             updatesCount++; // Увеличиваем счетчик обновлений
             repaint(); // Перерисовать интерфейс, если это необходимо
         }
-    }
-
-    private void switchRobot(ActionEvent e) {
-        if (robots == null || robots.isEmpty()) {
-            return;
-        }
-        int startIndex = currentRobotIndex;
-        do {
-            currentRobotIndex = (currentRobotIndex + 1) % robots.size();
-            if (robots.get(currentRobotIndex) instanceof ControlledRobot) {
-                this.model = robots.get(currentRobotIndex);
-                this.presenter.setActiveRobot(this.model);
-                logger.info("Switched to Robot #{}", currentRobotIndex + 1);
-                repaint();
-                return;
-            }
-        } while (currentRobotIndex != startIndex);
-        logger.info("No ControlledRobot available to switch.");
     }
 
     // Методы для обработки нажатий на кнопки конфигурации
