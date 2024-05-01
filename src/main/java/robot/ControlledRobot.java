@@ -111,7 +111,6 @@ public class ControlledRobot implements Robot {
     @Override
     public boolean move() {
         if (canMove()) {
-            simulationManager.saveState();
             this.position = calculateNextPosition(maxMovableSteps());
             notifyObservers();
             logger.info("Moved to position: col = {}, row = {}", position.getCol(), position.getRow());
@@ -123,7 +122,6 @@ public class ControlledRobot implements Robot {
     @Override
     public void turn() {
         if (canControlled) {
-            simulationManager.saveState();
             angle = (angle + 45) % 360;
             notifyObservers();
             logger.info("Turned clockwise to angle: {}", angle);
@@ -132,7 +130,6 @@ public class ControlledRobot implements Robot {
 
     public void turnCounterClockwise() {
         if (canControlled) {
-            simulationManager.saveState();
             angle = (angle - 45 + 360) % 360;
             notifyObservers();
             logger.info("Turned counterclockwise to angle: {}", angle);

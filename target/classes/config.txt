@@ -26,10 +26,3 @@ ControlledRobot
 positionRow=4
 positionCol=7
 speed=2
-AutonomousRobot
-positionRow=1
-positionCol=5
-detectionRange=2
-turnAngle=90
-turnDirection=false
-speed=2

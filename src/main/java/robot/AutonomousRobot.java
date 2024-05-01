@@ -86,7 +86,6 @@ public class AutonomousRobot implements Robot {
 
     @Override
     public void turn() {
-        simulationManager.saveState();
         if (turnDirection) {
             angle = (angle + turnAngle) % 360;
             logger.info("Turned right to angle: {}", angle);
@@ -123,7 +122,6 @@ public class AutonomousRobot implements Robot {
         if (canMove()) {
             int movableSteps = maxMovableSteps();  // determine the maximum number of steps the robot can move
             if (movableSteps > 0) {
-                simulationManager.saveState();
                 this.position = calculateNextPosition(movableSteps);
                 notifyObservers();
                 logger.info("Moved to position: col = {}, row = {}", position.getCol(), position.getRow());

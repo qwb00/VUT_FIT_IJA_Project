@@ -110,6 +110,7 @@ public class ControlView extends JPanel implements ComponentView {
 
     private void performMove(ActionEvent e) {
         if (model != null) {
+            simulationManager.saveState();
             model.move(); // Вызываем метод move модели Robot
             updatesCount++; // Увеличиваем счетчик обновлений
             repaint(); // Перерисовать интерфейс, если это необходимо
@@ -118,6 +119,7 @@ public class ControlView extends JPanel implements ComponentView {
 
     private void performTurn(ActionEvent e) {
         if (model != null) {
+            simulationManager.saveState();
             model.turn(); // Вызываем метод rotateClockwise модели Robot
             updatesCount++; // Увеличиваем счетчик обновлений
             repaint(); // Перерисовать интерфейс, если это необходимо
@@ -126,6 +128,7 @@ public class ControlView extends JPanel implements ComponentView {
 
     private void performCounterTurn(ActionEvent e) {
         if (model != null && model instanceof ControlledRobot) {
+            simulationManager.saveState();
             ControlledRobot robot = (ControlledRobot) model;
             robot.turnCounterClockwise(); // Вызываем метод rotateClockwise модели Robot
             updatesCount++; // Увеличиваем счетчик обновлений
