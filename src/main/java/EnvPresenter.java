@@ -3,6 +3,9 @@ package main.java;
 import main.java.common.Position;
 import main.java.common.Environment;
 import main.java.common.Robot;
+import main.java.configuration.Configuration;
+import main.java.design.DesignedUtils;
+import main.java.design.DesignedWindow;
 import main.java.environment.Room;
 import main.java.simulation.SimulationManager;
 import main.java.view.FieldView;
@@ -13,9 +16,7 @@ import main.java.common.Observable;
 import main.java.robot.ControlledRobot;
 import main.java.robot.AutonomousRobot;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,9 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 public class EnvPresenter implements Observer {
     private Environment env;
@@ -36,12 +35,14 @@ public class EnvPresenter implements Observer {
     private Robot activeRobot;
     private SimulationManager simulationManager;
 
+    private GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    private boolean isFullscreen = false;
 
-    public EnvPresenter(Environment var1) {
-        this.env = var1;
+
+    public EnvPresenter() {
+        this.env = null;
         this.fields = new HashMap();
         this.robots = new ArrayList<>();
-        this.simulationManager = SimulationManager.getInstance(var1);
     }
 
     public Environment getEnvironment() {
@@ -49,6 +50,7 @@ public class EnvPresenter implements Observer {
     }
 
     public void setEnvironment(Environment newEnv) {
+
         if (this.env instanceof Room) {
             List<Robot> oldRobots = new ArrayList<>(env.getRobots());
             for (Robot robot : oldRobots) {
@@ -70,7 +72,11 @@ public class EnvPresenter implements Observer {
             refreshGui();
             setActiveFirstRobot();  // Установить первого робота в списке как активного
         });
+
         this.simulationManager.setEnvironment(newEnv);
+        if (frame != null) {
+            frame.dispose(); // Закрываем старое окно, если оно существует
+        }
     }
 
     private void setActiveFirstRobot() {
@@ -85,7 +91,7 @@ public class EnvPresenter implements Observer {
     }
 
     public void clearEnvironment() {
-        stopSimulation();
+        deleteSimulation();
         // Check if the environment can be cleared directly
         if (env instanceof Room) {
             ((Room) env).clearObstacles();
@@ -112,7 +118,7 @@ public class EnvPresenter implements Observer {
     /**
      * Stops any ongoing simulation processes, including robot movements and other timed actions.
      */
-    public void stopSimulation() {
+    public void deleteSimulation() {
         // Stop all autonomous robots' movements
         for (RobotView robotView : robots) {
             Robot robot = robotView.getModel();
@@ -136,10 +142,12 @@ public class EnvPresenter implements Observer {
 
 
     public void initializeViews() {
+        frame = new DesignedWindow();
+        simulationManager = SimulationManager.getInstance(env);
         GridLayout gridLayout = new GridLayout(env.getRows(), env.getCols());
         JPanel gridPanel = new JPanel(gridLayout);
 
-        // Create field views based on the new environment
+        // Создаем представления полей на основе новой среды
         for (int row = 0; row < env.getRows(); ++row) {
             for (int col = 0; col < env.getCols(); ++col) {
                 Position position = new Position(row, col);
@@ -149,7 +157,13 @@ public class EnvPresenter implements Observer {
             }
         }
 
-        // Create robot views for each robot in the new environment
+        // Убедитесь, что ControlView инициализирован
+        if (controlView == null) {
+            controlView = new ControlView(this, null); // Если роботов нет, передаем null
+        }
+        controlView.setRobots(env.getRobots());
+
+        // Создайте представления роботов для каждого робота в новой среде
         env.getRobots().forEach(robot -> {
             RobotView robotView = new RobotView(this, robot);
             robots.add(robotView);
@@ -159,26 +173,32 @@ public class EnvPresenter implements Observer {
             }
         });
 
-        // Update the main frame to show the new layout
-        frame.getContentPane().add(gridPanel, BorderLayout.CENTER);
-        if (controlView != null) {
-            frame.getContentPane().add(controlView, BorderLayout.SOUTH);
+        // Установите первого робота как активного, если он есть
+        if (!robots.isEmpty()) {
+            Robot firstRobot = robots.get(0).getModel();
+            setActiveRobot(firstRobot);
+            controlView.setActiveRobot(firstRobot); // Отметить его активным в ControlView
         }
+
+        frame.getContentPane().add(gridPanel, BorderLayout.CENTER);
+        frame.getContentPane().add(controlView, BorderLayout.SOUTH);
+
+        frame.setLocationRelativeTo(null); // Центрируем окно
+
         frame.revalidate();
         frame.repaint();
+
+        frame.setVisible(true);
     }
+
 
 
     public void open() {
         try {
-            SwingUtilities.invokeAndWait(() -> {
-                this.initialize();
-                this.frame.setVisible(true);
-            });
-        } catch (InvocationTargetException | InterruptedException var2) {
-            Logger.getLogger(EnvPresenter.class.getName()).log(Level.SEVERE, (String)null, var2);
+            SwingUtilities.invokeAndWait(this::initialize);
+        } catch (InvocationTargetException | InterruptedException e) {
+            Logger.getLogger(EnvPresenter.class.getName()).log(Level.SEVERE, null, e);
         }
-
     }
 
     protected void init() {
@@ -194,41 +214,49 @@ public class EnvPresenter implements Observer {
         return (FieldView)this.fields.get(var1);
     }
 
-    private void initialize() {
-        this.frame = new JFrame("Robot Environment");
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.setSize(800, 600);
-        this.frame.setMinimumSize(new Dimension(800, 600));
-        this.frame.setResizable(false);
-        GridLayout gridLayout = new GridLayout(this.env.getRows(), this.env.getCols());
-        JPanel gridPanel = new JPanel(gridLayout);
+    public void initialize() {
+        String[] options = {"Load configuration", "Create empty map"};
+        int response = DesignedUtils.showCustomConfirmDialog(frame, "How would you like to start?", "Configuration", options);
 
-        // Создание и распределение полей
-        for (int row = 0; row < this.env.getRows(); ++row) {
-            for (int col = 0; col < this.env.getCols(); ++col) {
-                Position position = new Position(row, col);
-                FieldView fieldView = new FieldView(this.env, position, this);
-                gridPanel.add(fieldView);
-                this.fields.put(position, fieldView);
-            }
+        if (response == 1) {
+            createEmptyMap();
+        } else {
+            loadConfiguration();
         }
 
-        // Создание и добавление роботов
-        List<Robot> robotModels = this.env.getRobots();
-        robotModels.forEach(robot -> {
-            RobotView robotView = new RobotView(this, robot);
-            this.robots.add(robotView);
-        });
-
-        setActiveFirstRobot();
-
-        // Настройка ControlView
-        this.controlView = new ControlView(this, robotModels.get(0));
-        this.controlView.setRobots(robotModels);
-        this.frame.getContentPane().add(controlView, BorderLayout.SOUTH);
-        this.frame.getContentPane().add(gridPanel, BorderLayout.CENTER);
-
         this.frame.pack();
+        this.frame.setVisible(true);
+    }
+
+    private void loadConfiguration() {
+        String configFilePath = "src/main/resources/config.txt";
+        this.env = Configuration.loadConfiguration(configFilePath);
+        initializeViews(); // Инициализация представлений с загруженной конфигурацией
+    }
+
+    private void createEmptyMap() {
+        JTextField rowsField = new JTextField();
+        JTextField colsField = new JTextField();
+
+        JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
+        panel.add(new JLabel("Enter number of rows:"));
+        panel.add(rowsField);
+        panel.add(new JLabel("Enter number of columns:"));
+        panel.add(colsField);
+
+        int result = DesignedUtils.showCustomInputDialog(frame, panel, "Create Empty Map");
+
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                int numRows = Integer.parseInt(rowsField.getText());
+                int numCols = Integer.parseInt(colsField.getText());
+                this.env = new Room(numRows, numCols); // Создание новой пустой комнаты
+                initializeViews(); // Инициализация представлений с пустой конфигурацией
+            } catch (NumberFormatException ex) {
+                DesignedUtils.showCustomConfirmDialog(frame, "Invalid number format. Please enter valid integers.", "Error", new String[]{"OK"});
+                createEmptyMap(); // Повторный ввод
+            }
+        }
     }
 
     protected List<FieldView> fields() {
@@ -240,10 +268,7 @@ public class EnvPresenter implements Observer {
         //System.out.println("Observable changed: ");
         SwingUtilities.invokeLater(this::refreshGui);
     }
-
-    private void refreshGui() {
-        frame.revalidate();
-        frame.repaint();
+    public void refreshGui() {
         fields.values().forEach(FieldView::repaint); // Перерисовка каждого поля
         robots.forEach(RobotView::refreshView); // Вызов обновления для каждого представления робота
     }
@@ -271,5 +296,17 @@ public class EnvPresenter implements Observer {
         }
         refreshGui();
     }
+
+    public void addRobotView(Robot robot) {
+        RobotView robotView = new RobotView(this, robot); // Создание визуального представления
+        this.robots.add(robotView); // Добавление в список роботов
+        FieldView field = this.fields.get(robot.getPosition()); // Получение FieldView, где находится робот
+        if (field != null) {
+            field.addComponent(robotView); // Добавление компонента в FieldView
+            field.repaint(); // Перерисовка FieldView
+        }
+        refreshGui(); // Обновление GUI
+    }
+
 
 }

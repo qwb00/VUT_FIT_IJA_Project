@@ -5,6 +5,7 @@ package main.java.view;
 import main.java.EnvPresenter;
 import main.java.common.Observable;
 import main.java.common.Robot;
+import main.java.design.DesignedRobot;
 import main.java.robot.ControlledRobot;
 import main.java.robot.AutonomousRobot;
 import main.java.simulation.SimulationManager;
@@ -17,6 +18,7 @@ public class RobotView implements ComponentView, Observable.Observer {
     private final EnvPresenter parent;
     private FieldView current;
     private int changedModel = 0;
+    private final DesignedRobot designedRobot;
 
     private SimulationManager simulationManager;
 
@@ -27,12 +29,14 @@ public class RobotView implements ComponentView, Observable.Observer {
         this.simulationManager = SimulationManager.getInstance(var1.getEnvironment());
         var2.addObserver(this);
         this.privUpdate();
+
+        this.designedRobot = new DesignedRobot(model);
     }
 
     private void privUpdate() {
         FieldView field = this.parent.fieldAt(this.model.getPosition());
         if (this.current != null) {
-            this.current.removeComponent(); // Удалить предыдущий компонент
+            this.current.removeComponent();
             this.current.repaint();
         }
 
@@ -48,76 +52,11 @@ public class RobotView implements ComponentView, Observable.Observer {
         this.privUpdate();
     }
 
-    public void paintComponent(Graphics var1) {
-        Graphics2D var2 = (Graphics2D)var1;
-        Rectangle var3 = this.current.getBounds();
-        double var4 = var3.getWidth();
-        double var6 = var3.getHeight();
-        double var10 = Math.min(var6, var4) - 10.0;
-        double var12 = (var4 - var10) / 2.0;
-        double var14 = (var6 - var10) / 2.0;
-        Ellipse2D.Double var16 = new Ellipse2D.Double(var12, var14, var10, var10);
-
-        if (this.model instanceof ControlledRobot) {
-            var2.setColor(Color.cyan);
-        } else if (this.model instanceof AutonomousRobot) {
-            var2.setColor(Color.orange);
-        } else {
-            var2.setColor(Color.gray); // Для других типов роботов
+    public void paintComponent(Graphics g) {
+        if (this.current != null) {
+            Rectangle bounds = this.current.getBounds();
+            this.designedRobot.paintComponent(g, bounds.width, bounds.height, this.parent.isActive(this.model)); // Используем новый дизайн
         }
-
-        var2.fill(var16);
-
-        // Если робот активен, рисуем черную обводку
-        if (this.parent.isActive(this.model)) {
-            var2.setColor(Color.black);
-            var2.setStroke(new BasicStroke(3)); // Указываем толщину линии
-            var2.draw(var16);
-        }
-
-        double var17 = var12 + var10 / 2.0;
-        double var19 = var14 + var10 / 2.0;
-        int var21 = this.model.angle();
-        double var22 = 0.0;
-        double var24 = 0.0;
-        double var26 = var10 / 4.0;
-        switch (var21) {
-            case 0:
-                var22 = var17;
-                var24 = var14;
-                break;
-            case 45:
-                var22 = var17 + var26;
-                var24 = var14 + var26;
-                break;
-            case 90:
-                var22 = var17 + var26 * 2.0;
-                var24 = var14 + var26 * 2.0;
-                break;
-            case 135:
-                var22 = var17 + var26;
-                var24 = var14 + var26 * 3.0;
-                break;
-            case 180:
-                var22 = var17;
-                var24 = var19 + var26 * 2.0;
-                break;
-            case 225:
-                var22 = var17 - var26;
-                var24 = var19 + var26;
-                break;
-            case 270:
-                var22 = var12;
-                var24 = var19;
-                break;
-            case 315:
-                var22 = var17 - var26;
-                var24 = var19 - var26;
-        }
-
-        Ellipse2D.Double var28 = new Ellipse2D.Double(var22 - 3.0, var24 - 3.0, 6.0, 6.0);
-        var2.setColor(Color.black);
-        var2.fill(var28);
     }
 
     public int numberUpdates() {

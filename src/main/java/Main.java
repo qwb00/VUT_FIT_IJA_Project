@@ -10,14 +10,8 @@ public class
 
 Main {
     public static void main(String... args) {
-        String homePath = System.getProperty("user.home");
-
-        String configFilePath = "src/main/resources/config.txt";
-        Environment room = Configuration.loadConfiguration(configFilePath);
-        EnvPresenter presenter = new EnvPresenter(room);
-
-        presenter.open();
-
+        EnvPresenter presenter = new EnvPresenter();
+        presenter.open(); // Открываем приложение
     }
 
     /**
