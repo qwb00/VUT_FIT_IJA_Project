@@ -5,6 +5,7 @@ import main.java.common.Environment;
 import main.java.common.Robot;
 import main.java.configuration.Configuration;
 import main.java.design.DesignedUtils;
+import main.java.design.DesignedWindow;
 import main.java.environment.Room;
 import main.java.view.FieldView;
 import main.java.view.RobotView;
@@ -14,9 +15,7 @@ import main.java.common.Observable;
 import main.java.robot.ControlledRobot;
 import main.java.robot.AutonomousRobot;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +33,9 @@ public class EnvPresenter implements Observer {
     private ControlView controlView;
     private Robot activeRobot;
 
+    private GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    private boolean isFullscreen = false;
+
 
     public EnvPresenter() {
         this.env = null;
@@ -46,6 +48,7 @@ public class EnvPresenter implements Observer {
     }
 
     public void setEnvironment(Environment newEnv) {
+
         if (this.env instanceof Room) {
             List<Robot> oldRobots = new ArrayList<>(env.getRobots());
             for (Robot robot : oldRobots) {
@@ -67,6 +70,10 @@ public class EnvPresenter implements Observer {
             refreshGui();
             setActiveFirstRobot();  // Установить первого робота в списке как активного
         });
+
+        if (frame != null) {
+            frame.dispose(); // Закрываем старое окно, если оно существует
+        }
     }
 
     private void setActiveFirstRobot() {
@@ -81,7 +88,7 @@ public class EnvPresenter implements Observer {
     }
 
     public void clearEnvironment() {
-        stopSimulation();
+        deleteSimulation();
         // Check if the environment can be cleared directly
         if (env instanceof Room) {
             ((Room) env).clearObstacles();
@@ -108,7 +115,7 @@ public class EnvPresenter implements Observer {
     /**
      * Stops any ongoing simulation processes, including robot movements and other timed actions.
      */
-    public void stopSimulation() {
+    public void deleteSimulation() {
         // Stop all autonomous robots' movements
         for (RobotView robotView : robots) {
             Robot robot = robotView.getModel();
@@ -132,6 +139,8 @@ public class EnvPresenter implements Observer {
 
 
     public void initializeViews() {
+        frame = new DesignedWindow();
+
         GridLayout gridLayout = new GridLayout(env.getRows(), env.getCols());
         JPanel gridPanel = new JPanel(gridLayout);
 
@@ -168,13 +177,15 @@ public class EnvPresenter implements Observer {
             controlView.setActiveRobot(firstRobot); // Отметить его активным в ControlView
         }
 
-
-        // Обновите главный кадр, чтобы отобразить новый макет
         frame.getContentPane().add(gridPanel, BorderLayout.CENTER);
         frame.getContentPane().add(controlView, BorderLayout.SOUTH);
 
+        frame.setLocationRelativeTo(null); // Центрируем окно
+
         frame.revalidate();
         frame.repaint();
+
+        frame.setVisible(true);
     }
 
 
@@ -201,12 +212,6 @@ public class EnvPresenter implements Observer {
     }
 
     public void initialize() {
-        this.frame = new JFrame("Robot Environment");
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.setSize(1280, 720);
-        this.frame.setMinimumSize(new Dimension(800, 600));
-        this.frame.setResizable(false);
-
         String[] options = {"Load configuration", "Create empty map"};
         int response = DesignedUtils.showCustomConfirmDialog(frame, "How would you like to start?", "Configuration", options);
 

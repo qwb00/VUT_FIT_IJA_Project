@@ -1,0 +1,32 @@
+Room
+Rows=5
+Cols=8
+Obstacles=4
+Obstacle Position
+Row=1
+Col=2
+Obstacle Position
+Row=1
+Col=4
+Obstacle Position
+Row=1
+Col=5
+Obstacle Position
+Row=2
+Col=5
+Robots=3
+ControlledRobot
+positionRow=4
+positionCol=2
+speed=2
+ControlledRobot
+positionRow=4
+positionCol=7
+speed=2
+AutonomousRobot
+positionRow=1
+positionCol=1
+detectionRange=2
+turnAngle=90
+turnDirection=false
+speed=2

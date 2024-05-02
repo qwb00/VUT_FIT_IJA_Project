@@ -121,14 +121,13 @@ public class ControlView extends JPanel implements ComponentView {
         }
     }
 
-    // Методы для обработки нажатий на кнопки конфигурации
     private void loadConfiguration(ActionEvent e) {
-        String configFilePath = "src/main/resources/config.txt";  // Путь к файлу конфигурации
+        String configFilePath = "src/main/resources/config.txt"; // Путь к файлу конфигурации
         try {
-            presenter.clearEnvironment();  // Очистка текущего окружения и роботов
-            Environment newEnv = Configuration.loadConfiguration(configFilePath);  // Загрузка нового окружения
-            presenter.setEnvironment(newEnv);  // Обновляем окружение в presenter
-            presenter.initializeViews();  // Инициализируем представления с новым окружением
+            presenter.clearEnvironment(); // Очистка текущего окружения и роботов
+            Environment newEnv = Configuration.loadConfiguration(configFilePath); // Загрузка нового окружения
+            presenter.setEnvironment(newEnv); // Обновляем окружение в presenter
+            //presenter.initializeViews(); // Пусть `initializeViews` отвечает за обновление представлений
             logger.info("Configuration loaded from {}", configFilePath);
         } catch (Exception ex) {
             logger.error("Failed to load configuration from {}: {}", configFilePath, ex.getMessage());

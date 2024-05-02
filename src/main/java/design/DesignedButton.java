@@ -8,9 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class DesignedButton extends JButton {
-    private Color baseColor = new Color(34, 139, 34); // Темно-зеленый
-    private Color hoverColor = new Color(50, 205, 50); // Светло-зеленый
-    private Color pressedColor = new Color(0, 100, 0); // Ярко-зеленый
+    private Color baseColor = new Color(228, 228, 228);
+    private Color hoverColor = new Color(200, 200, 200);
+    private Color pressedColor = new Color(255, 255, 255);
     private Timer colorTransitionTimer;
     private int animationSpeed = 20; // Скорость анимации
     private Color currentColor;
