@@ -3,23 +3,24 @@ package main.java.view;
 import main.java.EnvPresenter;
 import main.java.common.Position;
 import main.java.common.Environment;
+import main.java.design.DesignedUtils;
 import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
+import main.java.design.DesignedField;
 
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class FieldView extends JPanel {
+public class FieldView extends DesignedField {
     private final Environment model;
     private final Position position;
     private EnvPresenter presenter;
     private ComponentView obj;
-    private int changedModel = 0;
-    private long lastClickTime = 0;
 
     public FieldView(Environment env, Position pos, EnvPresenter presenter) {
+        super(); // Вызов конструктора DesignedField
         this.model = env;
         this.position = pos;
         this.presenter = presenter;
@@ -47,15 +48,11 @@ public class FieldView extends JPanel {
 
     private void handleAddElement() {
         String[] options = {"Add obstacle", "Add robot"};
-        int choice = JOptionPane.showOptionDialog(
+        int choice = DesignedUtils.showCustomConfirmDialog(
                 this,
                 "Choose an action:",
                 "Add element",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]);
+                options);
 
         if (choice == 0) {
             model.createObstacleAt(position.getRow(), position.getCol());
@@ -66,20 +63,16 @@ public class FieldView extends JPanel {
 
     private void handleRobotTypeSelection() {
         String[] options = {"Controlled robot", "Autonomous robot"};
-        int choice = JOptionPane.showOptionDialog(
+        int choice = DesignedUtils.showCustomConfirmDialog(
                 this,
                 "Select type of robot to add:",
                 "Robot Type",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]);
+                options);
 
         if (choice == 0) {
-            handleRobotCreation();  // Existing method to create controlled robot
+            handleRobotCreation(); // Existing method to create controlled robot
         } else if (choice == 1) {
-            handleAutonomousRobotCreation();  // New method to create autonomous robot
+            handleAutonomousRobotCreation(); // New method to create autonomous robot
         }
     }
 
@@ -96,13 +89,13 @@ public class FieldView extends JPanel {
     private int askForRobotSpeed() {
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
         JSpinner speedSpinner = new JSpinner(spinnerModel);
-        int result = JOptionPane.showOptionDialog(null, speedSpinner, "Set Robot Speed",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+        int result = DesignedUtils.showCustomInputDialog(null, speedSpinner, "Set Robot Speed");
 
         if (result == JOptionPane.OK_OPTION) {
             return (Integer) speedSpinner.getValue();
         } else {
-            return -1; // Return -1 if user cancels
+            return -1; // Вернуть -1, если пользователь отменяет
         }
     }
 
@@ -123,7 +116,6 @@ public class FieldView extends JPanel {
                 null, directions, directions[0]);
         boolean turnDirection = (turnDirChoice == 1);  // True if "Right", false if "Left"
 
-        // Проверяем, не существует ли робот уже на этой позиции
         if (!model.robotAt(position)) {
             AutonomousRobot newRobot = AutonomousRobot.create(model, position, speed, detectionRange, turnAngle, turnDirection);
             if (newRobot != null) {
@@ -131,8 +123,6 @@ public class FieldView extends JPanel {
             }
         }
     }
-
-
 
     private int askForRobotParameter(String parameterName, int defaultValue, int min, int max, int step) {
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(defaultValue, min, max, step);
@@ -143,7 +133,7 @@ public class FieldView extends JPanel {
         if (result == JOptionPane.OK_OPTION) {
             return (Integer) spinner.getValue();
         } else {
-            return -1;  // Return -1 if user cancels
+            return -1;
         }
     }
 
@@ -182,13 +172,13 @@ public class FieldView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        setBackground(Color.WHITE); // Установим белый фон для клеток без препятствий
-        setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Граница для клеток
 
-        // Проверяем наличие препятствия
+        // Рисуем препятствия
         if (model.obstacleAt(position)) {
-            g.setColor(Color.DARK_GRAY); // Цвет препятствий
-            g.fillRect(0, 0, getWidth(), getHeight()); // Заполняем всю площадь панели
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setColor(Color.DARK_GRAY);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
         }
 
         // Если в клетке есть компонент (робот), вызываем его paintComponent
@@ -202,7 +192,6 @@ public class FieldView extends JPanel {
             this.setBackground(Color.lightGray);
             this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         }
-
     }
 
     public void addComponent(ComponentView var1) {
