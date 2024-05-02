@@ -31,7 +31,7 @@ public class AutonomousRobot implements Robot {
         this.turnAngle = turnAngle;
         this.turnDirection = turnDirection;
         this.speed = speed;
-        this.simulationManager = new SimulationManager(env);
+        this.simulationManager = SimulationManager.getInstance(env);
     }
 
     public void initMovement() {
@@ -45,6 +45,9 @@ public class AutonomousRobot implements Robot {
         }, 0, 1000);  // init movement with 1 second delay
     }
 
+    public void setSimulationManager(SimulationManager simulationManager) {
+        this.simulationManager = simulationManager;
+    }
     public static AutonomousRobot create(Environment env, Position pos, int speed, int detectionRange, int turnAngle, boolean turnDirection) {
         if (env.containsPosition(pos) && !env.robotAt(pos)) {
             AutonomousRobot robot = new AutonomousRobot(env, pos, speed, detectionRange, turnAngle, turnDirection);
@@ -86,6 +89,7 @@ public class AutonomousRobot implements Robot {
 
     @Override
     public void turn() {
+        simulationManager.saveState();
         if (turnDirection) {
             angle = (angle + turnAngle) % 360;
             logger.info("Turned right to angle: {}", angle);
@@ -120,6 +124,7 @@ public class AutonomousRobot implements Robot {
     @Override
     public boolean move() {
         if (canMove()) {
+            simulationManager.saveState();
             int movableSteps = maxMovableSteps();  // determine the maximum number of steps the robot can move
             if (movableSteps > 0) {
                 this.position = calculateNextPosition(movableSteps);

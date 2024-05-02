@@ -41,7 +41,7 @@ public class EnvPresenter implements Observer {
         this.env = var1;
         this.fields = new HashMap();
         this.robots = new ArrayList<>();
-        this.simulationManager = new SimulationManager(env);
+        this.simulationManager = SimulationManager.getInstance(var1);
     }
 
     public Environment getEnvironment() {
@@ -143,7 +143,7 @@ public class EnvPresenter implements Observer {
         for (int row = 0; row < env.getRows(); ++row) {
             for (int col = 0; col < env.getCols(); ++col) {
                 Position position = new Position(row, col);
-                FieldView fieldView = new FieldView(env, position, this, simulationManager);
+                FieldView fieldView = new FieldView(env, position, this);
                 fields.put(position, fieldView);
                 gridPanel.add(fieldView);
             }
@@ -207,7 +207,7 @@ public class EnvPresenter implements Observer {
         for (int row = 0; row < this.env.getRows(); ++row) {
             for (int col = 0; col < this.env.getCols(); ++col) {
                 Position position = new Position(row, col);
-                FieldView fieldView = new FieldView(this.env, position, this, simulationManager);
+                FieldView fieldView = new FieldView(this.env, position, this);
                 gridPanel.add(fieldView);
                 this.fields.put(position, fieldView);
             }
@@ -223,7 +223,7 @@ public class EnvPresenter implements Observer {
         setActiveFirstRobot();
 
         // Настройка ControlView
-        this.controlView = new ControlView(this, robotModels.get(0), simulationManager);
+        this.controlView = new ControlView(this, robotModels.get(0));
         this.controlView.setRobots(robotModels);
         this.frame.getContentPane().add(controlView, BorderLayout.SOUTH);
         this.frame.getContentPane().add(gridPanel, BorderLayout.CENTER);

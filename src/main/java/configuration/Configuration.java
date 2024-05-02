@@ -5,6 +5,7 @@ import main.java.common.Position;
 import main.java.environment.Room;
 import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
+import main.java.simulation.SimulationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,6 +14,7 @@ import java.util.Scanner;
 
 public class Configuration {
     private static final Logger logger = LogManager.getLogger(Configuration.class);
+
     public static void saveConfiguration(Environment env, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(env.toString());

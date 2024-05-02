@@ -20,11 +20,11 @@ public class FieldView extends JPanel {
 
     private final SimulationManager simulationManager;
 
-    public FieldView(Environment env, Position pos, EnvPresenter presenter, SimulationManager simulationManager) {
+    public FieldView(Environment env, Position pos, EnvPresenter presenter) {
         this.model = env;
         this.position = pos;
         this.presenter = presenter;
-        this.simulationManager = simulationManager;
+        this.simulationManager = SimulationManager.getInstance(env);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

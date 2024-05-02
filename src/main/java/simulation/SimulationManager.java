@@ -3,6 +3,7 @@ package main.java.simulation;
 import main.java.EnvPresenter;
 import main.java.common.Environment;
 import main.java.common.Observable;
+import main.java.common.Robot;
 import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
 import main.java.simulation.states.EnvironmentState;
@@ -14,20 +15,27 @@ import java.util.List;
 import java.util.Stack;
 
 public class SimulationManager implements Observable {
+    private static SimulationManager instance;
     private Environment environment; // Specific to Room rather than Environment
     private boolean isRunning = false;
-    private final Stack<EnvironmentState> historyStates = new Stack<>();
+    private final Stack<EnvironmentState> historyStates;
     private static final Logger logger = LogManager.getLogger(SimulationManager.class);
     private List<Observer> observers = new ArrayList<>();
 
-    private EnvPresenter presenter;
-
     public SimulationManager(Environment environment) {
         this.environment = environment;
+        historyStates = new Stack<>();
     }
 
     public void setEnvironment(Environment newEnvironment) {
         this.environment = newEnvironment;
+    }
+
+    public static SimulationManager getInstance(Environment environment) {
+        if (instance == null) {
+            instance = new SimulationManager(environment);
+        }
+        return instance;
     }
 
     public void pauseSimulation() {
@@ -78,7 +86,7 @@ public class SimulationManager implements Observable {
 
     public void saveState() {
         historyStates.push(new EnvironmentState(environment));
-        logger.info("Simulation state saved.");
+        logger.info("Simulation state saved. Current stack size: " + historyStates.size());
     }
 
     public void reverseSimulation() {
@@ -88,6 +96,9 @@ public class SimulationManager implements Observable {
             previousState.restore(environment);
             notifyObservers();
             logger.info("Simulation reversed to a previous state.");
+        }
+        else {
+            logger.warn("Attempted to reverse simulation but no states were saved in the history stack.");
         }
     }
 

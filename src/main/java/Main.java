@@ -3,6 +3,7 @@ package main.java;
 
 import main.java.configuration.Configuration;
 import main.java.common.Environment;
+import main.java.simulation.SimulationManager;
 
 
 public class
@@ -13,7 +14,6 @@ Main {
 
         String configFilePath = "src/main/resources/config.txt";
         Environment room = Configuration.loadConfiguration(configFilePath);
-
         EnvPresenter presenter = new EnvPresenter(room);
 
         presenter.open();
