@@ -24,6 +24,7 @@ public class AutonomousRobot implements Robot {
     private static final Logger logger = LogManager.getLogger(AutonomousRobot.class);
     private Timer movementTimer;
     private SimulationManager simulationManager;
+    public boolean isMoveable = false;
     public AutonomousRobot(Environment env, Position position, int speed, int detectionRange, int turnAngle, boolean turnDirection, int angle) {
         this.env = env;
         this.position = position;
@@ -53,6 +54,7 @@ public class AutonomousRobot implements Robot {
         if (env.containsPosition(pos) && !env.robotAt(pos)) {
             AutonomousRobot robot = new AutonomousRobot(env, pos, speed, detectionRange, turnAngle, turnDirection, startAngle);
             if (env.addRobot(robot)) {
+                robot.initMovement();
                 logger.info("Added a new AutonomousRobot at position: col = {}, row = {}", pos.getCol(), pos.getRow());
                 return robot;
             }
@@ -133,7 +135,7 @@ public class AutonomousRobot implements Robot {
                 logger.info("Moved to position: col = {}, row = {}", position.getCol(), position.getRow());
                 return true;
             }
-        } else {
+        } else if (isMoveable) {
             // obstacle detected
             turn();
             logger.info("Detected an obstacle within detection range, turned to angle: {}", angle);

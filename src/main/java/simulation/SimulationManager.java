@@ -42,6 +42,7 @@ public class SimulationManager implements Observable {
         if (isRunning) {
             environment.getRobots().forEach(robot -> {
                 if (robot instanceof AutonomousRobot) {
+                    ((AutonomousRobot) robot).isMoveable = false;
                     ((AutonomousRobot) robot).stopMovement();
                 }
                 if(robot instanceof ControlledRobot) {
@@ -57,6 +58,7 @@ public class SimulationManager implements Observable {
         if (!isRunning) {
             environment.getRobots().forEach(robot -> {
                 if (robot instanceof AutonomousRobot) {
+                    ((AutonomousRobot) robot).isMoveable = true;
                     ((AutonomousRobot) robot).initMovement();
                 }
                 if(robot instanceof ControlledRobot) {
@@ -72,6 +74,7 @@ public class SimulationManager implements Observable {
         if (isRunning) {
             environment.getRobots().forEach(robot -> {
                 if (robot instanceof AutonomousRobot) {
+                    ((AutonomousRobot) robot).isMoveable = false;
                     ((AutonomousRobot) robot).stopMovement();
                 }
                 if(robot instanceof ControlledRobot) {
