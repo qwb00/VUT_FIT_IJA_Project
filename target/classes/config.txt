@@ -17,7 +17,7 @@ Col=4
 Obstacle Position
 Row=0
 Col=3
-Robots=3
+Robots=2
 ControlledRobot
 positionRow=0
 positionCol=0

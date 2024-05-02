@@ -24,7 +24,7 @@ public class AutonomousRobot implements Robot {
     private static final Logger logger = LogManager.getLogger(AutonomousRobot.class);
     private Timer movementTimer;
     private SimulationManager simulationManager;
-    public AutonomousRobot(Environment env, Position position, int speed, int detectionRange, int turnAngle, boolean turnDirection) {
+    public AutonomousRobot(Environment env, Position position, int speed, int detectionRange, int turnAngle, boolean turnDirection, int angle) {
         this.env = env;
         this.position = position;
         this.detectionRange = detectionRange;
@@ -32,6 +32,7 @@ public class AutonomousRobot implements Robot {
         this.turnDirection = turnDirection;
         this.speed = speed;
         this.simulationManager = SimulationManager.getInstance(env);
+        this.angle = angle;
     }
 
     public void initMovement() {
@@ -48,9 +49,9 @@ public class AutonomousRobot implements Robot {
     public void setSimulationManager(SimulationManager simulationManager) {
         this.simulationManager = simulationManager;
     }
-    public static AutonomousRobot create(Environment env, Position pos, int speed, int detectionRange, int turnAngle, boolean turnDirection) {
+    public static AutonomousRobot create(Environment env, Position pos, int speed, int detectionRange, int turnAngle, boolean turnDirection, int startAngle) {
         if (env.containsPosition(pos) && !env.robotAt(pos)) {
-            AutonomousRobot robot = new AutonomousRobot(env, pos, speed, detectionRange, turnAngle, turnDirection);
+            AutonomousRobot robot = new AutonomousRobot(env, pos, speed, detectionRange, turnAngle, turnDirection, startAngle);
             if (env.addRobot(robot)) {
                 logger.info("Added a new AutonomousRobot at position: col = {}, row = {}", pos.getCol(), pos.getRow());
                 return robot;
@@ -189,6 +190,7 @@ public class AutonomousRobot implements Robot {
         return new Position(position.getRow() + (dy * step), position.getCol() + (dx * step));
     }
 
+    @Override
     public int getSpeed() {
         return speed;
     }

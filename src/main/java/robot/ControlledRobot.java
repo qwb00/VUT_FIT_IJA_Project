@@ -24,11 +24,12 @@ public class ControlledRobot implements Robot {
     public boolean canControlled = false;
     private SimulationManager simulationManager;
 
-    public ControlledRobot(Environment env, Position position, int speed) {
+    public ControlledRobot(Environment env, Position position, int speed, int angle) {
         this.env = env;
         this.position = position;
         this.speed = speed;
         this.simulationManager = SimulationManager.getInstance(env);
+        this.angle = angle;
     }
 
     @Override
@@ -57,9 +58,9 @@ public class ControlledRobot implements Robot {
      * @param pos The intended position for the robot within the environment
      * @return An instance of ControlledRobot placed at the given position or null if the position is invalid
      */
-    public static ControlledRobot create(Environment env, Position pos, int speed) {
+    public static ControlledRobot create(Environment env, Position pos, int speed, int startAngle) {
         if (env.containsPosition(pos) && !env.robotAt(pos)) {
-            ControlledRobot robot = new ControlledRobot(env, pos, speed);
+            ControlledRobot robot = new ControlledRobot(env, pos, speed, startAngle);
             if (env.addRobot(robot)) {
                 logger.info("Added a new ControlledRobot at position: col = {}, row = {}", pos.getCol(), pos.getRow());
                 return robot;
@@ -170,6 +171,7 @@ public class ControlledRobot implements Robot {
         return new Position(position.getRow() + (dy * step), position.getCol() + (dx * step));
     }
 
+    @Override
     public int getSpeed() {
         return speed;
     }

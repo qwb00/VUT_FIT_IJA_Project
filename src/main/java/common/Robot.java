@@ -43,6 +43,8 @@ public interface Robot extends Observable, Cloneable {
      */
     Robot clone();
 
+    int getSpeed();
+
     void setAngle(int angle);
 }
 

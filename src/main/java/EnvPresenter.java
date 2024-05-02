@@ -242,6 +242,8 @@ public class EnvPresenter implements Observer {
     }
 
     private void refreshGui() {
+        frame.revalidate();
+        frame.repaint();
         fields.values().forEach(FieldView::repaint); // Перерисовка каждого поля
         robots.forEach(RobotView::refreshView); // Вызов обновления для каждого представления робота
     }

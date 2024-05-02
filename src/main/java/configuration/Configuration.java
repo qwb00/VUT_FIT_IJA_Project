@@ -97,10 +97,10 @@ public class Configuration {
             int turnAngle = readInteger(scanner, "turnAngle");
             boolean turnDirection = Boolean.parseBoolean(scanner.nextLine().split("=")[1].trim());
             int speed = readInteger(scanner, "speed");
-            AutonomousRobot.create(room, new Position(row, col), speed, detectionRange, turnAngle, turnDirection);
+            AutonomousRobot.create(room, new Position(row, col), speed, detectionRange, turnAngle, turnDirection, 0);
         } else if (robotType.contains("ControlledRobot")) {
             int speed = readInteger(scanner, "speed");
-            ControlledRobot.create(room, new Position(row, col), speed);
+            ControlledRobot.create(room, new Position(row, col), speed, 0);
         }
     }
 
