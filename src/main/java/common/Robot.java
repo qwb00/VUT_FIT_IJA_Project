@@ -1,6 +1,8 @@
 package main.java.common;
 
-public interface Robot extends Observable {
+import main.java.robot.AutonomousRobot;
+
+public interface Robot extends Observable, Cloneable {
     /**
      * Turns the robot by 45 degrees clockwise
      */
@@ -33,5 +35,16 @@ public interface Robot extends Observable {
      * @return The current position of the robot
      */
     Position getPosition();
+
+    /**
+     * Returns a deep copy of the robot
+     *
+     * @return A deep copy of the robot
+     */
+    Robot clone();
+
+    int getSpeed();
+
+    void setAngle(int angle);
 }
 

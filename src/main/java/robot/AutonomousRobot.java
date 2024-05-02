@@ -4,6 +4,7 @@ import main.java.common.Environment;
 import main.java.common.Position;
 import main.java.common.Robot;
 
+import main.java.simulation.SimulationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.Timer;
@@ -22,17 +23,20 @@ public class AutonomousRobot implements Robot {
     private final List<Observer> observers = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(AutonomousRobot.class);
     private Timer movementTimer;
-    private AutonomousRobot(Environment env, Position position, int speed, int detectionRange, int turnAngle, boolean turnDirection) {
+    private SimulationManager simulationManager;
+    public boolean isMoveable = false;
+    public AutonomousRobot(Environment env, Position position, int speed, int detectionRange, int turnAngle, boolean turnDirection, int angle) {
         this.env = env;
         this.position = position;
         this.detectionRange = detectionRange;
         this.turnAngle = turnAngle;
         this.turnDirection = turnDirection;
         this.speed = speed;
-        initMovement();
+        this.simulationManager = SimulationManager.getInstance(env);
+        this.angle = angle;
     }
 
-    private void initMovement() {
+    public void initMovement() {
         movementTimer = new Timer();
         movementTimer.schedule(new TimerTask() {
             @Override
@@ -43,10 +47,14 @@ public class AutonomousRobot implements Robot {
         }, 0, 1000);  // init movement with 1 second delay
     }
 
-    public static AutonomousRobot create(Environment env, Position pos, int speed, int detectionRange, int turnAngle, boolean turnDirection) {
+    public void setSimulationManager(SimulationManager simulationManager) {
+        this.simulationManager = simulationManager;
+    }
+    public static AutonomousRobot create(Environment env, Position pos, int speed, int detectionRange, int turnAngle, boolean turnDirection, int startAngle) {
         if (env.containsPosition(pos) && !env.robotAt(pos)) {
-            AutonomousRobot robot = new AutonomousRobot(env, pos, speed, detectionRange, turnAngle, turnDirection);
+            AutonomousRobot robot = new AutonomousRobot(env, pos, speed, detectionRange, turnAngle, turnDirection, startAngle);
             if (env.addRobot(robot)) {
+                robot.initMovement();
                 logger.info("Added a new AutonomousRobot at position: col = {}, row = {}", pos.getCol(), pos.getRow());
                 return robot;
             }
@@ -84,6 +92,7 @@ public class AutonomousRobot implements Robot {
 
     @Override
     public void turn() {
+        simulationManager.saveState();
         if (turnDirection) {
             angle = (angle + turnAngle) % 360;
             logger.info("Turned right to angle: {}", angle);
@@ -100,15 +109,7 @@ public class AutonomousRobot implements Robot {
 
     @Override
     public boolean canMove() {
-        int checkDistance = Math.min(speed, detectionRange);  // Find the minimum of speed and detection range
-        for (int i = 1; i <= checkDistance; i++) {
-            Position checkingPosition = calculateNextPosition(i);
-            if (!env.containsPosition(checkingPosition) || env.robotAt(checkingPosition) || env.obstacleAt(checkingPosition)) {
-                // obstacle detected
-                return false;
-            }
-        }
-        return true; // obstacle not detected
+        return maxMovableSteps() > 0; // obstacle not detected
     }
 
     public int maxMovableSteps() {
@@ -126,6 +127,7 @@ public class AutonomousRobot implements Robot {
     @Override
     public boolean move() {
         if (canMove()) {
+            simulationManager.saveState();
             int movableSteps = maxMovableSteps();  // determine the maximum number of steps the robot can move
             if (movableSteps > 0) {
                 this.position = calculateNextPosition(movableSteps);
@@ -133,7 +135,7 @@ public class AutonomousRobot implements Robot {
                 logger.info("Moved to position: col = {}, row = {}", position.getCol(), position.getRow());
                 return true;
             }
-        } else {
+        } else if (isMoveable) {
             // obstacle detected
             turn();
             logger.info("Detected an obstacle within detection range, turned to angle: {}", angle);
@@ -145,6 +147,18 @@ public class AutonomousRobot implements Robot {
     @Override
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public AutonomousRobot clone() {
+        try {
+            AutonomousRobot cloned = (AutonomousRobot) super.clone();
+            cloned.position = new Position(this.position.getRow(), this.position.getCol());
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            logger.error("Failed to clone AutonomousRobot");
+            throw new AssertionError();  // must not happen since we are Cloneable
+        }
     }
 
     public Position calculateNextPosition(int step) {
@@ -176,6 +190,27 @@ public class AutonomousRobot implements Robot {
                 break;
         }
         return new Position(position.getRow() + (dy * step), position.getCol() + (dx * step));
+    }
+
+    @Override
+    public int getSpeed() {
+        return speed;
+    }
+
+    public int getDetectionRange() {
+        return detectionRange;
+    }
+
+    public int getTurnAngle() {
+        return turnAngle;
+    }
+
+    public boolean getTurnDirection() {
+        return turnDirection;
+    }
+
+    public void setAngle(int angle) {
+        this.angle = angle;
     }
 
     public String toString() {

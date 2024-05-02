@@ -1,8 +1,13 @@
 package main.java.common;
 
-public class Obstacle {
-    private final Position pos;
+import main.java.simulation.SimulationManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class Obstacle implements Cloneable {
+    private Position pos;
     private final Environment env;
+    private static final Logger logger = LogManager.getLogger(Obstacle.class.getName());
 
     /**
      * Constructor that sets the environment and position of the obstacle
@@ -26,5 +31,17 @@ public class Obstacle {
 
     public String toString() {
         return "Obstacle " + pos.toString();
+    }
+
+    @Override
+    public Obstacle clone() {
+        try {
+            Obstacle clone = (Obstacle) super.clone();
+            clone.pos = new Position(this.pos.getRow(), this.pos.getCol());
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            logger.error("Failed to clone Obstacle");
+            throw new AssertionError();
+        }
     }
 }

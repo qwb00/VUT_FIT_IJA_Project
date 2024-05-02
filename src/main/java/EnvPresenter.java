@@ -7,6 +7,7 @@ import main.java.configuration.Configuration;
 import main.java.design.DesignedUtils;
 import main.java.design.DesignedWindow;
 import main.java.environment.Room;
+import main.java.simulation.SimulationManager;
 import main.java.view.FieldView;
 import main.java.view.RobotView;
 import main.java.view.ControlView;
@@ -32,6 +33,7 @@ public class EnvPresenter implements Observer {
     private JFrame frame;
     private ControlView controlView;
     private Robot activeRobot;
+    private SimulationManager simulationManager;
 
     private GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
     private boolean isFullscreen = false;
@@ -71,6 +73,7 @@ public class EnvPresenter implements Observer {
             setActiveFirstRobot();  // Установить первого робота в списке как активного
         });
 
+        this.simulationManager.setEnvironment(newEnv);
         if (frame != null) {
             frame.dispose(); // Закрываем старое окно, если оно существует
         }
@@ -140,7 +143,7 @@ public class EnvPresenter implements Observer {
 
     public void initializeViews() {
         frame = new DesignedWindow();
-
+        simulationManager = SimulationManager.getInstance(env);
         GridLayout gridLayout = new GridLayout(env.getRows(), env.getCols());
         JPanel gridPanel = new JPanel(gridLayout);
 
@@ -265,7 +268,6 @@ public class EnvPresenter implements Observer {
         //System.out.println("Observable changed: ");
         SwingUtilities.invokeLater(this::refreshGui);
     }
-
     public void refreshGui() {
         fields.values().forEach(FieldView::repaint); // Перерисовка каждого поля
         robots.forEach(RobotView::refreshView); // Вызов обновления для каждого представления робота

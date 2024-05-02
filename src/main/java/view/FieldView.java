@@ -3,6 +3,7 @@ package main.java.view;
 import main.java.EnvPresenter;
 import main.java.common.Position;
 import main.java.common.Environment;
+import main.java.simulation.SimulationManager;
 import main.java.design.DesignedUtils;
 import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
@@ -19,12 +20,14 @@ public class FieldView extends DesignedField {
     private EnvPresenter presenter;
     private ComponentView obj;
 
+    private final SimulationManager simulationManager;
+
     public FieldView(Environment env, Position pos, EnvPresenter presenter) {
         super(); // Вызов конструктора DesignedField
         this.model = env;
         this.position = pos;
         this.presenter = presenter;
-
+        this.simulationManager = SimulationManager.getInstance(env);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -35,8 +38,10 @@ public class FieldView extends DesignedField {
 
     private void handleMouseClick() {
         if (model.obstacleAt(position)) {
+            simulationManager.saveState();
             removeObstacle();
         } else if (!model.robotAt(position)) {
+            simulationManager.saveState();
             handleAddElement();
         }
         updateFieldView();
@@ -79,7 +84,7 @@ public class FieldView extends DesignedField {
     private void handleRobotCreation() {
         int speed = askForRobotSpeed();
         if (speed > 0) { // speed will be -1 if the user cancels the dialog
-            ControlledRobot newRobot = ControlledRobot.create(model, position, speed);
+            ControlledRobot newRobot = ControlledRobot.create(model, position, speed, 0);
             if (newRobot != null) {
                 addNewControlledRobot(newRobot);
             }
@@ -117,7 +122,7 @@ public class FieldView extends DesignedField {
         boolean turnDirection = (turnDirChoice == 1);  // True if "Right", false if "Left"
 
         if (!model.robotAt(position)) {
-            AutonomousRobot newRobot = AutonomousRobot.create(model, position, speed, detectionRange, turnAngle, turnDirection);
+            AutonomousRobot newRobot = AutonomousRobot.create(model, position, speed, detectionRange, turnAngle, turnDirection, 0);
             if (newRobot != null) {
                 presenter.addRobotView(newRobot);
             }

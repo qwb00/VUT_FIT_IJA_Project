@@ -3,6 +3,7 @@ package main.java;
 
 import main.java.configuration.Configuration;
 import main.java.common.Environment;
+import main.java.simulation.SimulationManager;
 
 
 public class
@@ -11,7 +12,6 @@ Main {
     public static void main(String... args) {
         EnvPresenter presenter = new EnvPresenter();
         presenter.open(); // Открываем приложение
-
     }
 
     /**

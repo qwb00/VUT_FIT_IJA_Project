@@ -5,6 +5,7 @@ import main.java.common.Position;
 import main.java.environment.Room;
 import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
+import main.java.simulation.SimulationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,6 +14,7 @@ import java.util.Scanner;
 
 public class Configuration {
     private static final Logger logger = LogManager.getLogger(Configuration.class);
+
     public static void saveConfiguration(Environment env, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(env.toString());
@@ -95,10 +97,10 @@ public class Configuration {
             int turnAngle = readInteger(scanner, "turnAngle");
             boolean turnDirection = Boolean.parseBoolean(scanner.nextLine().split("=")[1].trim());
             int speed = readInteger(scanner, "speed");
-            AutonomousRobot.create(room, new Position(row, col), speed, detectionRange, turnAngle, turnDirection);
+            AutonomousRobot.create(room, new Position(row, col), speed, detectionRange, turnAngle, turnDirection, 0);
         } else if (robotType.contains("ControlledRobot")) {
             int speed = readInteger(scanner, "speed");
-            ControlledRobot.create(room, new Position(row, col), speed);
+            ControlledRobot.create(room, new Position(row, col), speed, 0);
         }
     }
 
