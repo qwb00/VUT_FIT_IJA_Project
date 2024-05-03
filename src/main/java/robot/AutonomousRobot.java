@@ -54,7 +54,7 @@ public class AutonomousRobot implements Robot {
         if (env.containsPosition(pos) && !env.robotAt(pos)) {
             AutonomousRobot robot = new AutonomousRobot(env, pos, speed, detectionRange, turnAngle, turnDirection, startAngle);
             if (env.addRobot(robot)) {
-                robot.initMovement();
+                //robot.initMovement();
                 logger.info("Added a new AutonomousRobot at position: col = {}, row = {}", pos.getCol(), pos.getRow());
                 return robot;
             }
