@@ -69,15 +69,41 @@
          */
         boolean obstacleAt(Position p);
 
+        /**
+         * Method to get the number of rows in the environment
+         *
+         * @return The number of rows in the environment
+         */
         int getRows();
 
+        /**
+         * Method to get the number of columns in the environment
+         *
+         * @return The number of columns in the environment
+         */
         int getCols();
 
+        /**
+         * Method to get the list of robots in the environment
+         *
+         * @return The list of robots in the environment
+         */
         List<Robot> getRobots();
 
+        /**
+         * Method to get the list of obstacles in the environment
+         *
+         * @return The list of obstacles in the environment
+         */
         List<Obstacle> getObstacles();
 
+        /**
+         * Method to clear all robots from the environment
+         */
         public void clearRobots();
 
+        /**
+         * Method to clear all obstacles from the environment
+         */
         public void clearObstacles();
     }
