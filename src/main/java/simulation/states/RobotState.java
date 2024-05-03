@@ -10,7 +10,8 @@ public class RobotState implements State {
     private final Robot robot;
     private final Position position;
     private final int speed;
-    private final int angle;  // Для ControlledRobot
+    private final int angle;
+    private final boolean isActive;// Для ControlledRobot
 
     // Для AutonomousRobot
     private final int detectionRange;
@@ -22,6 +23,7 @@ public class RobotState implements State {
         this.position = robot.getPosition();
         this.speed = robot.getSpeed();
         this.angle = robot.angle();
+        this.isActive = robot instanceof ControlledRobot && ((ControlledRobot) robot).isActive();
 
         if (robot instanceof AutonomousRobot) {
             AutonomousRobot ar = (AutonomousRobot) robot;
@@ -35,11 +37,12 @@ public class RobotState implements State {
         }
     }
 
+
     @Override
     public void restore(Environment environment) {
         Robot restoredRobot = null;
         if (robot instanceof AutonomousRobot) {
-            restoredRobot = new AutonomousRobot(environment, position, speed, detectionRange, turnAngle, turnDirection, angle);
+            restoredRobot = new AutonomousRobot(environment, position, speed, detectionRange, turnAngle, turnDirection, angle); // Пример кода, адаптируйте под ваш случай
         } else if (robot instanceof ControlledRobot) {
             restoredRobot = new ControlledRobot(environment, position, speed, angle);
         }
@@ -47,7 +50,10 @@ public class RobotState implements State {
         if (restoredRobot != null) {
             environment.addRobot(restoredRobot);
         }
-    }
 
+        if (restoredRobot instanceof ControlledRobot) {
+            ((ControlledRobot) restoredRobot).setActive(isActive);
+        }
+    }
 
 }

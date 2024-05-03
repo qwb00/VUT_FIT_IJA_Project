@@ -16,7 +16,7 @@ Row=2
 Col=5
 Robots=2
 ControlledRobot
-positionRow=4
+positionRow=2
 positionCol=2
 speed=2
 ControlledRobot

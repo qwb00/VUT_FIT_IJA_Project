@@ -20,6 +20,7 @@ public class ControlledRobot implements Robot {
     private final int speed;
     private final List<Observer> observers = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(ControlledRobot.class);
+    private boolean active;
 
     public boolean canControlled = false;
     private SimulationManager simulationManager;
@@ -30,6 +31,15 @@ public class ControlledRobot implements Robot {
         this.speed = speed;
         this.simulationManager = SimulationManager.getInstance(env);
         this.angle = angle;
+        this.active = false;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     @Override

@@ -8,7 +8,8 @@ import java.awt.event.MouseMotionAdapter;
 
 public class DesignedWindow extends JFrame {
     private Point initialClick;
-    private boolean isFullscreen = false; // Добавляем флаг состояния полноэкранного режима
+    private boolean isFullscreen = false;
+    private JPanel titleBar; // Добавляем флаг состояния полноэкранного режима
 
     public DesignedWindow() {
         initComponents();
@@ -23,7 +24,7 @@ public class DesignedWindow extends JFrame {
 
         setUndecorated(true);
 
-        JPanel titleBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        titleBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         titleBar.setBackground(new Color(228, 228, 228));
 
         JButton minimizeButton = createButton("src/main/resources/icons/minimize.png");
@@ -90,5 +91,9 @@ public class DesignedWindow extends JFrame {
         button.setPreferredSize(new Dimension(30, 30));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return button;
+    }
+
+    public JPanel getTitleBar() {
+        return titleBar;
     }
 }

@@ -21,6 +21,7 @@ public class SimulationManager implements Observable {
     private final Stack<EnvironmentState> historyStates;
     private static final Logger logger = LogManager.getLogger(SimulationManager.class);
     private List<Observer> observers = new ArrayList<>();
+    private Robot activeRobot;
 
     public SimulationManager(Environment environment) {
         this.environment = environment;
@@ -95,19 +96,37 @@ public class SimulationManager implements Observable {
     public void reverseSimulation() {
         pauseSimulation();
         if (!historyStates.isEmpty()) {
-            List<Robot> oldRobots = new ArrayList<>(environment.getRobots());
-            for (Robot robot : oldRobots) {
-                environment.removeRobot(robot);
-            }
+            environment.getRobots().clear();
 
             EnvironmentState previousState = historyStates.pop();
             previousState.restore(environment);
+
+            activeRobot = environment.getRobots().stream()
+                    .filter(robot -> robot instanceof ControlledRobot && ((ControlledRobot) robot).isActive())
+                    .findFirst()
+                    .orElse(null);
 
             notifyObservers();
             logger.info("Simulation reversed to a previous state.");
         } else {
             logger.warn("Attempted to reverse simulation but no states were saved in the history stack.");
         }
+    }
+
+    private Robot findActiveRobot(Environment environment) {
+        // Ищем активного робота в списке
+        return environment.getRobots().stream()
+                .filter(robot -> robot instanceof ControlledRobot && ((ControlledRobot) robot).isActive())
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void setActiveRobot(Robot robot) {
+        this.activeRobot = robot;
+    }
+
+    public Robot getActiveRobot() {
+        return activeRobot;
     }
 
     @Override

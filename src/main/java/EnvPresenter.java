@@ -271,17 +271,57 @@ public class EnvPresenter implements Observer {
     }
 
     public void update(Observable o) {
-        // Обновление GUI, когда состояние робота изменяется
-        //System.out.println("Observable changed: ");
-
         if (o instanceof SimulationManager) {
-            if (frame != null) {
-                frame.dispose(); // Удаляем старое окно
+            fields.clear();
+            robots.clear();
+
+            frame.getContentPane().removeAll();
+
+            GridLayout gridLayout = new GridLayout(env.getRows(), env.getCols());
+            JPanel gridPanel = new JPanel(gridLayout);
+
+            for (int row = 0; row < env.getRows(); ++row) {
+                for (int col = 0; col < env.getCols(); ++col) {
+                    Position position = new Position(row, col);
+                    FieldView fieldView = new FieldView(env, position, this);
+                    fields.put(position, fieldView);
+                    gridPanel.add(fieldView);
+                }
             }
-            initializeViews(); // Пересоздаем графику для роботов
-            refreshGui(); // Обновляем графику
+
+            env.getRobots().forEach(robot -> {
+                RobotView robotView = new RobotView(this, robot);
+                robots.add(robotView);
+                FieldView field = fields.get(robot.getPosition());
+                if (field != null) {
+                    field.addComponent(robotView);
+                }
+            });
+
+            if (frame instanceof DesignedWindow) {
+                JPanel titleBar = ((DesignedWindow) frame).getTitleBar();
+                frame.getContentPane().add(titleBar, BorderLayout.NORTH);
+            }
+
+            frame.getContentPane().add(gridPanel, BorderLayout.CENTER);
+            frame.getContentPane().add(controlView, BorderLayout.SOUTH);
+
+            // Устанавливаем активного робота, если он есть
+            Robot activeRobot = simulationManager.getActiveRobot();
+            if (activeRobot != null) {
+                setActiveRobot(activeRobot);
+                controlView.setActiveRobot(activeRobot);
+            }
+
+            frame.revalidate();
+            frame.repaint();
         }
     }
+
+
+
+
+
 
     public void refreshGui() {
         fields.values().forEach(FieldView::repaint); // Перерисовка каждого поля
@@ -291,6 +331,15 @@ public class EnvPresenter implements Observer {
     public void setActiveRobot(Robot robot) {
         if (robot instanceof ControlledRobot) {
             this.activeRobot = robot;
+            ((ControlledRobot) robot).setActive(true);
+
+            // Сбрасываем активность у других роботов
+            for (Robot otherRobot : env.getRobots()) {
+                if (otherRobot != robot && otherRobot instanceof ControlledRobot) {
+                    ((ControlledRobot) otherRobot).setActive(false);
+                }
+            }
+
             refreshGui(); // Обновляем графический интерфейс после изменения активного робота
         }
     }
