@@ -37,10 +37,17 @@ public class RobotState implements State {
 
     @Override
     public void restore(Environment environment) {
+        Robot restoredRobot = null;
         if (robot instanceof AutonomousRobot) {
-            AutonomousRobot.create(environment, position, speed, detectionRange, turnAngle, turnDirection, angle);
+            restoredRobot = new AutonomousRobot(environment, position, speed, detectionRange, turnAngle, turnDirection, angle);
         } else if (robot instanceof ControlledRobot) {
-            ControlledRobot.create(environment, position, speed, angle);
+            restoredRobot = new ControlledRobot(environment, position, speed, angle);
+        }
+
+        if (restoredRobot != null) {
+            environment.addRobot(restoredRobot);
         }
     }
+
+
 }

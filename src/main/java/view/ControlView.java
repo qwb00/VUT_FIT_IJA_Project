@@ -91,24 +91,30 @@ public class ControlView extends JPanel implements ComponentView {
         saveConfigButton.addActionListener(this::saveConfiguration);
         add(saveConfigButton);
 
-        // Start Button
-        JButton startButton = new JButton("Start");
+        Icon startButtonIcon = resizeIcon(new ImageIcon("src/main/resources/icons/play.png"));
+        DesignedButton startButton = new DesignedButton(startButtonIcon);
+        startButton.setPreferredSize(new Dimension(60, 45));
         startButton.addActionListener(this::handleStart);
         add(startButton);
 
-        // Pause Button
-        JButton pauseButton = new JButton("Pause");
+        Icon pauseButtonIcon = resizeIcon(new ImageIcon("src/main/resources/icons/pause.png"));
+        DesignedButton pauseButton = new DesignedButton(pauseButtonIcon);
+        pauseButton.setPreferredSize(new Dimension(60, 45));
         pauseButton.addActionListener(this::handlePause);
         add(pauseButton);
 
-        JButton stopButton = new JButton("Stop");
+        Icon stopButtonIcon = resizeIcon(new ImageIcon("src/main/resources/icons/stop.png"));
+        DesignedButton stopButton = new DesignedButton(stopButtonIcon);
+        stopButton.setPreferredSize(new Dimension(60, 45));
         stopButton.addActionListener(this::handleStop);
         add(stopButton);
 
-        // Reverse Button
-        JButton reverseButton = new JButton("Reverse");
+        Icon reverseButtonIcon = resizeIcon(new ImageIcon("src/main/resources/icons/reverse.png"));
+        DesignedButton reverseButton = new DesignedButton(reverseButtonIcon);
+        reverseButton.setPreferredSize(new Dimension(60, 45));
         reverseButton.addActionListener(this::handleReverse);
         add(reverseButton);
+
     }
 
     // Метод для изменения размера иконки
@@ -144,6 +150,7 @@ public class ControlView extends JPanel implements ComponentView {
     }
 
     private void loadConfiguration(ActionEvent e) {
+        handleStop(null);
         String configFilePath = "src/main/resources/config.txt"; // Путь к файлу конфигурации
         try {
             presenter.clearEnvironment(); // Очистка текущего окружения и роботов

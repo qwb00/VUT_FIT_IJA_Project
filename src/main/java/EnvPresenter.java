@@ -144,8 +144,15 @@ public class EnvPresenter implements Observer {
     public void initializeViews() {
         frame = new DesignedWindow();
         simulationManager = SimulationManager.getInstance(env);
+        simulationManager.addObserver(this);
+
+
         GridLayout gridLayout = new GridLayout(env.getRows(), env.getCols());
         JPanel gridPanel = new JPanel(gridLayout);
+
+        // Убедитесь, что правильно создаются поля и роботы
+        fields.clear();
+        robots.clear();
 
         // Создаем представления полей на основе новой среды
         for (int row = 0; row < env.getRows(); ++row) {
@@ -266,16 +273,26 @@ public class EnvPresenter implements Observer {
     public void update(Observable o) {
         // Обновление GUI, когда состояние робота изменяется
         //System.out.println("Observable changed: ");
-        SwingUtilities.invokeLater(this::refreshGui);
+
+        if (o instanceof SimulationManager) {
+            if (frame != null) {
+                frame.dispose(); // Удаляем старое окно
+            }
+            initializeViews(); // Пересоздаем графику для роботов
+            refreshGui(); // Обновляем графику
+        }
     }
+
     public void refreshGui() {
         fields.values().forEach(FieldView::repaint); // Перерисовка каждого поля
         robots.forEach(RobotView::refreshView); // Вызов обновления для каждого представления робота
     }
 
     public void setActiveRobot(Robot robot) {
-        this.activeRobot = robot;
-        refreshGui(); // Обновляем GUI после изменения активного робота
+        if (robot instanceof ControlledRobot) {
+            this.activeRobot = robot;
+            refreshGui(); // Обновляем графический интерфейс после изменения активного робота
+        }
     }
 
     public boolean isActive(Robot robot) {

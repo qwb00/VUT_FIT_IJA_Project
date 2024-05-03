@@ -95,12 +95,17 @@ public class SimulationManager implements Observable {
     public void reverseSimulation() {
         pauseSimulation();
         if (!historyStates.isEmpty()) {
+            List<Robot> oldRobots = new ArrayList<>(environment.getRobots());
+            for (Robot robot : oldRobots) {
+                environment.removeRobot(robot);
+            }
+
             EnvironmentState previousState = historyStates.pop();
             previousState.restore(environment);
+
             notifyObservers();
             logger.info("Simulation reversed to a previous state.");
-        }
-        else {
+        } else {
             logger.warn("Attempted to reverse simulation but no states were saved in the history stack.");
         }
     }
