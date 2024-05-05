@@ -103,4 +103,12 @@
          * Method to clear all obstacles from the environment
          */
         void clearObstacles();
+
+        /**
+         * Method to get the robot at the specified position
+         *
+         * @param p The position to check
+         * @return The robot at the specified position
+         */
+        Robot getRobotAt(Position p);
     }

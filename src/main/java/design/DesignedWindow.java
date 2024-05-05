@@ -28,13 +28,13 @@ public class DesignedWindow extends JFrame {
         titleBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         titleBar.setBackground(new Color(228, 228, 228));
 
-        JButton minimizeButton = createButton("src/main/resources/icons/minimize.png");
+        JButton minimizeButton = createButton("lib/icons/minimize.png");
         minimizeButton.addActionListener(e -> setState(Frame.ICONIFIED));
 
-        JButton maximizeButton = createButton("src/main/resources/icons/fullscreen.png");
+        JButton maximizeButton = createButton("lib/icons/fullscreen.png");
         maximizeButton.addActionListener(e -> toggleFullscreen());
 
-        JButton closeButton = createButton("src/main/resources/icons/close.png");
+        JButton closeButton = createButton("lib/icons/close.png");
         closeButton.addActionListener(e -> System.exit(0));
 
         titleBar.add(minimizeButton);

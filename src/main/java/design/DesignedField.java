@@ -39,6 +39,6 @@ public class DesignedField extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setColor(getBackground());
-        g2d.fillRect(0, 0, getWidth(), getHeight()); // Измените на fillRect, чтобы убрать скругленные углы
+        g2d.fillRect(0, 0, getWidth(), getHeight());
     }
 }

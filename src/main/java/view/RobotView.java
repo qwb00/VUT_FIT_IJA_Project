@@ -22,7 +22,6 @@ public class RobotView implements ComponentView, Observable.Observer {
         this.parent = var1;
         var2.addObserver(this);
         this.privUpdate();
-
         this.designedRobot = new DesignedRobot(model);
     }
 

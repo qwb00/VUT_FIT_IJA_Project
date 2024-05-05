@@ -214,6 +214,11 @@ public class Room implements Environment, Observable {
     }
 
     @Override
+    public Robot getRobotAt(Position p) {
+        return robots.stream().filter(robot -> robot.getPosition().equals(p)).findFirst().orElse(null);
+    }
+
+    @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }

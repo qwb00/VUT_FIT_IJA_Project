@@ -216,9 +216,9 @@ public class EnvPresenter implements Observer {
     }
 
     private void loadConfiguration() {
-        String configFilePath = "src/main/resources/config.txt";
+        String configFilePath = "data/config.txt";
         this.env = Configuration.loadConfiguration(configFilePath);
-        initializeViews(); // Инициализация представлений с загруженной конфигурацией
+        initializeViews();
     }
 
     private void createEmptyMap() {

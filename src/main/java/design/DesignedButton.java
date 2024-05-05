@@ -98,7 +98,6 @@ public class DesignedButton extends JButton {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Устанавливаем цвет с использованием currentColor
         g2d.setColor(currentColor);
         g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
 
