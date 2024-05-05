@@ -1,10 +1,14 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
+ */
+
+package main.java.common;
+
+/**
  * Interface for objects that can be observed.
  * Classes implementing this interface allow other objects to observe their state changes.
  */
-package main.java.common;
 
 public interface Observable {
     /**

@@ -1,8 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xposte00 - Aleksander Postelga
- * Represents the state of an obstacle.
- * This class is used to save and restore the state of an obstacle.
  */
 package main.java.simulation.states;
 
@@ -10,6 +8,10 @@ import main.java.common.Environment;
 import main.java.common.Obstacle;
 import main.java.common.Position;
 
+/**
+ * Represents the state of an obstacle.
+ * This class is used to save and restore the state of an obstacle.
+ */
 public class ObstacleState implements State {
     private final int row;
     private final int col;

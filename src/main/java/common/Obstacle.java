@@ -1,14 +1,17 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xposte00 - Aleksander Postelga
- * Represents an obstacle within the simulation environment.
- * It maintains its position and provides functionality to clone itself.
  */
+
 package main.java.common;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Represents an obstacle within the simulation environment.
+ * It maintains its position and provides functionality to clone itself.
+ */
 public class Obstacle implements Cloneable {
     private Position pos;
     private static final Logger logger = LogManager.getLogger(Obstacle.class.getName());

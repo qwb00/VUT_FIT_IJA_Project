@@ -1,8 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * A custom-designed field for the user interface.
- * It changes color on hover and has a bordered appearance.
  */
 package main.java.design;
 

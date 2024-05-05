@@ -1,9 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xposte00 - Aleksander Postelga
- * The SimulationManager class is responsible for managing the simulation state,
- * including starting, pausing, stopping, and reversing the simulation.
- * It follows the Observable pattern to notify observers of simulation state changes.
  */
 
 package main.java.simulation;
@@ -21,6 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * The SimulationManager class is responsible for managing the simulation state,
+ * including starting, pausing, stopping, and reversing the simulation.
+ * It follows the Observable pattern to notify observers of simulation state changes.
+ */
 public class SimulationManager implements Observable {
     private static SimulationManager instance;
     private Environment environment;

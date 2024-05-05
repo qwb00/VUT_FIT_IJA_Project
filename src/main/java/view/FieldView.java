@@ -1,8 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * FieldView is a graphical component that represents a single field in the environment grid.
- * It manages the display of obstacles and robots, and handles user interactions like clicking on the field.
  */
 package main.java.view;
 
@@ -20,6 +18,10 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * FieldView is a graphical component that represents a single field in the environment grid.
+ * It manages the display of obstacles and robots, and handles user interactions like clicking on the field.
+ */
 public class FieldView extends DesignedField {
     private final Environment model;
     private final Position position;

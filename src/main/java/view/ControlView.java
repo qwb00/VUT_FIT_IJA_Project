@@ -1,8 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * The ControlView class manages the control panel of the application,
- * providing buttons to manipulate the simulation and interact with robots.
  */
 package main.java.view;
 
@@ -21,6 +19,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
+/**
+ * The ControlView class manages the control panel of the application,
+ * providing buttons to manipulate the simulation and interact with robots.
+ */
 public class ControlView extends JPanel implements ComponentView {
     private List<Robot> robots; // List of robots
     private int currentRobotIndex = 0; // Index of the current robot

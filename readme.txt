@@ -16,10 +16,10 @@ Maven
 The project is compiled using Maven.
 
 Compile the project:
-mvn compile
+mvn clean package
 
 Run the project:
-mvn exec:java
+java -jar target/RobotSimulation-0.8.jar
 
 Features
 Simulation Control: Start and pause the simulation of robots in a 2D environment.

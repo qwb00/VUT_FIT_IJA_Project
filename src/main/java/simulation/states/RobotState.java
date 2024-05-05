@@ -1,8 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xposte00 - Aleksander Postelga
- * Represents the state of a robot in the simulation.
- * This class is used to save and restore the state of a robot.
  */
 package main.java.simulation.states;
 
@@ -12,6 +10,10 @@ import main.java.common.Robot;
 import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
 
+/**
+ * Represents the state of a robot in the simulation.
+ * This class is used to save and restore the state of a robot.
+ */
 public class RobotState implements State {
     private final Robot robot;
     private final Position position;

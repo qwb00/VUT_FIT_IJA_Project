@@ -1,7 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * A graphical representation of a robot with specific visual details.
  */
 package main.java.design;
 
@@ -12,6 +11,9 @@ import main.java.common.Robot;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
+/**
+ * A graphical representation of a robot with specific visual details.
+ */
 public class DesignedRobot {
     private final Robot model;
 

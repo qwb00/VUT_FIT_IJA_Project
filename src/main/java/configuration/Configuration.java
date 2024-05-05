@@ -1,7 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xposte00 - Aleksander Postelga
- * Configuration class for saving and loading simulation configurations to/from files.
  */
 package main.java.configuration;
 
@@ -16,6 +15,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.util.Scanner;
 
+/**
+ * Configuration class for saving and loading simulation configurations to/from files.
+ */
 public class Configuration {
     private static final Logger logger = LogManager.getLogger(Configuration.class);
 

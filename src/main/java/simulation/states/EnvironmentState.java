@@ -1,8 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xposte00 - Aleksander Postelga
- * Represents the state of an environment, including its robots and obstacles.
- * This class is used to save and restore the state of the environment.
  */
 package main.java.simulation.states;
 
@@ -10,6 +8,10 @@ import main.java.common.Environment;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Represents the state of an environment, including its robots and obstacles.
+ * This class is used to save and restore the state of the environment.
+ */
 public class EnvironmentState implements State {
     private final List<State> states = new ArrayList<>();
 

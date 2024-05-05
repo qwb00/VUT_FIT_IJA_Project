@@ -1,13 +1,15 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * Utility class providing custom dialog functionalities with a consistent design.
  */
 package main.java.design;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Utility class providing custom dialog functionalities with a consistent design.
+ */
 public class DesignedUtils {
 
     /**

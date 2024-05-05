@@ -1,10 +1,12 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
- * The Main class serves as the entry point for the application.
- * It initializes the environment presenter and starts the graphical user interface.
  */
 package main.java;
 
+/**
+ * The Main class serves as the entry point for the application.
+ * It initializes the environment presenter and starts the graphical user interface.
+ */
 public class Main {
     /**
      * The main method, which is the entry point of the application.

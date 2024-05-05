@@ -1,14 +1,16 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * The ComponentView interface defines a graphical component that can be painted
- * and associated with a robot model in the 2D robot simulator.
  */
 package main.java.view;
 
 import main.java.common.Robot;
 import java.awt.Graphics;
 
+/**
+ * The ComponentView interface defines a graphical component that can be painted
+ * and associated with a robot model in the 2D robot simulator.
+ */
 public interface ComponentView {
     /**
      * Paints the component

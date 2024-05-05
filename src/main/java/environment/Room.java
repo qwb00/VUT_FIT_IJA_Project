@@ -1,8 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * Represents a simulation environment in the form of a room.
- * This environment contains robots and obstacles, and it provides methods to interact with them.
  */
 package main.java.environment;
 
@@ -13,6 +11,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a simulation environment in the form of a room.
+ * This environment contains robots and obstacles, and it provides methods to interact with them.
+ */
 public class Room implements Environment, Observable {
     private final int rows;
     private final int cols;

@@ -1,7 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * Custom button class with a specific design and color transition effects.
  */
 package main.java.design;
 

@@ -1,12 +1,16 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * Interface that represents a simulation environment.
- * This environment contains robots and obstacles, and it provides methods to interact with them.
  */
+
 package main.java.common;
 
 import java.util.List;
+
+/**
+ * Interface that represents a simulation environment.
+ * This environment contains robots and obstacles, and it provides methods to interact with them.
+ */
 
 public interface Environment {
     /**

@@ -1,7 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * A custom-designed window with a title bar that includes custom buttons for minimizing, maximizing, and closing the window.
  */
 package main.java.design;
 
@@ -11,6 +10,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
+/**
+ * A custom-designed window with a title bar that includes custom buttons for minimizing, maximizing, and closing the window.
+ */
 public class DesignedWindow extends JFrame {
     private Point initialClick;
     private boolean isFullscreen = false;

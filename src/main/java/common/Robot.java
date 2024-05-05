@@ -1,10 +1,12 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xposte00 - Aleksander Postelga
- * Interface representing a robot with basic capabilities like moving, turning, and state management.
  */
 package main.java.common;
 
+/**
+ * Interface representing a robot with basic capabilities like moving, turning, and state management.
+ */
 public interface Robot extends Observable, Cloneable {
     /**
      * Turns the robot by 45 degrees clockwise

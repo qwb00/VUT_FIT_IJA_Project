@@ -1,8 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * The EnvPresenter class acts as a presenter in the Model-View-Presenter (MVP) pattern,
- * managing the interaction between the simulation environment and the user interface.
  */
 
 package main.java;
@@ -33,6 +31,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 
+/**
+ * The EnvPresenter class acts as a presenter in the Model-View-Presenter (MVP) pattern,
+ * managing the interaction between the simulation environment and the user interface.
+ */
 public class EnvPresenter implements Observer {
     private Environment env;
     private final Map<Position, FieldView> fields;

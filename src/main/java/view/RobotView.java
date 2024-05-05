@@ -1,8 +1,6 @@
 /**
  * Project: Jednoduchý 2D simulátor mobilních robotů
  * Author: xpetri23 - Aleksei Petrishko
- * A graphical view representation of a robot.
- * This class observes changes in the robot's state and updates the GUI accordingly.
  */
 package main.java.view;
 
@@ -13,6 +11,10 @@ import main.java.design.DesignedRobot;
 
 import java.awt.*;
 
+/**
+ * A graphical view representation of a robot.
+ * This class observes changes in the robot's state and updates the GUI accordingly.
+ */
 public class RobotView implements ComponentView, Observable.Observer {
     private final Robot model;
     private final EnvPresenter parent;
