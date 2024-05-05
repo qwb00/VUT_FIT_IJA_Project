@@ -39,13 +39,13 @@ public class DesignedWindow extends JFrame {
         titleBar.setBackground(new Color(228, 228, 228));
 
         // Add minimize, maximize, and close buttons to the title bar
-        JButton minimizeButton = createButton("src/main/resources/icons/minimize.png");
+        JButton minimizeButton = createButton("lib/icons/minimize.png");
         minimizeButton.addActionListener(e -> setState(Frame.ICONIFIED));
 
-        JButton maximizeButton = createButton("src/main/resources/icons/fullscreen.png");
+        JButton maximizeButton = createButton("lib/icons/fullscreen.png");
         maximizeButton.addActionListener(e -> toggleFullscreen());
 
-        JButton closeButton = createButton("src/main/resources/icons/close.png");
+        JButton closeButton = createButton("lib/icons/close.png");
         closeButton.addActionListener(e -> System.exit(0));
 
         titleBar.add(minimizeButton);

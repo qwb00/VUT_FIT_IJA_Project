@@ -250,7 +250,7 @@ public class EnvPresenter implements Observer {
      * Loads the environment configuration from a file and initializes the views.
      */
     private void loadConfiguration() {
-        String configFilePath = "src/main/resources/config.txt";
+        String configFilePath = "data/config.txt";
         this.env = Configuration.loadConfiguration(configFilePath);
         initializeViews();
     }
