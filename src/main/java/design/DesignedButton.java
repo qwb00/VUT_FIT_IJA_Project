@@ -8,12 +8,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class DesignedButton extends JButton {
-    private Color baseColor = new Color(228, 228, 228);
-    private Color hoverColor = new Color(200, 200, 200);
-    private Color pressedColor = new Color(255, 255, 255);
-    private Timer colorTransitionTimer;
-    private int animationSpeed = 20; // Скорость анимации
-    private Color currentColor;
+    // Color constants
+    private final Color baseColor = new Color(228, 228, 228);
+    private final Color hoverColor = new Color(200, 200, 200);
+    private final Color pressedColor = new Color(255, 255, 255);
+    private Timer colorTransitionTimer; // Timer for color transitions
+    private Color currentColor; // Current color of the button
 
     public DesignedButton(Icon icon) {
         super(icon);
@@ -25,6 +25,7 @@ public class DesignedButton extends JButton {
 
         currentColor = baseColor;
 
+        // Add listeners for color transitions
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -49,19 +50,23 @@ public class DesignedButton extends JButton {
         });
     }
 
+    // Start a color transition to the target color
     private void startColorTransition(Color targetColor) {
         if (colorTransitionTimer != null && colorTransitionTimer.isRunning()) {
             colorTransitionTimer.stop();
         }
 
+        // Speed of the color transition
+        int animationSpeed = 20;
         colorTransitionTimer = new Timer(animationSpeed, new ActionListener() {
             private int step = 0;
-            private final int steps = 20;
             private final Color startColor = currentColor;
 
+            // Calculate the next color in the transition
             @Override
             public void actionPerformed(ActionEvent e) {
                 step++;
+                int steps = 20;
                 float ratio = (float) step / steps;
                 currentColor = new Color(
                         (int) (startColor.getRed() + ratio * (targetColor.getRed() - startColor.getRed())),
@@ -80,12 +85,14 @@ public class DesignedButton extends JButton {
         colorTransitionTimer.start();
     }
 
+    // Stop the color transition
     private void stopColorTransition() {
         if (colorTransitionTimer != null && colorTransitionTimer.isRunning()) {
             colorTransitionTimer.stop();
         }
     }
 
+    // Paint the button with the current color
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;

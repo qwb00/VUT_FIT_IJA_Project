@@ -7,8 +7,6 @@ import main.java.common.Robot;
 import main.java.simulation.SimulationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import main.java.common.Observable.Observer;
-import main.java.common.Observable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +14,14 @@ import java.util.List;
 public class ControlledRobot implements Robot {
     private final Environment env;
     private Position position;
-    private int angle = 0;
+    private int angle;
     private final int speed;
     private final List<Observer> observers = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(ControlledRobot.class);
     private boolean active;
 
     public boolean canControlled = false;
-    private SimulationManager simulationManager;
+    private final SimulationManager simulationManager;
 
     public ControlledRobot(Environment env, Position position, int speed, int angle) {
         this.env = env;
@@ -34,10 +32,18 @@ public class ControlledRobot implements Robot {
         this.active = false;
     }
 
+    /**
+     * Sets the robot active
+     */
     public void setActive(boolean active) {
         this.active = active;
     }
 
+    /**
+     * Returns whether the robot is active
+     *
+     * @return true if the robot is active, false otherwise
+     */
     public boolean isActive() {
         return active;
     }
@@ -80,21 +86,41 @@ public class ControlledRobot implements Robot {
         return null;
     }
 
+    /**
+     * Returns the angle of the robot
+     *
+     * @return The angle of the robot
+     */
     @Override
     public int angle() {
         return angle;
     }
 
+    /**
+     * Checks whether the robot can move
+     *
+     * @return true if the robot can move, false otherwise
+     */
     @Override
     public boolean canMove() {
         return maxMovableSteps() > 0 && canControlled;
     }
 
+    /**
+     * Returns the current position of the robot
+     *
+     * @return The current position of the robot
+     */
     @Override
     public Position getPosition() {
         return position;
     }
 
+    /**
+     * Returns a deep copy of the robot
+     *
+     * @return A deep copy of the robot
+     */
     @Override
     public ControlledRobot clone() {
         try {
@@ -107,6 +133,11 @@ public class ControlledRobot implements Robot {
         }
     }
 
+    /**
+     * Returns the maximum number of steps the robot can move
+     *
+     * @return The maximum number of steps the robot can move
+     */
     public int maxMovableSteps() {
         int steps = 0;
         for (int step = 1; step <= speed; step++) {
@@ -119,18 +150,22 @@ public class ControlledRobot implements Robot {
         return steps;
     }
 
+    /**
+     * Moves the robot
+     */
     @Override
-    public boolean move() {
+    public void move() {
         if (canMove()) {
             simulationManager.saveState();
             this.position = calculateNextPosition(maxMovableSteps());
             notifyObservers();
             logger.info("Moved to position: col = {}, row = {}", position.getCol(), position.getRow());
-            return true;
         }
-        return false;
     }
 
+    /**
+     * Turns the robot by 45 degrees clockwise
+     */
     @Override
     public void turn() {
         if (canControlled) {
@@ -141,6 +176,9 @@ public class ControlledRobot implements Robot {
         }
     }
 
+    /**
+     * Turns the robot by 45 degrees counterclockwise
+     */
     public void turnCounterClockwise() {
         if (canControlled) {
             simulationManager.saveState();
@@ -150,8 +188,15 @@ public class ControlledRobot implements Robot {
         }
     }
 
+    /**
+     * Calculates the next position of the robot after moving a specified number of steps
+     *
+     * @param step The number of steps to move
+     * @return The next position of the robot
+     */
     public Position calculateNextPosition(int step) {
-        int dx = 0, dy = 0;
+        int dx = 0;
+        int dy = 0;
         switch (angle) {
             case 0:
                 dy = -1;
@@ -181,15 +226,21 @@ public class ControlledRobot implements Robot {
         return new Position(position.getRow() + (dy * step), position.getCol() + (dx * step));
     }
 
+    /**
+     * Returns the speed of the robot
+     *
+     * @return The speed of the robot
+     */
     @Override
     public int getSpeed() {
         return speed;
     }
 
-    public void setAngle(int angle) {
-        this.angle = angle;
-    }
-
+    /**
+     * Return the string representation of the ControlledRobot
+     *
+     * @return The string representation of the ControlledRobot
+     */
     @Override
     public String toString() {
         return "ControlledRobot\n"

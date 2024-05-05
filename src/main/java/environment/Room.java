@@ -10,7 +10,7 @@ import java.util.List;
 public class Room implements Environment, Observable {
     private final int rows;
     private final int cols;
-    private List<Robot> robots;
+    private final List<Robot> robots;
     private final List<Obstacle> obstacles;
     private static final Logger logger = LogManager.getLogger(Room.class);
     private final List<Observer> observers = new ArrayList<>();
@@ -38,6 +38,12 @@ public class Room implements Environment, Observable {
         return new Room(rows, cols);
     }
 
+    /**
+     * Adds a robot to the room at the specified position
+     *
+     * @param robot The robot to add
+     * @return true if the robot was added successfully, false otherwise
+     */
     @Override
     public boolean addRobot(Robot robot) {
         if (robot == null || !containsPosition(robot.getPosition()) ||
@@ -48,15 +54,19 @@ public class Room implements Environment, Observable {
         return true;
     }
 
+    /**
+     * Removes the specified robot from the room
+     *
+     * @param robot The robot to remove
+     */
     @Override
-    public boolean removeRobot(Robot robot) {
+    public void removeRobot(Robot robot) {
         boolean removed = robots.remove(robot);
         if (removed) {
             logger.info("Robot removed from the environment at position: {}, {}", robot.getPosition().getCol(), robot.getPosition().getRow());
         } else {
             logger.warn("Failed to remove robot: Robot not found in the environment.");
         }
-        return removed;
     }
 
     /**
@@ -76,35 +86,43 @@ public class Room implements Environment, Observable {
     }
 
     /**
-     * Resets the room by removing all robots and obstacles.
+     * Checks whether the specified position is within the bounds of the room
+     *
+     * @param pos The position to check
+     * @return true if the position is within the room, false otherwise
      */
-    public void resetRoom() {
-        clearRobots();
-        clearObstacles();
-        logger.info("Room has been reset.");
-    }
-
     @Override
     public boolean containsPosition(Position pos) {
         return pos.getRow() >= 0 && pos.getRow() < this.rows &&
                 pos.getCol() >= 0 && pos.getCol() < this.cols;
     }
 
+    /**
+     * Creates a new robot at the specified position
+     *
+     * @param row The row of the position
+     * @param col The column of the position
+     */
     @Override
-    public boolean createObstacleAt(int row, int col) {
+    public void createObstacleAt(int row, int col) {
         if (row < 0 || row >= this.rows || col < 0 || col >= this.cols ||
                 obstacleAt(row, col) || robotAt(new Position(row, col))) {
-            return false;
+            return;
         }
         Obstacle newObstacle = new Obstacle(this, new Position(row, col));
         obstacles.add(newObstacle);
         logger.info("Created a new Obstacle at position: col = {}, row = {}", newObstacle.getPosition().getCol(), newObstacle.getPosition().getRow());
-        return true;
     }
 
-    public boolean removeObstacleAt(int row, int col) {
+    /**
+     * Removes an obstacle at the specified position
+     *
+     * @param row The row of the position
+     * @param col The column of the position
+     */
+    public void removeObstacleAt(int row, int col) {
         if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) {
-            return false;
+            return;
         }
         Obstacle toRemove = obstacles.stream()
                 .filter(obstacle -> obstacle.getPosition().getRow() == row && obstacle.getPosition().getCol() == col)
@@ -113,92 +131,86 @@ public class Room implements Environment, Observable {
         if (toRemove != null) {
             obstacles.remove(toRemove);
             logger.info("Removed an Obstacle at position: col = {}, row = {}", toRemove.getPosition().getCol(), toRemove.getPosition().getRow());
-            return true;
+            return;
         }
         logger.error("No Obstacle found at position: ({}, {})", row, col);
-        return false;
     }
 
 
+    /**
+     * Checks whether an obstacle exists at the specified position
+     *
+     * @param row The row of the position
+     * @param col The column of the position
+     * @return true if an obstacle exists at the specified position, false otherwise
+     */
     @Override
     public boolean obstacleAt(int row, int col) {
         return obstacles.stream().anyMatch(obstacle ->
                 obstacle.getPosition().getRow() == row && obstacle.getPosition().getCol() == col);
     }
 
+    /**
+     * Checks whether an obstacle exists at the specified position
+     *
+     * @param p The position to check
+     * @return true if an obstacle exists at the specified position, false otherwise
+     */
     @Override
     public boolean obstacleAt(Position p) {
         return obstacleAt(p.getRow(), p.getCol());
     }
 
+    /**
+     * Checks whether a robot exists at the specified position
+     *
+     * @param p The position to check
+     * @return true if a robot exists at the specified position, false otherwise
+     */
     @Override
     public boolean robotAt(Position p) {
         return robots.stream().anyMatch(robot ->
                 robot.getPosition().equals(p));
     }
 
+    /*
+     * Returns the list of robots in the room
+     *
+     * @return The list of robots in the room
+     */
     @Override
     public List<Robot> getRobots() {
         return robots;
     }
 
+    /**
+     * Returns the list of obstacles in the room
+     *
+     * @return The list of obstacles in the room
+     */
     @Override
     public List<Obstacle> getObstacles() {
         return obstacles;
     }
 
+    /**
+     * Returns the number of rows in the room
+     *
+     * @return The number of rows in the room
+     */
     @Override
     public int getRows() {
         return this.rows;
     }
 
+    /**
+     * Returns the number of columns in the room
+     *
+     * @return The number of columns in the room
+     */
     @Override
     public int getCols() {
         return this.cols;
-    }
-
-    public void update() {
-        // Assuming Room stores a list of robots and possibly other entities
-        List<Robot> updatedRobots = new ArrayList<>();
-        for (Robot robot : this.getRobots()) {
-            if (robot.canMove()) {
-                robot.move();  // Move each robot based on its own logic
-            } else {
-                robot.turn();  // If the robot cannot move, make it turn or choose another action
-            }
-            checkCollisions(robot);  // Check for collisions after each move
-            updatedRobots.add(robot);
-        }
-
-        // Optionally, update obstacles or other entities
-        updateObstacles();
-
-        // Update the list of robots after all movements and interactions
-        this.robots = updatedRobots;
-
-        // Notify observers about the update if the Room class implements Observable
-        notifyObservers();
-    }
-
-    private void checkCollisions(Robot robot) {
-        // Example collision detection logic
-        Position robotPosition = robot.getPosition();
-        for (Obstacle obstacle : this.getObstacles()) {
-            if (obstacle.getPosition().equals(robotPosition)) {
-                handleCollision(robot, obstacle);
-                break;
-            }
-        }
-    }
-
-    private void handleCollision(Robot robot, Obstacle obstacle) {
-        // Handle what happens when a robot encounters an obstacle
-        System.out.println("Collision detected between " + robot + " and " + obstacle);
-        // Possible actions might include stopping the robot, damaging it, etc.
-    }
-
-    private void updateObstacles() {
-        // Any logic to update obstacles if they are dynamic or interactable
     }
 
     @Override
@@ -216,6 +228,11 @@ public class Room implements Environment, Observable {
         observers.forEach(observer -> observer.update(this));
     }
 
+    /**
+     * Returns a string representation of the room
+     *
+     * @return A string representation of the room
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Room\n");

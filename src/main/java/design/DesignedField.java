@@ -6,15 +6,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class DesignedField extends JPanel {
-    private Color baseColor = new Color(255, 220, 150);
-    private Color hoverColor = new Color(255, 180, 100);
-    private Color borderColor = new Color(0, 0, 0); // Цвет границ
+    // Color constants
+    private final Color baseColor = new Color(255, 220, 150);
+    private final Color hoverColor = new Color(255, 180, 100);
 
     public DesignedField() {
         setBackground(baseColor);
+        Color borderColor = new Color(0, 0, 0);
         setBorder(BorderFactory.createLineBorder(borderColor, 1)); // Граница ячейки
         setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        // Add listeners for color transitions
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -28,6 +30,7 @@ public class DesignedField extends JPanel {
         });
     }
 
+    // Paint the background of the field
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

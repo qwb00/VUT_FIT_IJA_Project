@@ -1,6 +1,5 @@
 package main.java.common;
 
-import main.java.simulation.SimulationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,10 +28,18 @@ public class Obstacle implements Cloneable {
         return pos;
     }
 
+    /**
+     * Gets the string representation of the obstacle
+     * @return The string representation of the obstacle
+     */
     public String toString() {
         return "Obstacle " + pos.toString();
     }
 
+    /**
+     * Clones the obstacle
+     * @return A clone of the obstacle
+     */
     @Override
     public Obstacle clone() {
         try {

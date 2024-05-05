@@ -6,12 +6,8 @@ import main.java.EnvPresenter;
 import main.java.common.Observable;
 import main.java.common.Robot;
 import main.java.design.DesignedRobot;
-import main.java.robot.ControlledRobot;
-import main.java.robot.AutonomousRobot;
-import main.java.simulation.SimulationManager;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 
 public class RobotView implements ComponentView, Observable.Observer {
     private final Robot model;
@@ -20,18 +16,16 @@ public class RobotView implements ComponentView, Observable.Observer {
     private int changedModel = 0;
     private final DesignedRobot designedRobot;
 
-    private SimulationManager simulationManager;
-
 
     public RobotView(EnvPresenter var1, Robot var2) {
         this.model = var2;
         this.parent = var1;
-        this.simulationManager = SimulationManager.getInstance(var1.getEnvironment());
         var2.addObserver(this);
         this.privUpdate();
 
         this.designedRobot = new DesignedRobot(model);
     }
+
 
     private void privUpdate() {
         FieldView field = this.parent.fieldAt(this.model.getPosition());
@@ -57,14 +51,6 @@ public class RobotView implements ComponentView, Observable.Observer {
             Rectangle bounds = this.current.getBounds();
             this.designedRobot.paintComponent(g, bounds.width, bounds.height, this.parent.isActive(this.model)); // Используем новый дизайн
         }
-    }
-
-    public int numberUpdates() {
-        return this.changedModel;
-    }
-
-    public void clearChanged() {
-        this.changedModel = 0;
     }
 
     public Robot getModel() {

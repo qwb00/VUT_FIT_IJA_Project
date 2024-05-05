@@ -18,29 +18,29 @@ public class DesignedRobot {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Размер и положение робота
+        // Size and position of the robot
         double robotDiameter = Math.min(width, height) - 10.0;
         double x = (width - robotDiameter) / 2.0;
         double y = (height - robotDiameter) / 2.0;
 
-        // Цвета для роботов
+        // Color of the robot
         Color fillColor = (model instanceof ControlledRobot) ? new Color(0, 204, 255) : (model instanceof AutonomousRobot) ? new Color(255, 153, 0) : Color.GRAY;
 
-        // Рисуем робот в виде круга
+        // Paint the robot
         g2d.setColor(fillColor);
         Ellipse2D.Double robotShape = new Ellipse2D.Double(x, y, robotDiameter, robotDiameter);
         g2d.fill(robotShape);
 
-        // Черная обводка, если робот активен
+        // Black border for the robot
         if (isActive) {
             g2d.setColor(Color.BLACK);
             g2d.setStroke(new BasicStroke(3));
             g2d.draw(robotShape);
         }
 
-        // Рассчитываем положение глаза с учетом угла
+        // Calculate the position of the eye
         int angle = model.angle();
-        double angleInRadians = Math.toRadians(angle - 90); // Корректируем начальное положение
+        double angleInRadians = Math.toRadians(angle - 90); // Corrects the angle to match the robot's orientation
 
         double centerX = x + robotDiameter / 2.0;
         double centerY = y + robotDiameter / 2.0;

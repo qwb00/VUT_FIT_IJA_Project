@@ -42,13 +42,9 @@ public class RobotState implements State {
     public void restore(Environment environment) {
         Robot restoredRobot = null;
         if (robot instanceof AutonomousRobot) {
-            restoredRobot = new AutonomousRobot(environment, position, speed, detectionRange, turnAngle, turnDirection, angle); // Пример кода, адаптируйте под ваш случай
+            restoredRobot = AutonomousRobot.create(environment, position, speed, detectionRange, turnAngle, turnDirection, angle);
         } else if (robot instanceof ControlledRobot) {
-            restoredRobot = new ControlledRobot(environment, position, speed, angle);
-        }
-
-        if (restoredRobot != null) {
-            environment.addRobot(restoredRobot);
+            restoredRobot = ControlledRobot.create(environment, position, speed, angle);
         }
 
         if (restoredRobot instanceof ControlledRobot) {

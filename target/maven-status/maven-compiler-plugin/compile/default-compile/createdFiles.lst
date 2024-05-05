@@ -22,7 +22,6 @@ main/java/Main.class
 main/java/common/Obstacle.class
 main/java/simulation/states/EnvironmentState.class
 main/java/gui/SimulatorGUI$3.class
-main/java/common/AbstractObservableRobot.class
 main/java/robot/AutonomousRobot$1.class
 main/java/design/DesignedWindow$1.class
 main/java/gui/ControlPanel.class

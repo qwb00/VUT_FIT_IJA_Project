@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class DesignedUtils {
     public static int showCustomConfirmDialog(Component parent, String message, String title, String[] options) {
-        // Создаем пользовательский диалог
+        // Creating a panel with a message
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(new Color(240, 240, 240));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));

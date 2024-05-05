@@ -5,7 +5,6 @@ import main.java.common.Position;
 import main.java.environment.Room;
 import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
-import main.java.simulation.SimulationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,6 +52,7 @@ public class Configuration {
                 numRobots = Integer.parseInt(line.split("=")[1].trim());
                 readingRobots = true;    // Start reading robot details
             } else if (line.startsWith("Obstacle Position") && readingObstacles && numObstacles > 0) {
+                assert room != null;
                 parseObstacle(room, scanner);
                 numObstacles--;
                 if (numObstacles == 0) {

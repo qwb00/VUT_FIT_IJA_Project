@@ -1,7 +1,5 @@
 package main.java.common;
 
-import main.java.robot.AutonomousRobot;
-
 public interface Robot extends Observable, Cloneable {
     /**
      * Turns the robot by 45 degrees clockwise
@@ -25,9 +23,8 @@ public interface Robot extends Observable, Cloneable {
     /**
      * Moves the robot in its current direction
      *
-     * @return true if the move is successful, false otherwise
      */
-    boolean move();
+    void move();
 
     /**
      * Returns information about the robot's current position
@@ -43,8 +40,11 @@ public interface Robot extends Observable, Cloneable {
      */
     Robot clone();
 
+    /**
+     * Returns the speed of the robot
+     *
+     * @return The speed of the robot
+     */
     int getSpeed();
-
-    void setAngle(int angle);
 }
 

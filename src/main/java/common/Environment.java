@@ -16,25 +16,22 @@
          *
          * @param row The row of the position
          * @param col The column of the position
-         * @return true if the operation is successful, false otherwise
          */
-        boolean createObstacleAt(int row, int col);
+        void createObstacleAt(int row, int col);
 
         /**
          * Removes a robot from the environment.
          * @param robot The robot to be removed.
-         * @return true if the operation is successful, false otherwise.
          */
-        boolean removeRobot(Robot robot);
+        void removeRobot(Robot robot);
 
         /**
          * Removes an obstacle at the specified position
          *
          * @param row The row of the position
          * @param col The column of the position
-         * @return true if the operation is successful, false otherwise
          */
-        boolean removeObstacleAt(int row, int col);
+        void removeObstacleAt(int row, int col);
 
         /**
          * Checks if there is an obstacle at the specified row and column
@@ -100,10 +97,10 @@
         /**
          * Method to clear all robots from the environment
          */
-        public void clearRobots();
+        void clearRobots();
 
         /**
          * Method to clear all obstacles from the environment
          */
-        public void clearObstacles();
+        void clearObstacles();
     }

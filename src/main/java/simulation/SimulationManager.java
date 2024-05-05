@@ -1,6 +1,5 @@
 package main.java.simulation;
 
-import main.java.EnvPresenter;
 import main.java.common.Environment;
 import main.java.common.Observable;
 import main.java.common.Robot;
@@ -16,11 +15,11 @@ import java.util.Stack;
 
 public class SimulationManager implements Observable {
     private static SimulationManager instance;
-    private Environment environment; // Specific to Room rather than Environment
+    private Environment environment;
     private boolean isRunning = false;
     private final Stack<EnvironmentState> historyStates;
     private static final Logger logger = LogManager.getLogger(SimulationManager.class);
-    private List<Observer> observers = new ArrayList<>();
+    private final List<Observer> observers = new ArrayList<>();
     private Robot activeRobot;
 
     public SimulationManager(Environment environment) {
@@ -28,10 +27,20 @@ public class SimulationManager implements Observable {
         historyStates = new Stack<>();
     }
 
+    /**
+     * Sets the environment for the simulation manager
+     *
+     * @param newEnvironment The new environment to set
+     */
     public void setEnvironment(Environment newEnvironment) {
         this.environment = newEnvironment;
     }
 
+    /**
+     * Returns the environment for the simulation manager
+     *
+     * @return The environment for the simulation manager
+     */
     public static SimulationManager getInstance(Environment environment) {
         if (instance == null) {
             instance = new SimulationManager(environment);
@@ -39,22 +48,9 @@ public class SimulationManager implements Observable {
         return instance;
     }
 
-    public void pauseSimulation() {
-        if (isRunning) {
-            environment.getRobots().forEach(robot -> {
-                if (robot instanceof AutonomousRobot) {
-                    ((AutonomousRobot) robot).isMoveable = false;
-                    ((AutonomousRobot) robot).stopMovement();
-                }
-                if(robot instanceof ControlledRobot) {
-                    ((ControlledRobot) robot).canControlled = false;
-                }
-            });
-            isRunning = false;
-            logger.info("Simulation paused.");
-        }
-    }
-
+    /**
+     * Starts the simulation
+     */
     public void startSimulation() {
         if (!isRunning) {
             environment.getRobots().forEach(robot -> {
@@ -71,6 +67,28 @@ public class SimulationManager implements Observable {
         }
     }
 
+    /**
+     * Pauses the simulation
+     */
+    public void pauseSimulation() {
+        if (isRunning) {
+            environment.getRobots().forEach(robot -> {
+                if (robot instanceof AutonomousRobot) {
+                    ((AutonomousRobot) robot).isMoveable = false;
+                    ((AutonomousRobot) robot).stopMovement();
+                }
+                if(robot instanceof ControlledRobot) {
+                    ((ControlledRobot) robot).canControlled = false;
+                }
+            });
+            isRunning = false;
+            logger.info("Simulation paused.");
+        }
+    }
+
+    /**
+     * Stops the simulation
+     */
     public void stopSimulation() {
         if (isRunning) {
             environment.getRobots().forEach(robot -> {
@@ -88,11 +106,17 @@ public class SimulationManager implements Observable {
         }
     }
 
+    /**
+     * Saves the current state of the simulation
+     */
     public void saveState() {
         historyStates.push(new EnvironmentState(environment));
         logger.info("Simulation state saved. Current stack size: " + historyStates.size());
     }
 
+    /**
+     * Reverses the simulation to a previous state
+     */
     public void reverseSimulation() {
         pauseSimulation();
         if (!historyStates.isEmpty()) {
@@ -113,18 +137,11 @@ public class SimulationManager implements Observable {
         }
     }
 
-    private Robot findActiveRobot(Environment environment) {
-        // Ищем активного робота в списке
-        return environment.getRobots().stream()
-                .filter(robot -> robot instanceof ControlledRobot && ((ControlledRobot) robot).isActive())
-                .findFirst()
-                .orElse(null);
-    }
-
-    public void setActiveRobot(Robot robot) {
-        this.activeRobot = robot;
-    }
-
+    /**
+     * Returns the active robot in the simulation
+     *
+     * @return The active robot in the simulation
+     */
     public Robot getActiveRobot() {
         return activeRobot;
     }
@@ -144,5 +161,9 @@ public class SimulationManager implements Observable {
     @Override
     public void notifyObservers() {
         observers.forEach(observer -> observer.update(this));
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 }

@@ -17,13 +17,13 @@ import java.awt.event.MouseEvent;
 public class FieldView extends DesignedField {
     private final Environment model;
     private final Position position;
-    private EnvPresenter presenter;
+    private final EnvPresenter presenter;
     private ComponentView obj;
 
     private final SimulationManager simulationManager;
 
     public FieldView(Environment env, Position pos, EnvPresenter presenter) {
-        super(); // Вызов конструктора DesignedField
+        super(); // calls the constructor of the DesignedField
         this.model = env;
         this.position = pos;
         this.presenter = presenter;
@@ -36,6 +36,9 @@ public class FieldView extends DesignedField {
         });
     }
 
+    /**
+     * Handles the mouse click event
+     */
     private void handleMouseClick() {
         if (model.obstacleAt(position)) {
             simulationManager.saveState();
@@ -47,10 +50,16 @@ public class FieldView extends DesignedField {
         updateFieldView();
     }
 
+    /**
+     * Removes the obstacle at the current position
+     */
     private void removeObstacle() {
         model.removeObstacleAt(position.getRow(), position.getCol());
     }
 
+    /**
+     * Handles the addition of an element (obstacle or robot) to the field
+     */
     private void handleAddElement() {
         String[] options = {"Add obstacle", "Add robot"};
         int choice = DesignedUtils.showCustomConfirmDialog(
@@ -66,6 +75,9 @@ public class FieldView extends DesignedField {
         }
     }
 
+    /**
+     * Handles the selection of the robot type
+     */
     private void handleRobotTypeSelection() {
         String[] options = {"Controlled robot", "Autonomous robot"};
         int choice = DesignedUtils.showCustomConfirmDialog(
@@ -81,6 +93,9 @@ public class FieldView extends DesignedField {
         }
     }
 
+    /**
+     * Handles the creation of a controlled robot
+     */
     private void handleRobotCreation() {
         int speed = askForRobotSpeed();
         if (speed > 0) { // speed will be -1 if the user cancels the dialog
@@ -91,6 +106,11 @@ public class FieldView extends DesignedField {
         }
     }
 
+    /**
+     * Asks the user for the robot speed
+     *
+     * @return The speed of the robot or -1 if the user cancels the dialog
+     */
     private int askForRobotSpeed() {
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
         JSpinner speedSpinner = new JSpinner(spinnerModel);
@@ -100,10 +120,13 @@ public class FieldView extends DesignedField {
         if (result == JOptionPane.OK_OPTION) {
             return (Integer) speedSpinner.getValue();
         } else {
-            return -1; // Вернуть -1, если пользователь отменяет
+            return -1; // if user cancels the dialog
         }
     }
 
+    /**
+     * Handles the creation of an autonomous robot
+     */
     private void handleAutonomousRobotCreation() {
         // Make sure the autonomous robot is created only once and added correctly
         int speed = askForRobotParameter("Speed", 1, 1, Integer.MAX_VALUE, 1);
@@ -125,10 +148,24 @@ public class FieldView extends DesignedField {
             AutonomousRobot newRobot = AutonomousRobot.create(model, position, speed, detectionRange, turnAngle, turnDirection, 0);
             if (newRobot != null) {
                 presenter.addRobotView(newRobot);
+                if(simulationManager.isRunning()) {
+                    newRobot.isMoveable = true;
+                    newRobot.initMovement();
+                }
             }
         }
     }
 
+    /**
+     * Asks the user for a robot parameter
+     *
+     * @param parameterName The name of the parameter
+     * @param defaultValue  The default value of the parameter
+     * @param min           The minimum value of the parameter
+     * @param max           The maximum value of the parameter
+     * @param step          The step value of the parameter
+     * @return The value of the parameter or -1 if the user cancels the dialog
+     */
     private int askForRobotParameter(String parameterName, int defaultValue, int min, int max, int step) {
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(defaultValue, min, max, step);
         JSpinner spinner = new JSpinner(spinnerModel);
@@ -142,6 +179,11 @@ public class FieldView extends DesignedField {
         }
     }
 
+    /**
+     * Adds a new controlled robot to the field
+     *
+     * @param newRobot The new controlled robot
+     */
     private void addNewControlledRobot(ControlledRobot newRobot) {
         FieldView fieldView = presenter.fieldAt(position);
         if (fieldView != null) {
@@ -154,18 +196,9 @@ public class FieldView extends DesignedField {
         }
     }
 
-    private void addNewAutonomousRobot(AutonomousRobot newRobot) {
-        FieldView fieldView = presenter.fieldAt(position);
-        if (fieldView != null) {
-            RobotView robotView = new RobotView(presenter, newRobot);
-            model.addRobot(newRobot);
-            presenter.addRobotView(newRobot);
-            presenter.setActiveRobotByPosition(position);
-            fieldView.addComponent(robotView);
-            fieldView.repaint();
-        }
-    }
-
+    /**
+     * Updates the view of the field
+     */
     private void updateFieldView() {
         if (model.robotAt(position)) {
             presenter.setActiveRobotByPosition(position);
@@ -174,11 +207,14 @@ public class FieldView extends DesignedField {
         repaint();
     }
 
+    /**
+     * Updates the view of the field
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Рисуем препятствия
+        // Draw the obstacle
         if (model.obstacleAt(position)) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -186,12 +222,15 @@ public class FieldView extends DesignedField {
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
 
-        // Если в клетке есть компонент (робот), вызываем его paintComponent
+        // If there is a robot, calls his paintComponent method
         if (obj != null) {
             obj.paintComponent(g);
         }
     }
 
+    /**
+     * Updates the view of the field
+     */
     private void privUpdate() {
         if (this.model.obstacleAt(this.position)) {
             this.setBackground(Color.lightGray);
@@ -199,26 +238,19 @@ public class FieldView extends DesignedField {
         }
     }
 
+    /**
+     * Adds a component to the field
+     *
+     * @param var1 The component to add
+     */
     public void addComponent(ComponentView var1) {
         this.obj = var1;
     }
 
+    /**
+     * Removes the component from the field
+     */
     public void removeComponent() {
         this.obj = null;
-    }
-
-    public ComponentView getComponent() {
-        return this.obj;
-    }
-
-    public int numberUpdates() {
-        return this.obj == null ? 0 : this.obj.numberUpdates();
-    }
-
-    public void clearChanged() {
-        if (this.obj != null) {
-            this.obj.clearChanged();
-        }
-
     }
 }

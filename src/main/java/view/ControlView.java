@@ -4,7 +4,6 @@ import main.java.common.Environment;
 import main.java.common.Robot;
 import main.java.EnvPresenter;
 import main.java.configuration.Configuration;
-import main.java.robot.AutonomousRobot;
 import main.java.robot.ControlledRobot;
 import main.java.simulation.SimulationManager;
 import main.java.design.DesignedButton;
@@ -17,14 +16,13 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 public class ControlView extends JPanel implements ComponentView {
-    private List<Robot> robots; // Список роботов
-    private int currentRobotIndex = 0; // Индекс текущего робота
+    private List<Robot> robots; // List of robots
+    private int currentRobotIndex = 0; // Index of the current robot
     private Robot model;
     private int updatesCount = 0;
-    private EnvPresenter presenter;
-    private boolean isObstacleMode = false;
+    private final EnvPresenter presenter;
     private static final Logger logger = LogManager.getLogger(ControlView.class);
-    private SimulationManager simulationManager;
+    private final SimulationManager simulationManager;
 
     public ControlView(EnvPresenter presenter, Robot model){
         this.presenter = presenter;
@@ -33,13 +31,18 @@ public class ControlView extends JPanel implements ComponentView {
         initializeUI();
     }
 
+    /**
+     * Sets the list of robots
+     *
+     */
     public void setRobots(List<Robot> robots) {
         this.robots = robots;
-        if (!robots.isEmpty()) {
-            this.model = robots.get(currentRobotIndex);
-        }
     }
 
+    /**
+     * Sets the active robot
+     *
+     */
     public void setActiveRobot(Robot robot) {
         if (robot instanceof ControlledRobot) {
             this.model = robot;
@@ -57,10 +60,12 @@ public class ControlView extends JPanel implements ComponentView {
     }
 
 
+    /**
+     * Initializes the UI
+     */
     private void initializeUI() {
         setLayout(new FlowLayout());
 
-        // Изменяем размер иконки при загрузке
         Icon moveIcon = resizeIcon(new ImageIcon("src/main/resources/icons/move.png"));
         DesignedButton moveButton = new DesignedButton(moveIcon);
         moveButton.setPreferredSize(new Dimension(60, 45));
@@ -117,95 +122,139 @@ public class ControlView extends JPanel implements ComponentView {
 
     }
 
-    // Метод для изменения размера иконки
+    /**
+     * Resizes the icon
+     *
+     * @param icon The icon to resize
+     * @return The resized icon
+     */
     private Icon resizeIcon(ImageIcon icon) {
         Image img = icon.getImage();
         Image resizedImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         return new ImageIcon(resizedImg);
     }
 
+    /**
+     * Performs the move action
+     *
+     * @param e The action event
+     */
     private void performMove(ActionEvent e) {
         if (model != null) {
-            model.move(); // Вызываем метод move модели Robot
-            updatesCount++; // Увеличиваем счетчик обновлений
-            repaint(); // Перерисовать интерфейс, если это необходимо
+            model.move();
+            updatesCount++;
+            repaint();
         }
     }
 
+    /**
+     * Performs the turn action
+     *
+     * @param e The action event
+     */
     private void performTurn(ActionEvent e) {
         if (model != null) {
-            model.turn(); // Вызываем метод rotateClockwise модели Robot
-            updatesCount++; // Увеличиваем счетчик обновлений
-            repaint(); // Перерисовать интерфейс, если это необходимо
+            model.turn();
+            updatesCount++;
+            repaint();
         }
     }
 
+    /**
+     * Performs the counter turn action
+     *
+     * @param e The action event
+     */
     private void performCounterTurn(ActionEvent e) {
         if (model != null && model instanceof ControlledRobot) {
             ControlledRobot robot = (ControlledRobot) model;
-            robot.turnCounterClockwise(); // Вызываем метод rotateClockwise модели Robot
-            updatesCount++; // Увеличиваем счетчик обновлений
-            repaint(); // Перерисовать интерфейс, если это необходимо
+            robot.turnCounterClockwise();
+            updatesCount++;
+            repaint();
         }
     }
 
+    /**
+     * Loads the configuration
+     *
+     * @param e The action event
+     */
     private void loadConfiguration(ActionEvent e) {
         handleStop(null);
-        String configFilePath = "src/main/resources/config.txt"; // Путь к файлу конфигурации
+        String configFilePath = "src/main/resources/config.txt";
         try {
-            presenter.clearEnvironment(); // Очистка текущего окружения и роботов
-            Environment newEnv = Configuration.loadConfiguration(configFilePath); // Загрузка нового окружения
-            presenter.setEnvironment(newEnv); // Обновляем окружение в presenter
-            //presenter.initializeViews(); // Пусть `initializeViews` отвечает за обновление представлений
+            presenter.clearEnvironment();
+            Environment newEnv = Configuration.loadConfiguration(configFilePath);
+            presenter.setEnvironment(newEnv);
             logger.info("Configuration loaded from {}", configFilePath);
         } catch (Exception ex) {
             logger.error("Failed to load configuration from {}: {}", configFilePath, ex.getMessage());
         }
     }
 
+    /**
+     * Saves the configuration
+     *
+     * @param e The action event
+     */
     private void saveConfiguration(ActionEvent e) {
-        Configuration.saveConfiguration(presenter.getEnvironment(), "src/main/resources/config.txt");  // Укажите правильный путь
+        Configuration.saveConfiguration(presenter.getEnvironment(), "src/main/resources/config.txt");
         repaint();
     }
 
+    /**
+     * Handles the start action
+     *
+     * @param e The action event
+     */
     private void handleStart(ActionEvent e) {
         simulationManager.startSimulation();
     }
 
+    /**
+     * Handles the pause action
+     *
+     * @param e The action event
+     */
     private void handlePause(ActionEvent e) {
         simulationManager.pauseSimulation();
     }
 
+    /**
+     * Handles the reverse action
+     *
+     * @param e The action event
+     */
     private void handleReverse(ActionEvent e) {
         simulationManager.reverseSimulation();
     }
 
+    /**
+     * Handles the stop action
+     *
+     * @param e The action event
+     */
     private void handleStop(ActionEvent e) {
         simulationManager.stopSimulation();
     }
 
+    /**
+     * Paints the component
+     *
+     * @param g The graphics object
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Рендеринг специфических элементов не требуется, так как все управляется кнопками
     }
 
-    @Override
-    public int numberUpdates() {
-        return updatesCount;
-    }
-
+    /**
+     * Returns the model
+     *
+     * @return The model
+     */
     @Override
     public Robot getModel() {
         return robots.get(currentRobotIndex);
-    }
-
-    @Override
-    public void clearChanged() {
-        updatesCount = 0;  // Сброс счетчика изменений
-    }
-
-    public boolean isObstacleMode() {
-        return isObstacleMode;
     }
 }

@@ -9,12 +9,13 @@ import java.awt.event.MouseMotionAdapter;
 public class DesignedWindow extends JFrame {
     private Point initialClick;
     private boolean isFullscreen = false;
-    private JPanel titleBar; // Добавляем флаг состояния полноэкранного режима
+    private JPanel titleBar; // Adding to the title bar
 
     public DesignedWindow() {
         initComponents();
     }
 
+    // Initialize the components of the window
     private void initComponents() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 720);
@@ -66,7 +67,7 @@ public class DesignedWindow extends JFrame {
         });
     }
 
-    // Метод для переключения полноэкранного режима
+    // Method for toggling fullscreen mode
     private void toggleFullscreen() {
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice device = env.getDefaultScreenDevice();
@@ -79,6 +80,7 @@ public class DesignedWindow extends JFrame {
         isFullscreen = !isFullscreen;
     }
 
+    // Create a button with the specified icon
     private JButton createButton(String iconPath) {
         JButton button = new JButton();
         ImageIcon icon = new ImageIcon(iconPath);

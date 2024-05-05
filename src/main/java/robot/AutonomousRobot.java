@@ -15,7 +15,7 @@ import java.util.List;
 public class AutonomousRobot implements Robot {
     private final Environment env;
     private Position position;
-    private int angle = 0;
+    private int angle;
     private final int detectionRange; // Distance to detect obstacles
     private final int turnAngle; // Angle to turn when an obstacle is detected
     private final boolean turnDirection;
@@ -23,7 +23,7 @@ public class AutonomousRobot implements Robot {
     private final List<Observer> observers = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(AutonomousRobot.class);
     private Timer movementTimer;
-    private SimulationManager simulationManager;
+    private final SimulationManager simulationManager;
     public boolean isMoveable = false;
     public AutonomousRobot(Environment env, Position position, int speed, int detectionRange, int turnAngle, boolean turnDirection, int angle) {
         this.env = env;
@@ -36,6 +36,9 @@ public class AutonomousRobot implements Robot {
         this.angle = angle;
     }
 
+    /**
+     * Initializes the movement of the robot
+     */
     public void initMovement() {
         movementTimer = new Timer();
         movementTimer.schedule(new TimerTask() {
@@ -47,9 +50,18 @@ public class AutonomousRobot implements Robot {
         }, 0, 1000);  // init movement with 1 second delay
     }
 
-    public void setSimulationManager(SimulationManager simulationManager) {
-        this.simulationManager = simulationManager;
-    }
+    /**
+     * Factory method for creating an AutonomousRobot instance
+     *
+     * @param env The environment in which the robot will operate
+     * @param pos The initial position of the robot
+     * @param speed The speed of the robot
+     * @param detectionRange The distance to detect obstacles
+     * @param turnAngle The angle to turn when an obstacle is detected
+     * @param turnDirection The direction to turn when an obstacle is detected
+     * @param startAngle The initial angle of the robot
+     * @return A new AutonomousRobot instance
+     */
     public static AutonomousRobot create(Environment env, Position pos, int speed, int detectionRange, int turnAngle, boolean turnDirection, int startAngle) {
         if (env.containsPosition(pos) && !env.robotAt(pos)) {
             AutonomousRobot robot = new AutonomousRobot(env, pos, speed, detectionRange, turnAngle, turnDirection, startAngle);
@@ -82,6 +94,9 @@ public class AutonomousRobot implements Robot {
         }
     }
 
+    /**
+     * Stops the movement of the robot
+     */
     public void stopMovement() {
         if (movementTimer != null) {
             movementTimer.cancel();  // Остановка таймера
@@ -90,6 +105,9 @@ public class AutonomousRobot implements Robot {
         }
     }
 
+    /**
+     * Turns the robot
+     */
     @Override
     public void turn() {
         simulationManager.saveState();
@@ -102,16 +120,31 @@ public class AutonomousRobot implements Robot {
         }
     }
 
+    /**
+     * Returns the current angle of the robot's orientation
+     *
+     * @return The angle of the robot
+     */
     @Override
     public int angle() {
         return angle;
     }
 
+    /**
+     * Checks whether the robot can move in its current direction
+     *
+     * @return true if the adjacent tile exists within the environment and is empty, false otherwise
+     */
     @Override
     public boolean canMove() {
         return maxMovableSteps() > 0; // obstacle not detected
     }
 
+    /**
+     * Returns the maximum number of steps the robot can move
+     *
+     * @return The maximum number of steps the robot can move
+     */
     public int maxMovableSteps() {
         int steps = 0;
         for (int i = 1; i <= speed; i++) {
@@ -124,8 +157,11 @@ public class AutonomousRobot implements Robot {
         return steps;
     }
 
+    /**
+     * Moves the robot
+     */
     @Override
-    public boolean move() {
+    public void move() {
         if (canMove()) {
             simulationManager.saveState();
             int movableSteps = maxMovableSteps();  // determine the maximum number of steps the robot can move
@@ -133,22 +169,29 @@ public class AutonomousRobot implements Robot {
                 this.position = calculateNextPosition(movableSteps);
                 notifyObservers();
                 logger.info("Moved to position: col = {}, row = {}", position.getCol(), position.getRow());
-                return true;
             }
         } else if (isMoveable) {
             // obstacle detected
             turn();
             logger.info("Detected an obstacle within detection range, turned to angle: {}", angle);
-            return false;
         }
-        return false;
     }
 
+    /**
+     * Returns the current position of the robot
+     *
+     * @return The current position of the robot
+     */
     @Override
     public Position getPosition() {
         return position;
     }
 
+    /**
+     * Returns a deep copy of the robot
+     *
+     * @return A deep copy of the robot
+     */
     @Override
     public AutonomousRobot clone() {
         try {
@@ -161,6 +204,12 @@ public class AutonomousRobot implements Robot {
         }
     }
 
+    /**
+     * Calculates the next position of the robot
+     *
+     * @param step The number of steps to move
+     * @return The next position of the robot
+     */
     public Position calculateNextPosition(int step) {
         int dx = 0, dy = 0;
         switch (angle) {
@@ -192,27 +241,48 @@ public class AutonomousRobot implements Robot {
         return new Position(position.getRow() + (dy * step), position.getCol() + (dx * step));
     }
 
+    /**
+     * Returns the speed of the robot
+     *
+     * @return The speed of the robot
+     */
     @Override
     public int getSpeed() {
         return speed;
     }
 
+    /**
+     * Returns the detection range of the robot
+     *
+     * @return The detection range of the robot
+     */
     public int getDetectionRange() {
         return detectionRange;
     }
 
+    /**
+     * Returns the turn angle of the robot
+     *
+     * @return The turn angle of the robot
+     */
     public int getTurnAngle() {
         return turnAngle;
     }
 
+    /**
+     * Returns the turn direction of the robot
+     *
+     * @return The turn direction of the robot
+     */
     public boolean getTurnDirection() {
         return turnDirection;
     }
 
-    public void setAngle(int angle) {
-        this.angle = angle;
-    }
-
+    /**
+     * Returns the environment in which the robot operates
+     *
+     * @return The environment in which the robot operates
+     */
     public String toString() {
         return "AutonomousRobot\n"
                 + "positionRow=" + position.getRow() + "\n"
