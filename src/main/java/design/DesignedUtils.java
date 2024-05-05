@@ -1,11 +1,25 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xpetri23 - Aleksei Petrishko
+ * Utility class providing custom dialog functionalities with a consistent design.
+ */
 package main.java.design;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class DesignedUtils {
+
+    /**
+     * Displays a custom confirmation dialog with the specified options and message.
+     *
+     * @param parent  The parent component for the dialog.
+     * @param message The message to display in the dialog.
+     * @param title   The title of the dialog.
+     * @param options An array of options to show in the dialog.
+     * @return The index of the selected option, or -1 if no option is selected.
+     */
     public static int showCustomConfirmDialog(Component parent, String message, String title, String[] options) {
-        // Creating a panel with a message
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(new Color(240, 240, 240));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -20,6 +34,14 @@ public class DesignedUtils {
                 null, options, options[0]);
     }
 
+    /**
+     * Displays a custom input dialog with the specified input component.
+     *
+     * @param parent        The parent component for the dialog.
+     * @param inputComponent The input component to display in the dialog.
+     * @param title         The title of the dialog.
+     * @return The index of the selected option, or -1 if no option is selected.
+     */
     public static int showCustomInputDialog(Component parent, JComponent inputComponent, String title) {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(new Color(240, 240, 240));

@@ -1,3 +1,9 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xposte00 - Aleksander Postelga
+ * Represents an obstacle within the simulation environment.
+ * It maintains its position and provides functionality to clone itself.
+ */
 package main.java.common;
 
 import org.apache.logging.log4j.LogManager;
@@ -5,17 +11,14 @@ import org.apache.logging.log4j.Logger;
 
 public class Obstacle implements Cloneable {
     private Position pos;
-    private final Environment env;
     private static final Logger logger = LogManager.getLogger(Obstacle.class.getName());
 
     /**
      * Constructor that sets the environment and position of the obstacle
      *
      * @param pos The position of the obstacle within the environment
-     * @param env The environment to which the obstacle belongs
      */
-    public Obstacle(Environment env, Position pos) {
-        this.env = env;
+    public Obstacle(Position pos) {
         this.pos = pos;
     }
 

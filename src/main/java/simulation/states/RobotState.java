@@ -1,3 +1,9 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xposte00 - Aleksander Postelga
+ * Represents the state of a robot in the simulation.
+ * This class is used to save and restore the state of a robot.
+ */
 package main.java.simulation.states;
 
 import main.java.common.Environment;
@@ -11,13 +17,18 @@ public class RobotState implements State {
     private final Position position;
     private final int speed;
     private final int angle;
-    private final boolean isActive;// Для ControlledRobot
+    private final boolean isActive;
 
-    // Для AutonomousRobot
     private final int detectionRange;
     private final int turnAngle;
     private final boolean turnDirection;
 
+    /**
+     * Constructs a RobotState from the given robot.
+     * Captures the position, speed, angle, and other properties of the robot.
+     *
+     * @param robot The robot to capture the state from.
+     */
     public RobotState(Robot robot) {
         this.robot = robot;
         this.position = robot.getPosition();
@@ -37,7 +48,12 @@ public class RobotState implements State {
         }
     }
 
-
+    /**
+     * Restores the robot state in the specified environment.
+     * Creates a new robot in the environment at the stored position and restores its properties.
+     *
+     * @param environment The environment to restore the robot in.
+     */
     @Override
     public void restore(Environment environment) {
         Robot restoredRobot = null;
