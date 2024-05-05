@@ -99,12 +99,21 @@ public class SimulationManager implements Observable {
      */
     public void stopSimulation() {
         pauseSimulation();
-        if(!historyStates.isEmpty()
-        EnvironmentState previousState = null;
-        for (int i = 0; i < historyStates.size(); i++) {
-            previousState = historyStates.pop();
-        }
+        if(!historyStates.isEmpty()) {
+            environment.getRobots().clear();
+            EnvironmentState previousState = historyStates.firstElement();
+            historyStates.clear();
+            previousState.restore(environment);
+            activeRobot = environment.getRobots().stream()
+                    .filter(robot -> robot instanceof ControlledRobot && ((ControlledRobot) robot).isActive())
+                    .findFirst()
+                    .orElse(null);
 
+            notifyObservers();
+            logger.info("Simulation stopped.");
+        } else {
+            logger.warn("Attempted to stop simulation but no states were saved in the history stack.");
+        }
     }
 
     /**

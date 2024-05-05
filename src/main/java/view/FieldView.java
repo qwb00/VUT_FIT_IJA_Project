@@ -117,6 +117,7 @@ public class FieldView extends DesignedField {
             ControlledRobot newRobot = ControlledRobot.create(model, position, speed, 0);
             if (newRobot != null) {
                 addNewControlledRobot(newRobot);
+                if(simulationManager.isRunning()) newRobot.canControlled = true;
             }
         }
     }

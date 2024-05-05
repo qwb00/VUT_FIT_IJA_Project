@@ -175,8 +175,7 @@ public class ControlView extends JPanel implements ComponentView {
      * @param e The action event
      */
     private void performCounterTurn(ActionEvent e) {
-        if (model != null && model instanceof ControlledRobot) {
-            ControlledRobot robot = (ControlledRobot) model;
+        if (model != null && model instanceof ControlledRobot robot) {
             robot.turnCounterClockwise();
             repaint();
         }
@@ -189,7 +188,7 @@ public class ControlView extends JPanel implements ComponentView {
      */
     private void loadConfiguration(ActionEvent e) {
         handleStop(null);
-        String configFilePath = "src/main/resources/config.txt";
+        String configFilePath = "data/config.txt";
         try {
             presenter.clearEnvironment();
             Environment newEnv = Configuration.loadConfiguration(configFilePath);
@@ -206,7 +205,7 @@ public class ControlView extends JPanel implements ComponentView {
      * @param e The action event
      */
     private void saveConfiguration(ActionEvent e) {
-        Configuration.saveConfiguration(presenter.getEnvironment(), "src/main/resources/config.txt");
+        Configuration.saveConfiguration(presenter.getEnvironment(), "data/config.txt");
         repaint();
     }
 

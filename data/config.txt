@@ -1,7 +1,7 @@
 Room
 Rows=5
 Cols=8
-Obstacles=4
+Obstacles=7
 Obstacle Position
 Row=1
 Col=2
@@ -14,12 +14,35 @@ Col=5
 Obstacle Position
 Row=2
 Col=5
-Robots=2
+Obstacle Position
+Row=3
+Col=3
+Obstacle Position
+Row=4
+Col=4
+Obstacle Position
+Row=0
+Col=7
+Robots=4
 ControlledRobot
 positionRow=2
 positionCol=2
-speed=2
+speed=1
 ControlledRobot
 positionRow=4
 positionCol=7
+speed=2
+AutonomousRobot
+positionRow=3
+positionCol=0
+detectionRange=1
+turnAngle=90
+turnDirection=false
+speed=1
+AutonomousRobot
+positionRow=3
+positionCol=6
+detectionRange=1
+turnAngle=45
+turnDirection=true
 speed=2
