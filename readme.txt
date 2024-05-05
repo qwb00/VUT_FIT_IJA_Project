@@ -35,7 +35,8 @@ environment/: Description of the environment and its elements.
 robot/: Different types of robots.
 simulation/: Simulation logic, state, and management.
 view/: Graphical interface and object views.
-data/: Project resources like images, configuration files, etc.
+data/: Project resources like configuration files.
+lib/: External libraries and images used in the project.
 
 Project Team
 xposte00 - Aleksander Postelga - Robot movement simulation and all related functionalities.
