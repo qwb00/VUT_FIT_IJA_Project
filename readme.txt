@@ -9,7 +9,7 @@ Installation and Running
 Requirements:
 
 1. Make sure you have the following components installed on your computer:
-JDK 11+
+JDK 17
 Maven
 
 2. Compile and run the project:

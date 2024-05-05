@@ -98,20 +98,13 @@ public class SimulationManager implements Observable {
      * Stops the simulation
      */
     public void stopSimulation() {
-        if (isRunning) {
-            environment.getRobots().forEach(robot -> {
-                if (robot instanceof AutonomousRobot) {
-                    ((AutonomousRobot) robot).isMoveable = false;
-                    ((AutonomousRobot) robot).stopMovement();
-                }
-                if(robot instanceof ControlledRobot) {
-                    ((ControlledRobot) robot).canControlled = false;
-                }
-            });
-            historyStates.clear(); // Clear history upon stop to reset simulation to initial state
-            isRunning = false;
-            logger.info("Simulation stopped.");
+        pauseSimulation();
+        if(!historyStates.isEmpty()
+        EnvironmentState previousState = null;
+        for (int i = 0; i < historyStates.size(); i++) {
+            previousState = historyStates.pop();
         }
+
     }
 
     /**
