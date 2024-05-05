@@ -1,3 +1,9 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xpetri23 - Aleksei Petrishko
+ * The ControlView class manages the control panel of the application,
+ * providing buttons to manipulate the simulation and interact with robots.
+ */
 package main.java.view;
 
 import main.java.common.Environment;
@@ -19,11 +25,16 @@ public class ControlView extends JPanel implements ComponentView {
     private List<Robot> robots; // List of robots
     private int currentRobotIndex = 0; // Index of the current robot
     private Robot model;
-    private int updatesCount = 0;
     private final EnvPresenter presenter;
     private static final Logger logger = LogManager.getLogger(ControlView.class);
     private final SimulationManager simulationManager;
 
+    /**
+     * Constructs a ControlView for controlling the robots and the simulation.
+     *
+     * @param presenter The environment presenter.
+     * @param model     The robot model being controlled.
+     */
     public ControlView(EnvPresenter presenter, Robot model){
         this.presenter = presenter;
         this.model = model;
@@ -66,55 +77,55 @@ public class ControlView extends JPanel implements ComponentView {
     private void initializeUI() {
         setLayout(new FlowLayout());
 
-        Icon moveIcon = resizeIcon(new ImageIcon("lib/icons/move.png"));
+        Icon moveIcon = resizeIcon(new ImageIcon("src/main/resources/icons/move.png"));
         DesignedButton moveButton = new DesignedButton(moveIcon);
         moveButton.setPreferredSize(new Dimension(60, 45));
         moveButton.addActionListener(this::performMove);
         add(moveButton);
 
-        Icon rotateCounterIcon = resizeIcon(new ImageIcon("lib/icons/left.png"));
+        Icon rotateCounterIcon = resizeIcon(new ImageIcon("src/main/resources/icons/left.png"));
         DesignedButton rotateCounterButton = new DesignedButton(rotateCounterIcon);
         rotateCounterButton.setPreferredSize(new Dimension(60, 45));
         rotateCounterButton.addActionListener(this::performCounterTurn);
         add(rotateCounterButton);
 
-        Icon rotateIcon = resizeIcon(new ImageIcon("lib/icons/right.png"));
+        Icon rotateIcon = resizeIcon(new ImageIcon("src/main/resources/icons/right.png"));
         DesignedButton rotateButton = new DesignedButton(rotateIcon);
         rotateButton.setPreferredSize(new Dimension(60, 45));
         rotateButton.addActionListener(this::performTurn);
         add(rotateButton);
 
-        Icon loadConfigIcon = resizeIcon(new ImageIcon("lib/icons/load.png"));
+        Icon loadConfigIcon = resizeIcon(new ImageIcon("src/main/resources/icons/load.png"));
         DesignedButton loadConfigButton = new DesignedButton(loadConfigIcon);
         loadConfigButton.setPreferredSize(new Dimension(60, 45));
         loadConfigButton.addActionListener(this::loadConfiguration);
         add(loadConfigButton);
 
-        Icon saveConfigIcon = resizeIcon(new ImageIcon("lib/icons/save.png"));
+        Icon saveConfigIcon = resizeIcon(new ImageIcon("src/main/resources/icons/save.png"));
         DesignedButton saveConfigButton = new DesignedButton(saveConfigIcon);
         saveConfigButton.setPreferredSize(new Dimension(60, 45));
         saveConfigButton.addActionListener(this::saveConfiguration);
         add(saveConfigButton);
 
-        Icon startButtonIcon = resizeIcon(new ImageIcon("lib/icons/play.png"));
+        Icon startButtonIcon = resizeIcon(new ImageIcon("src/main/resources/icons/play.png"));
         DesignedButton startButton = new DesignedButton(startButtonIcon);
         startButton.setPreferredSize(new Dimension(60, 45));
         startButton.addActionListener(this::handleStart);
         add(startButton);
 
-        Icon pauseButtonIcon = resizeIcon(new ImageIcon("lib/icons/pause.png"));
+        Icon pauseButtonIcon = resizeIcon(new ImageIcon("src/main/resources/icons/pause.png"));
         DesignedButton pauseButton = new DesignedButton(pauseButtonIcon);
         pauseButton.setPreferredSize(new Dimension(60, 45));
         pauseButton.addActionListener(this::handlePause);
         add(pauseButton);
 
-        Icon stopButtonIcon = resizeIcon(new ImageIcon("lib/icons/stop.png"));
+        Icon stopButtonIcon = resizeIcon(new ImageIcon("src/main/resources/icons/stop.png"));
         DesignedButton stopButton = new DesignedButton(stopButtonIcon);
         stopButton.setPreferredSize(new Dimension(60, 45));
         stopButton.addActionListener(this::handleStop);
         add(stopButton);
 
-        Icon reverseButtonIcon = resizeIcon(new ImageIcon("lib/icons/reverse.png"));
+        Icon reverseButtonIcon = resizeIcon(new ImageIcon("src/main/resources/icons/reverse.png"));
         DesignedButton reverseButton = new DesignedButton(reverseButtonIcon);
         reverseButton.setPreferredSize(new Dimension(60, 45));
         reverseButton.addActionListener(this::handleReverse);
@@ -142,7 +153,6 @@ public class ControlView extends JPanel implements ComponentView {
     private void performMove(ActionEvent e) {
         if (model != null) {
             model.move();
-            updatesCount++;
             repaint();
         }
     }
@@ -155,7 +165,6 @@ public class ControlView extends JPanel implements ComponentView {
     private void performTurn(ActionEvent e) {
         if (model != null) {
             model.turn();
-            updatesCount++;
             repaint();
         }
     }
@@ -169,7 +178,6 @@ public class ControlView extends JPanel implements ComponentView {
         if (model != null && model instanceof ControlledRobot) {
             ControlledRobot robot = (ControlledRobot) model;
             robot.turnCounterClockwise();
-            updatesCount++;
             repaint();
         }
     }

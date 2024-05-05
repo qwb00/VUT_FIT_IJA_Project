@@ -1,3 +1,8 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xposte00 - Aleksander Postelga
+ * Represents a position in a 2D grid, defined by row and column indices.
+ */
 package main.java.common;
 
 public class Position {

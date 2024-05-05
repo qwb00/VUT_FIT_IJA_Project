@@ -1,3 +1,9 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xpetri23 - Aleksei Petrishko
+ * Represents a simulation environment in the form of a room.
+ * This environment contains robots and obstacles, and it provides methods to interact with them.
+ */
 package main.java.environment;
 
 import main.java.common.*;
@@ -109,7 +115,7 @@ public class Room implements Environment, Observable {
                 obstacleAt(row, col) || robotAt(new Position(row, col))) {
             return;
         }
-        Obstacle newObstacle = new Obstacle(this, new Position(row, col));
+        Obstacle newObstacle = new Obstacle(new Position(row, col));
         obstacles.add(newObstacle);
         logger.info("Created a new Obstacle at position: col = {}, row = {}", newObstacle.getPosition().getCol(), newObstacle.getPosition().getRow());
     }
@@ -211,11 +217,6 @@ public class Room implements Environment, Observable {
     @Override
     public int getCols() {
         return this.cols;
-    }
-
-    @Override
-    public Robot getRobotAt(Position p) {
-        return robots.stream().filter(robot -> robot.getPosition().equals(p)).findFirst().orElse(null);
     }
 
     @Override

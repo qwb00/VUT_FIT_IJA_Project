@@ -1,3 +1,8 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xpetri23 - Aleksei Petrishko
+ * Custom button class with a specific design and color transition effects.
+ */
 package main.java.design;
 
 import javax.swing.*;
@@ -7,14 +12,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Custom button class with a specific design and color transition effects.
+ */
 public class DesignedButton extends JButton {
-    // Color constants
     private final Color baseColor = new Color(228, 228, 228);
     private final Color hoverColor = new Color(200, 200, 200);
     private final Color pressedColor = new Color(255, 255, 255);
-    private Timer colorTransitionTimer; // Timer for color transitions
-    private Color currentColor; // Current color of the button
+    private Timer colorTransitionTimer;
+    private Color currentColor;
 
+    /**
+     * Constructs a DesignedButton with the specified icon.
+     *
+     * @param icon The icon to display on the button.
+     */
     public DesignedButton(Icon icon) {
         super(icon);
         setBackground(baseColor);
@@ -25,7 +37,7 @@ public class DesignedButton extends JButton {
 
         currentColor = baseColor;
 
-        // Add listeners for color transitions
+        // Add mouse listeners to change button colors on hover and press
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -50,19 +62,21 @@ public class DesignedButton extends JButton {
         });
     }
 
-    // Start a color transition to the target color
+    /**
+     * Starts the color transition animation towards the target color.
+     *
+     * @param targetColor The target color for the transition.
+     */
     private void startColorTransition(Color targetColor) {
         if (colorTransitionTimer != null && colorTransitionTimer.isRunning()) {
             colorTransitionTimer.stop();
         }
 
-        // Speed of the color transition
         int animationSpeed = 20;
         colorTransitionTimer = new Timer(animationSpeed, new ActionListener() {
             private int step = 0;
             private final Color startColor = currentColor;
 
-            // Calculate the next color in the transition
             @Override
             public void actionPerformed(ActionEvent e) {
                 step++;
@@ -85,14 +99,20 @@ public class DesignedButton extends JButton {
         colorTransitionTimer.start();
     }
 
-    // Stop the color transition
+    /**
+     * Stops the current color transition animation.
+     */
     private void stopColorTransition() {
         if (colorTransitionTimer != null && colorTransitionTimer.isRunning()) {
             colorTransitionTimer.stop();
         }
     }
 
-    // Paint the button with the current color
+    /**
+     * Paints the button with rounded corners and the current color.
+     *
+     * @param g The Graphics object to protect.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;

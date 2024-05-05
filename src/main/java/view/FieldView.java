@@ -1,3 +1,9 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xpetri23 - Aleksei Petrishko
+ * FieldView is a graphical component that represents a single field in the environment grid.
+ * It manages the display of obstacles and robots, and handles user interactions like clicking on the field.
+ */
 package main.java.view;
 
 import main.java.EnvPresenter;
@@ -22,6 +28,13 @@ public class FieldView extends DesignedField {
 
     private final SimulationManager simulationManager;
 
+    /**
+     * Constructs a FieldView for the given environment and position.
+     *
+     * @param env       The environment model to which this field belongs.
+     * @param pos       The position of the field within the environment.
+     * @param presenter The presenter managing the environment.
+     */
     public FieldView(Environment env, Position pos, EnvPresenter presenter) {
         super(); // calls the constructor of the DesignedField
         this.model = env;
@@ -37,16 +50,15 @@ public class FieldView extends DesignedField {
     }
 
     /**
-     * Handles the mouse click event
+     * Handles the mouse click event.
+     * Depending on the state of the field, it removes an obstacle or prompts to add a new element.
      */
     private void handleMouseClick() {
         if (model.obstacleAt(position)) {
             simulationManager.saveState();
             removeObstacle();
-        } else if (model.robotAt(position)) {
-            presenter.setActiveRobotByPosition(position);
-        }
-        else {
+        } else if (!model.robotAt(position)) {
+            simulationManager.saveState();
             handleAddElement();
         }
         updateFieldView();
@@ -71,7 +83,6 @@ public class FieldView extends DesignedField {
                 options);
 
         if (choice == 0) {
-            simulationManager.saveState();
             model.createObstacleAt(position.getRow(), position.getCol());
         } else if (choice == 1) {
             handleRobotTypeSelection();
@@ -102,7 +113,6 @@ public class FieldView extends DesignedField {
     private void handleRobotCreation() {
         int speed = askForRobotSpeed();
         if (speed > 0) { // speed will be -1 if the user cancels the dialog
-            simulationManager.saveState();
             ControlledRobot newRobot = ControlledRobot.create(model, position, speed, 0);
             if (newRobot != null) {
                 addNewControlledRobot(newRobot);
@@ -149,7 +159,6 @@ public class FieldView extends DesignedField {
         boolean turnDirection = (turnDirChoice == 1);  // True if "Right", false if "Left"
 
         if (!model.robotAt(position)) {
-            simulationManager.saveState();
             AutonomousRobot newRobot = AutonomousRobot.create(model, position, speed, detectionRange, turnAngle, turnDirection, 0);
             if (newRobot != null) {
                 presenter.addRobotView(newRobot);
@@ -205,6 +214,9 @@ public class FieldView extends DesignedField {
      * Updates the view of the field
      */
     private void updateFieldView() {
+        if (model.robotAt(position)) {
+            presenter.setActiveRobotByPosition(position);
+        }
         privUpdate();
         repaint();
     }

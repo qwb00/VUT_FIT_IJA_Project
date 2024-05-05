@@ -1,3 +1,10 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xposte00 - Aleksander Postelga
+ * Represents an autonomous robot that can automatically move and avoid obstacles.
+ * This robot interacts with the environment, maintains its position and state, and
+ * moves automatically based on its internal logic.
+ */
 package main.java.robot;
 
 import main.java.common.Environment;

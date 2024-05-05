@@ -1,3 +1,10 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xpetri23 - Aleksei Petrishko
+ * The EnvPresenter class acts as a presenter in the Model-View-Presenter (MVP) pattern,
+ * managing the interaction between the simulation environment and the user interface.
+ */
+
 package main.java;
 
 import main.java.common.Position;
@@ -35,18 +42,30 @@ public class EnvPresenter implements Observer {
     private Robot activeRobot;
     private SimulationManager simulationManager;
 
+    /**
+     * Initializes the EnvPresenter, setting up default values.
+     */
     public EnvPresenter() {
         this.env = null;
         this.fields = new HashMap<>();
         this.robots = new ArrayList<>();
     }
 
+    /**
+     * Retrieves the current environment of the simulation.
+     *
+     * @return The current simulation environment.
+     */
     public Environment getEnvironment() {
         return this.env;
     }
 
+    /**
+     * Sets a new environment and updates the presentation accordingly.
+     *
+     * @param newEnv The new environment to set.
+     */
     public void setEnvironment(Environment newEnv) {
-
         if (this.env instanceof Room) {
             List<Robot> oldRobots = new ArrayList<>(env.getRobots());
             for (Robot robot : oldRobots) {
@@ -75,6 +94,9 @@ public class EnvPresenter implements Observer {
         }
     }
 
+    /**
+     * Sets the first robot in the environment as active.
+     */
     private void setActiveFirstRobot() {
         List<Robot> robots = env.getRobots();
         if (!robots.isEmpty()) {
@@ -86,36 +108,34 @@ public class EnvPresenter implements Observer {
         }
     }
 
+    /**
+     * Clears the environment by removing all obstacles and robots.
+     */
     public void clearEnvironment() {
         deleteSimulation();
-        // Check if the environment can be cleared directly
         if (env instanceof Room) {
             (env).clearObstacles();
             (env).clearRobots();
         }
 
-        // Clear all fields and robot views
         fields.forEach((pos, field) -> {
             field.removeComponent();
             frame.getContentPane().remove(field);
         });
         fields.clear();
 
-        // Unsubscribe each RobotView from its model
         robots.forEach(robotView -> robotView.getModel().removeObserver(this));
         robots.clear();
 
-        // Clear and reset the frame
         frame.getContentPane().removeAll();
         frame.revalidate();
         frame.repaint();
     }
 
     /**
-     * Stops any ongoing simulation processes, including robot movements and other timed actions.
+     * Stops the simulation and removes all components from the frame.
      */
     public void deleteSimulation() {
-        // Stop all autonomous robots' movements
         for (RobotView robotView : robots) {
             Robot robot = robotView.getModel();
             if (robot instanceof AutonomousRobot) {
@@ -126,7 +146,6 @@ public class EnvPresenter implements Observer {
         fields.forEach((position, fieldView) -> fieldView.removeComponent());
         fields.clear();
 
-        // Reset the UI components
         frame.getContentPane().removeAll();
         frame.revalidate();
         frame.repaint();
@@ -134,12 +153,13 @@ public class EnvPresenter implements Observer {
         Logger.getLogger(EnvPresenter.class.getName()).log(Level.INFO, "Simulation stopped.");
     }
 
-
+    /**
+     * Initializes the views for the environment and its components.
+     */
     public void initializeViews() {
         frame = new DesignedWindow();
         simulationManager = SimulationManager.getInstance(env);
         simulationManager.addObserver(this);
-
 
         GridLayout gridLayout = new GridLayout(env.getRows(), env.getCols());
         JPanel gridPanel = new JPanel(gridLayout);
@@ -188,7 +208,9 @@ public class EnvPresenter implements Observer {
     }
 
 
-
+    /**
+     * Opens the main application window.
+     */
     public void open() {
         try {
             SwingUtilities.invokeAndWait(this::initialize);
@@ -197,10 +219,19 @@ public class EnvPresenter implements Observer {
         }
     }
 
+    /**
+     * Retrieves the field view at the specified position.
+     *
+     * @param var1 The position to check.
+     * @return The field view at the specified position.
+     */
     public FieldView fieldAt(Position var1) {
         return this.fields.get(var1);
     }
 
+    /**
+     * Initializes the main application, providing options to load a configuration or create an empty map.
+     */
     public void initialize() {
         String[] options = {"Load configuration", "Create empty map"};
         int response = DesignedUtils.showCustomConfirmDialog(frame, "How would you like to start?", "Configuration", options);
@@ -215,12 +246,18 @@ public class EnvPresenter implements Observer {
         this.frame.setVisible(true);
     }
 
+    /**
+     * Loads the environment configuration from a file and initializes the views.
+     */
     private void loadConfiguration() {
-        String configFilePath = "data/config.txt";
+        String configFilePath = "src/main/resources/config.txt";
         this.env = Configuration.loadConfiguration(configFilePath);
         initializeViews();
     }
 
+    /**
+     * Creates an empty map by asking the user for the number of rows and columns.
+     */
     private void createEmptyMap() {
         JTextField rowsField = new JTextField();
         JTextField colsField = new JTextField();
@@ -246,6 +283,11 @@ public class EnvPresenter implements Observer {
         }
     }
 
+    /**
+     * Updates the graphical user interface when the simulation changes.
+     *
+     * @param o The observable object that changed.
+     */
     public void update(Observable o) {
         if (o instanceof SimulationManager) {
             fields.clear();
@@ -294,16 +336,19 @@ public class EnvPresenter implements Observer {
         }
     }
 
-
-
-
-
-
+    /**
+     * Refreshes the graphical user interface for the environment.
+     */
     public void refreshGui() {
         fields.values().forEach(FieldView::repaint);
         robots.forEach(RobotView::refreshView);
     }
 
+    /**
+     * Sets the specified robot as the active robot.
+     *
+     * @param robot The robot to set as active.
+     */
     public void setActiveRobot(Robot robot) {
         if (robot instanceof ControlledRobot) {
             this.activeRobot = robot;
@@ -319,10 +364,21 @@ public class EnvPresenter implements Observer {
         }
     }
 
+    /**
+     * Checks if the specified robot is the active robot.
+     *
+     * @param robot The robot to check.
+     * @return true if the specified robot is active, false otherwise.
+     */
     public boolean isActive(Robot robot) {
         return robot.equals(activeRobot);
     }
 
+    /**
+     * Sets the active robot based on its position.
+     *
+     * @param pos The position of the robot to set as active.
+     */
     public void setActiveRobotByPosition(Position pos) {
         for (RobotView robotView : robots) {
             if (robotView.getModel().getPosition().equals(pos) && robotView.getModel() instanceof ControlledRobot) {
@@ -334,6 +390,11 @@ public class EnvPresenter implements Observer {
         refreshGui();
     }
 
+    /**
+     * Adds a robot view to the environment.
+     *
+     * @param robot The robot to add to the view.
+     */
     public void addRobotView(Robot robot) {
         RobotView robotView = new RobotView(this, robot);
         this.robots.add(robotView);

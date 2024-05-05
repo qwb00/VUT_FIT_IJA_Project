@@ -1,3 +1,8 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xpetri23 - Aleksei Petrishko
+ * A custom-designed window with a title bar that includes custom buttons for minimizing, maximizing, and closing the window.
+ */
 package main.java.design;
 
 import javax.swing.*;
@@ -9,13 +14,18 @@ import java.awt.event.MouseMotionAdapter;
 public class DesignedWindow extends JFrame {
     private Point initialClick;
     private boolean isFullscreen = false;
-    private JPanel titleBar; // Adding to the title bar
+    private JPanel titleBar;
 
+    /**
+     * Constructs a new DesignedWindow, initializing its components.
+     */
     public DesignedWindow() {
         initComponents();
     }
 
-    // Initialize the components of the window
+    /**
+     * Initializes the components of the DesignedWindow.
+     */
     private void initComponents() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 720);
@@ -28,13 +38,14 @@ public class DesignedWindow extends JFrame {
         titleBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         titleBar.setBackground(new Color(228, 228, 228));
 
-        JButton minimizeButton = createButton("lib/icons/minimize.png");
+        // Add minimize, maximize, and close buttons to the title bar
+        JButton minimizeButton = createButton("src/main/resources/icons/minimize.png");
         minimizeButton.addActionListener(e -> setState(Frame.ICONIFIED));
 
-        JButton maximizeButton = createButton("lib/icons/fullscreen.png");
+        JButton maximizeButton = createButton("src/main/resources/icons/fullscreen.png");
         maximizeButton.addActionListener(e -> toggleFullscreen());
 
-        JButton closeButton = createButton("lib/icons/close.png");
+        JButton closeButton = createButton("src/main/resources/icons/close.png");
         closeButton.addActionListener(e -> System.exit(0));
 
         titleBar.add(minimizeButton);
@@ -43,6 +54,7 @@ public class DesignedWindow extends JFrame {
 
         add(titleBar, BorderLayout.NORTH);
 
+        // Add listeners for moving the window by dragging the title bar
         titleBar.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -67,7 +79,9 @@ public class DesignedWindow extends JFrame {
         });
     }
 
-    // Method for toggling fullscreen mode
+    /**
+     * Toggles the window between fullscreen and normal modes.
+     */
     private void toggleFullscreen() {
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice device = env.getDefaultScreenDevice();
@@ -80,7 +94,12 @@ public class DesignedWindow extends JFrame {
         isFullscreen = !isFullscreen;
     }
 
-    // Create a button with the specified icon
+    /**
+     * Creates a custom button with the specified icon.
+     *
+     * @param iconPath The path to the icon file.
+     * @return A JButton with the specified icon.
+     */
     private JButton createButton(String iconPath) {
         JButton button = new JButton();
         ImageIcon icon = new ImageIcon(iconPath);
@@ -95,6 +114,11 @@ public class DesignedWindow extends JFrame {
         return button;
     }
 
+    /**
+     * Returns the custom title bar panel.
+     *
+     * @return The title bar panel.
+     */
     public JPanel getTitleBar() {
         return titleBar;
     }

@@ -1,3 +1,9 @@
+/**
+ * Project: Jednoduchý 2D simulátor mobilních robotů
+ * Author: xposte00 - Aleksander Postelga
+ * Represents a controlled robot that can move and turn based on user input.
+ * This robot interacts with the environment and maintains its position and state.
+ */
 package main.java.robot;
 
 import main.java.common.Environment;
