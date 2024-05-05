@@ -58,7 +58,6 @@ public class FieldView extends DesignedField {
             simulationManager.saveState();
             removeObstacle();
         } else if (!model.robotAt(position)) {
-            simulationManager.saveState();
             handleAddElement();
         }
         updateFieldView();
@@ -83,6 +82,7 @@ public class FieldView extends DesignedField {
                 options);
 
         if (choice == 0) {
+            simulationManager.saveState();
             model.createObstacleAt(position.getRow(), position.getCol());
         } else if (choice == 1) {
             handleRobotTypeSelection();
@@ -113,6 +113,7 @@ public class FieldView extends DesignedField {
     private void handleRobotCreation() {
         int speed = askForRobotSpeed();
         if (speed > 0) { // speed will be -1 if the user cancels the dialog
+            simulationManager.saveState();
             ControlledRobot newRobot = ControlledRobot.create(model, position, speed, 0);
             if (newRobot != null) {
                 addNewControlledRobot(newRobot);
@@ -159,6 +160,7 @@ public class FieldView extends DesignedField {
         boolean turnDirection = (turnDirChoice == 1);  // True if "Right", false if "Left"
 
         if (!model.robotAt(position)) {
+            simulationManager.saveState();
             AutonomousRobot newRobot = AutonomousRobot.create(model, position, speed, detectionRange, turnAngle, turnDirection, 0);
             if (newRobot != null) {
                 presenter.addRobotView(newRobot);
